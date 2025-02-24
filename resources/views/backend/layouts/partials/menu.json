@@ -11,12 +11,8 @@
         "id": "base",
         "children": [
             {
-                "title": "Avatars",
-                "url": "admin/components/avatars"
-            },
-            {
-                "title": "Buttons",
-                "url": "admin/components/buttons"
+                "title": "Danh sách danh mục",
+                "url": "admin.categories.index"
             }
         ]
     }

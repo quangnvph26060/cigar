@@ -56,7 +56,7 @@
                                         $isChildActive = request()->is($child['url']) ? 'active' : '';
                                     @endphp
                                     <li class="{{ $isChildActive }}">
-                                        <a href="{{ url($child['url']) }}">
+                                        <a href="{{ route($child['url']) }}">
                                             <span class="sub-item">{{ $child['title'] }}</span>
                                         </a>
                                     </li>

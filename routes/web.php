@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Backend\AuthController;
+use App\Http\Controllers\Backend\BulkActionController;
+use App\Http\Controllers\Backend\Category\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'admin.auth']], function () {
+    \UniSharp\LaravelFilemanager\Lfm::routes();
+});
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -29,7 +35,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
             return view('backend.dashboard');
         })->name('dashboard');
 
+        Route::post('/delete-items', [BulkActionController::class, 'deleteItems'])->name('delete.items');
+
         // route logout
         Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
+
+        // categories routes
+        Route::resources([
+            'categories' => CategoryController::class
+        ]);
+
+        // Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
+        // Route::get('categories/create', [CategoryController::class, 'create'])->name('categories.create');
+        // Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
+        // Route::get('categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+        // Route::put('categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
     });
 });
