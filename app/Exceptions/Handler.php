@@ -55,11 +55,21 @@ class Handler extends ExceptionHandler
         //     return redirect()->route('home');
         // }
 
-        // if ($exception instanceof ValidationException) {
-        //     return response()->json([
-        //         'errors' => $exception->errors(),
-        //     ], 422);
-        // }
+        if ($exception instanceof ValidationException) {
+            // Lấy lỗi đầu tiên
+            $error = $exception->errors();
+            $firstError = reset($error); // Lấy lỗi đầu tiên từ mảng lỗi
+
+            // Nếu request là Ajax, trả về lỗi đầu tiên dưới dạng JSON
+            if ($request->ajax()) {
+                return response()->json([
+                    'message' => $firstError[0] // Trả về lỗi đầu tiên
+                ], 422);
+            }
+
+            // Nếu là request thông thường, trả về trang lỗi mặc định
+            return parent::render($request, $exception);
+        }
 
         return parent::render($request, $exception);
     }

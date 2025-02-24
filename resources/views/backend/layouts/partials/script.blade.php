@@ -15,14 +15,11 @@
     <!-- Chart Circle -->
     <script src="{{ asset('backend/assets/js/plugin/chart-circle/circles.min.js') }}"></script>
 
-    <!-- Datatables -->
-    <script src="{{ asset('backend/assets/js/plugin/datatables/datatables.min.js') }}"></script>
-
     <!-- Bootstrap Notify -->
     <script src="{{ asset('backend/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
 
     <!-- Sweet Alert -->
-    <script src="{{ asset('backend/assets/js/plugin/sweetalert/sweetalert.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Kaiadmin JS -->
     <script src="{{ asset('backend/assets/js/kaiadmin.min.js') }}"></script>
@@ -31,6 +28,113 @@
     <script src="{{ asset('backend/assets/js/setting-demo.js') }}"></script>
 
     @include('backend.layouts.partials.alert')
+
+    <script>
+        const BASE_URL = "{{ url('/') }}";
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
+        const previewImage = function(event, imgId) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function() {
+                const imgElement = document.getElementById(imgId);
+                imgElement.src = reader.result;
+            };
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        };
+
+        const convertSlug = (sourceSelector, targetSelector) => {
+            let text = $(sourceSelector).val();
+
+            let slug = text
+                .toLowerCase()
+                .trim()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "") // Loại bỏ dấu tiếng Việt
+                .replace(/đ/g, "d")
+                .replace(/Đ/g, "D") // Chuyển đ -> d
+                .replace(/[^a-z0-9 -]/g, "") // Xóa ký tự đặc biệt
+                .replace(/\s+/g, "-") // Thay khoảng trắng bằng dấu -
+                .replace(/-+/g, "-"); // Xóa dấu - dư thừa
+
+            $(targetSelector).val(slug);
+        }
+
+        function submitForm(formId, url, successCallback, type) {
+
+            $(formId).on('submit', function(e) {
+                e.preventDefault();
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        console.log('Dữ liệu đã được gửi thành công', response);
+                        if (typeof successCallback === 'function') {
+                            successCallback(response);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+
+                        Toast.fire({
+                            icon: "error",
+                            title: xhr.responseJSON.message
+                        });
+
+                        console.log('Lỗi khi gửi dữ liệu: ', error);
+                    }
+                });
+            });
+
+            // let isFormChanged = false;
+
+            // // Khi có bất kỳ thay đổi nào trong form
+            // $(formId).on('change input', function() {
+            //     isFormChanged = true;
+            // });
+
+            // // Cảnh báo khi rời khỏi trang
+            // $(window).on('beforeunload', function(e) {
+            //     if (isFormChanged) {
+            //         return "Bạn có chắc chắn muốn rời khỏi trang? Những thay đổi chưa được lưu sẽ mất.";
+            //     }
+            // });
+
+            // // Xử lý khi bấm nút reload hoặc chuyển trang nội bộ
+            // $('a').on('click', function(e) {
+            //     if (isFormChanged) {
+            //         let confirmLeave = confirm("Bạn có thay đổi chưa lưu. Bạn có chắc muốn rời đi?");
+            //         if (!confirmLeave) {
+            //             e.preventDefault(); // Hủy hành động nếu người dùng bấm "Hủy"
+            //         }
+            //     }
+            // });
+        }
+    </script>
 
 
     @stack('scripts')

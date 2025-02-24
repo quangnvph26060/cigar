@@ -5704,7 +5704,8 @@ div.table-responsive > div.dataTables_wrapper > div.row {
 
 .form-control.select2-hidden-accessible {
   position: absolute !important;
-  width: 1px !important; }
+  width: 1px !important; 
+}
 
 .select2-black .select2-selection__choice .select2-selection__choice__remove, .select2-primary .select2-selection__choice .select2-selection__choice__remove, .select2-info .select2-selection__choice .select2-selection__choice__remove, .select2-danger .select2-selection__choice .select2-selection__choice__remove, .select2-warning .select2-selection__choice .select2-selection__choice__remove, .select2-success .select2-selection__choice .select2-selection__choice__remove {
   color: #ffffff !important; }

@@ -32,10 +32,36 @@
 <link rel="stylesheet" href="{{ asset('backend/assets/css/demo.css') }}" />
 
 <style>
+    form label {
+        font-weight: bold;
+    }
+
+    table thead tr th,
+    table thead tr td,
+    table tbody tr th,
+    table tbody tr td {
+        font-size: 0.9em;
+    }
+
+    .nav.nav-tabs {
+        border: none
+    }
+
     .breadcrumb {
         background: #ffffff;
         border-radius: 8px;
         padding: 10px 15px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        /* Đảm bảo không bị vỡ layout trên màn hình nhỏ */
+    }
+
+    .breadcrumb .breadcrumb-item {
+        display: flex;
+        align-items: center;
     }
 
     .breadcrumb-item a {
@@ -52,6 +78,11 @@
     .breadcrumb-item.active {
         color: #6c757d;
         font-weight: 600;
+    }
+
+    .breadcrumb li:last-child {
+        margin-left: auto;
+        /* Đẩy phần tử cuối về bên phải */
     }
 </style>
 
