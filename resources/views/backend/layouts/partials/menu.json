@@ -13,6 +13,10 @@
             {
                 "title": "Danh sách danh mục",
                 "url": "admin.categories.index"
+            },
+            {
+                "title": "Danh sách thuộc tính",
+                "url": "admin.attributes.index"
             }
         ]
     }

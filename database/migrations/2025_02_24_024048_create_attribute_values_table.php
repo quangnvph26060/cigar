@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignIdFor(Attribute::class)->constrained()->cascadeOnDelete();
             $table->string('value')->unique(); // Ví dụ: Mỹ, Hàn, Cohiba, Davidoff
             $table->string('slug')->unique();
+            $table->string('image')->nullable();
+            $table->text('description')->nullable();
 
             $table->string('seo_title')->nullable();
             $table->text('seo_description')->nullable();

@@ -10,6 +10,7 @@ class Category extends Model
     use HasFactory;
 
     protected $fillable = [
+        'parent_id',
         'name',
         'slug',
         'image',
@@ -28,5 +29,15 @@ class Category extends Model
     public function attributes()
     {
         return $this->belongsToMany(Attribute::class, 'category_attributes', 'category_id', 'attribute_id')->withPivot('attribute_value_ids');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
     }
 }

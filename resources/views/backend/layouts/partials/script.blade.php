@@ -79,15 +79,44 @@
             $(targetSelector).val(slug);
         }
 
-        function submitForm(formId, url, successCallback, type) {
+        function submitForm(formId, successCallback) {
 
             $(formId).on('submit', function(e) {
                 e.preventDefault();
 
+                let type = $(this).attr('data-type');
+
+                var submitBtn = $("#submitBtn");
+                var spinner = submitBtn.find(".spinner-border");
+
+                // Disable nút và hiển thị hiệu ứng loading
+                submitBtn.prop("disabled", true);
+                spinner.removeClass("d-none");
+
+                // Kiểm tra xem CKEditor đã được khởi tạo trên textarea chưa
+                $('textarea.ckeditor').each(function() {
+                    const editorId = this.id;
+
+                    // Nếu CKEditor chưa được khởi tạo, khởi tạo nó
+                    if (!CKEDITOR.instances[editorId]) {
+                        CKEDITOR.replace(editorId, {
+                            filebrowserUploadMethod: 'form'
+                        });
+                    } else {
+                        // Nếu CKEditor đã được khởi tạo, cập nhật giá trị của nó
+                        CKEDITOR.instances[editorId].updateElement();
+                    }
+                });
+
+
                 var formData = new FormData(this);
 
+                if (type && type !== undefined && type.toUpperCase() === 'PUT') {
+                    formData.append('_method', 'PUT');
+                }
+
                 $.ajax({
-                    url: url,
+                    url: $(formId).attr('action'),
                     type: "POST",
                     data: formData,
                     processData: false,
@@ -106,6 +135,11 @@
                         });
 
                         console.log('Lỗi khi gửi dữ liệu: ', error);
+                    },
+                    complete: function() {
+                        // Khôi phục trạng thái nút sau khi API hoàn tất (thành công hoặc lỗi)
+                        submitBtn.prop("disabled", false);
+                        spinner.addClass("d-none");
                     }
                 });
             });

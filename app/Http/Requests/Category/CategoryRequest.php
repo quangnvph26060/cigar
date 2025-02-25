@@ -26,19 +26,20 @@ class CategoryRequest extends FormRequest
         $id = optional($this->route('category'))->id;
 
         return [
-            'name' => 'required|unique:categories,name,' . $id,
-            'slug' => 'nullable|unique:categories,slug,' . $id,
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'description' => 'nullable',
-            'seo_title' => 'nullable|max:100',
-            'seo_description' => 'nullable|max:150',
-            'seo_keywords' => 'nullable',
-            'position' => 'nullable|numeric|min:1',
-            'status' => 'required|in:1,2',
-            'attribute_id' => 'nullable|array',
-            'attribute_id.*' => 'exists:attributes,id',
-            'attribute_values' => 'nullable|array',
-            'attribute_values.*' => 'required_if:attribute_id.*,.|exists:attribute_values,id',
+            'name'                  => 'required|unique:categories,name,' . $id,
+            'slug'                  => 'nullable|unique:categories,slug,' . $id,
+            'image'                 => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'description'           => 'nullable',
+            'seo_title'             => 'nullable|max:100',
+            'seo_description'       => 'nullable|max:150',
+            'seo_keywords'          => 'nullable',
+            'position'              => 'nullable|numeric|min:1',
+            'status'                => 'required|in:1,2',
+            'attribute_id'          => 'nullable|array',
+            'attribute_id.*'        => 'exists:attributes,id',
+            'attribute_values'      => 'nullable|array',
+            'attribute_values.*'    => 'required_if:attribute_id.*,.|exists:attribute_values,id',
+            'parent_id'             => 'nullable|exists:categories,id'
         ];
     }
 
@@ -50,17 +51,18 @@ class CategoryRequest extends FormRequest
     public function attributes()
     {
         return [
-            'name' => 'Tên danh mục',
-            'slug' => 'Slug danh mục',
-            'image' => 'Hình ảnh',
-            'description' => 'Mô tả',
-            'seo_title' => 'Tiêu đề SEO',
-            'seo_description' => 'Mô tả SEO',
-            'seo_keywords' => 'Từ khóa SEO',
-            'position' => 'Vị trí',
-            'status' => 'Trạng thái',
-            'attribute_id' => 'Thuộc tính',
-            'attribute_values' => 'Giá trị thuộc tính',
+            'name'              => 'Tên danh mục',
+            'slug'              => 'Slug danh mục',
+            'image'             => 'Hình ảnh',
+            'description'       => 'Mô tả',
+            'seo_title'         => 'Tiêu đề SEO',
+            'seo_description'   => 'Mô tả SEO',
+            'seo_keywords'      => 'Từ khóa SEO',
+            'position'          => 'Vị trí',
+            'status'            => 'Trạng thái',
+            'attribute_id'      => 'Thuộc tính',
+            'attribute_values'  => 'Giá trị thuộc tính',
+            'parent_id'         => 'Danh mục cha'
         ];
     }
 

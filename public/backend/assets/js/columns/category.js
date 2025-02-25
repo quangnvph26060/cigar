@@ -1,6 +1,7 @@
 const columns = [
     {
         data: "name",
+        name: "name",
         title: "TÊN DANH MỤC",
         render(data, type, row) {
             return `<a href="/admin/categories/${row.id}/edit"><strong>${data}</strong></a>`
@@ -8,12 +9,20 @@ const columns = [
     },
     {
         data: "slug",
-        title: "ĐƯỜNG DẪN THÂN THIỆN",
+        name: "slug",
+        title: "ĐƯỜNG DẪN",
     },
     {
         data: "attribute_name",
         name: "attribute_name",
         title: "THUỘC TÍNH",
+        orderable: false,
+        searchable: false,
+    },
+    {
+        data: "parent_id",
+        name: "parent_id",
+        title: "DANH MỤC CHA",
         orderable: false,
         searchable: false,
     },

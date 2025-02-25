@@ -77,11 +77,11 @@ const dataTables = (api, columns, model) => {
                     model: model,
                 },
                 success: function (response) {
+                    table.ajax.reload(); // Sử dụng biến table thay vì gọi lại $('#myTable').DataTable()
                     Toast.fire({
                         icon: "success",
                         title: response.message
                     });
-                    table.ajax.reload(); // Sử dụng biến table thay vì gọi lại $('#myTable').DataTable()
                     $('#actionSelect').val('');
                     $('input[type="checkbox"]').prop("checked", false);
                     toggleActionDiv();

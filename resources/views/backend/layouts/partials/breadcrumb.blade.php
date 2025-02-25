@@ -5,7 +5,7 @@
         </li>
         @isset($page)
             <li class="breadcrumb-item active" aria-current="page">
-                <i class="fas fa-file-alt"></i> {{ $page }}
+                <i class="fas fa-file-alt me-2"></i> {{ $page }}
             </li>
         @endisset
 
