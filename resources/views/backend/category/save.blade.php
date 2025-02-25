@@ -26,7 +26,7 @@
         $action = isset($category) ? route('admin.categories.update', $category) : route('admin.categories.store');
     @endphp
 
-    <form action="{{ $action }}" method="post" enctype="multipart/form-data" id="myform">
+    <form action="{{ $action }}" method="post" enctype="multipart/form-data" id="myForm">
 
         @isset($category)
             @method('PUT')
@@ -135,6 +135,22 @@
                         </select>
                     </div>
                 </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Danh mục cha</h5>
+                    </div>
+
+                    <div class="card-body">
+                        <select name="parent_id" id="parent_id" class="form-select">
+                            <option value="">Danh mục cha</option>
+                            @foreach ($categories as $key => $c)
+                                <option @disabled(($category->id ?? '') == $key) @selected(($category->parent_id ?? '') == $key)
+                                    value="{{ $key }}">{{ $c }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
 
                 <div class="card">
                     <div class="card-header">
@@ -150,7 +166,12 @@
                     </div>
                 </div>
 
-                <button class="btn btn-primary btn-sm"><i class="fas fa-save me-1"></i> Lưu</button>
+                <div class="d-flex justify-content-end">
+                    <button id="submitBtn" class="btn btn-primary btn-sm d-flex align-items-center gap-2" type="submit">
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        <i class="fas fa-save me-1"></i> Lưu
+                    </button>
+                </div>
 
             </div>
         </div>
@@ -236,14 +257,13 @@
                 placeholder: "Nhập từ khóa...",
             });
 
-            let type = "{{ isset($category) ? 'PUT' : 'POST' }}";
-
-            submitForm('#myform', $('#myform').attr('action'), function(response) {
+            submitForm('#myForm', function(response) {
                 window.location.href = "{{ route('admin.categories.index') }}"
-            }, type);
+            });
 
             CKEDITOR.replace('description', {
                 filebrowserUploadMethod: 'form',
+                height: "315px"
             });
         });
     </script>

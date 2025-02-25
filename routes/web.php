@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Backend\Attribute\AttributeController;
+use App\Http\Controllers\Backend\Attribute\AttributeValueController;
 use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\BulkActionController;
 use App\Http\Controllers\Backend\Category\CategoryController;
@@ -42,13 +44,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // categories routes
         Route::resources([
-            'categories' => CategoryController::class
+            'categories' => CategoryController::class,
+            'attributes' => AttributeController::class,
         ]);
 
-        // Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
-        // Route::get('categories/create', [CategoryController::class, 'create'])->name('categories.create');
-        // Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
-        // Route::get('categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
-        // Route::put('categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+        Route::get('attributes-values/{id}', [AttributeValueController::class, 'index'])->name('attributes-values.index');
+        Route::post('attributes-values/{id}', [AttributeValueController::class, 'store'])->name('attributes-values.store');
+        Route::put('attributes-values/{id}', [AttributeValueController::class, 'update'])->name('attributes-values.update');
     });
 });
