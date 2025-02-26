@@ -79,6 +79,16 @@
             $(targetSelector).val(slug);
         }
 
+        function ckeditor(id) {
+            if (CKEDITOR.instances[id]) {
+                CKEDITOR.instances[id].destroy(true);
+            }
+
+            CKEDITOR.replace(id, {
+                filebrowserUploadMethod: 'form',
+            });
+        }
+
         function submitForm(formId, successCallback) {
 
             $(formId).on('submit', function(e) {

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Backend\Attribute\AttributeController;
 use App\Http\Controllers\Backend\Attribute\AttributeValueController;
 use App\Http\Controllers\Backend\AuthController;
+use App\Http\Controllers\Backend\Brand\BrandController;
 use App\Http\Controllers\Backend\BulkActionController;
 use App\Http\Controllers\Backend\Category\CategoryController;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +47,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resources([
             'categories' => CategoryController::class,
             'attributes' => AttributeController::class,
+            'brands' => BrandController::class
         ]);
 
         Route::get('attributes-values/{id}', [AttributeValueController::class, 'index'])->name('attributes-values.index');

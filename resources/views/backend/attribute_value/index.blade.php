@@ -8,11 +8,11 @@
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
-            <a class="nav-link active" id="info-tab" data-bs-toggle="tab" href="#info" role="tab" aria-controls="info"
+            <a class="nav-link active fw-bold" id="info-tab" data-bs-toggle="tab" href="#info" role="tab" aria-controls="info"
                 aria-selected="true">Thông Tin Giá Trị</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" id="seo-tab" data-bs-toggle="tab" href="#seo" role="tab" aria-controls="seo"
+            <a class="nav-link fw-bold" id="seo-tab" data-bs-toggle="tab" href="#seo" role="tab" aria-controls="seo"
                 aria-selected="false">Cấu Hình Seo</a>
         </li>
     </ul>
@@ -24,7 +24,7 @@
             <div class="col-lg-9">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-content-center">
-                        <h3 class="card-title form-title">THÊM GIÁ TRỊ</h3>
+                        <h3 class="card-title form-title" style="text-transform: uppercase">THÊM GIÁ TRỊ ({{ $attribute->name }})</h3>
                         <div class="card-tool">
                             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                                 data-bs-target="#exampleModal">
@@ -151,9 +151,8 @@
     <script>
         $(document).ready(function() {
 
-            CKEDITOR.replace('description', {
-                filebrowserUploadMethod: 'form',
-            });
+
+            ckeditor('description')
 
             var url = window.location.href;
             var id = url.substring(url.lastIndexOf('/') + 1);

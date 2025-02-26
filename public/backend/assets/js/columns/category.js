@@ -18,6 +18,7 @@ const columns = [
         title: "THUỘC TÍNH",
         orderable: false,
         searchable: false,
+        width: "30%"
     },
     {
         data: "parent_id",
