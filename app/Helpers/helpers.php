@@ -153,3 +153,16 @@ if (!function_exists('saveImages')) {
 }
 
 
+if (!function_exists('isActiveMenu')) {
+    function isActiveMenu($menuItem)
+    {
+        $currentRoute = request()->route()->getName(); // Lấy route hiện tại
+
+        // Kiểm tra nếu menuItem có key 'inRoutes' và route hiện tại có trong danh sách
+        if (isset($menuItem['inRoutes']) && in_array($currentRoute, $menuItem['inRoutes'])) {
+            return 'show';
+        }
+
+        return '';
+    }
+}

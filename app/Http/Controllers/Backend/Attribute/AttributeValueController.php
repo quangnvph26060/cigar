@@ -47,7 +47,7 @@ class AttributeValueController extends Controller
                     ->editColumn('value', function ($row) {
                         $jsonData = htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8');
                         return '<a href="javascript:void(0)" data-resource="' . $jsonData . '">' . $row->value . '</a>';
-                    })->editColumn('status', fn($row) => $row->status == 1 ? '<span class="badge bg-success">Xuất bản</span>' : '<span class="badge bg-warning">Chưa xuất bản</span>');;
+                    })->editColumn('status', fn($row) => $row->status == 1 ? '<span class="badge bg-success">Xuất bản</span>' : '<span class="badge bg-warning">Chưa xuất bản</span>');
             }, ['value', 'status']);
         }
         return view('backend.attribute_value.index', compact('attribute'));

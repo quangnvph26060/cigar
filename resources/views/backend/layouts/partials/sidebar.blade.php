@@ -32,10 +32,10 @@
                     $isActive = request()->routeIs($item['route'] ?? '') ? 'active' : '';
                     $hasChildren = isset($item['children']);
                     $href = $hasChildren ? '#' . $item['id'] : (isset($item['route']) ? route($item['route']) : '#');
-                    $isOpen =
-                        $hasChildren && collect($item['children'])->contains(fn($child) => request()->is($child['url']))
-                            ? 'show'
-                            : '';
+                    // $isOpen =
+                    //     $hasChildren && collect($item['children'])->contains(fn($child) => request()->is($child['url']))
+                    //         ? 'show'
+                    //         : '';
                 @endphp
 
                 <li class="nav-item {{ $isActive }}">
@@ -49,13 +49,13 @@
                     </a>
 
                     @if ($hasChildren)
-                        <div class="collapse {{ $isOpen }}" id="{{ $item['id'] }}">
+                        <div class="collapse {{ isActiveMenu($item) }}" id="{{ $item['id'] }}">
                             <ul class="nav nav-collapse">
                                 @foreach ($item['children'] as $child)
                                     @php
-                                        $isChildActive = request()->is($child['url']) ? 'active' : '';
+                                        $isChildActive = request()->routeIs($child['url']) ? 'active' : '';
                                     @endphp
-                                    <li class="{{ $isChildActive }}">
+                                    <li class="nav-item {{ $isChildActive }}">
                                         <a href="{{ route($child['url']) }}">
                                             <span class="sub-item">{{ $child['title'] }}</span>
                                         </a>

@@ -10,11 +10,11 @@
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
             <a class="nav-link active" id="info-tab" data-bs-toggle="tab" href="#info" role="tab" aria-controls="info"
-                aria-selected="true">Thông tin danh mục</a>
+                aria-selected="true">Thông Tin Danh Mục</a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="seo-tab" data-bs-toggle="tab" href="#seo" role="tab" aria-controls="seo"
-                aria-selected="false">Seo danh mục</a>
+                aria-selected="false">Cấu Hình Seo</a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="attribute-tab" data-bs-toggle="tab" href="#attribute" role="tab"
@@ -202,11 +202,15 @@
             $('#attribute_id').select2({
                 placeholder: "Chọn thuộc tính",
                 allowClear: true,
+                width: '100%', // Đảm bảo chiều rộng được thiết lập chính xác
+                dropdownAutoWidth: true, // Tự động điều chỉnh chiều rộng khi có nhiều lựa chọn
             })
 
             $('#attribute-values-container .select2').select2({
                 placeholder: 'Chọn giá trị',
-                allowClear: true
+                allowClear: true,
+                width: '100%', // Đảm bảo chiều rộng được thiết lập chính xác
+                dropdownAutoWidth: true, // Tự động điều chỉnh chiều rộng khi có nhiều lựa chọn
             });
 
             $("#attribute_id").on("change", function() {

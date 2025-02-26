@@ -1,0 +1,71 @@
+[id^="wssuchtermcontainer-"] .wsconnex-category .wsconnex-category-title,
+[id^="wssuchtermcontainer-"] #wsconnex-foot span,
+[id^="wssuchtermcontainer-"] .productcontainer:hover > a {
+    color: #7b2222;
+}
+
+[id^="wssuchtermcontainer-"] .wsconnex-category > ul > li > span:hover,
+[id^="wssuchtermcontainer-"] .wsconnex-category > ul > li > ul > li > span:hover,
+[id^="wssuchtermcontainer-"] .wsconnex-category > ul > li > ul > li > ul > li > span:hover,
+[id^="wssuchtermcontainer-"] .wsconnex-category > ul > li > ul > li > ul > li > ul > li > span:hover,
+[id^="wssuchtermcontainer-"] #ws-btn-products:hover,
+[id^="wssuchtermcontainer-"] #ws-btn-content:hover,
+[id^="wssuchtermcontainer-"] .customcontainer:hover,
+[id^="wssuchtermcontainer-"] .ws-showmore:hover,
+[id^="wssuchtermcontainer-"] .ws-suggest-terms ul li [data-suggest]:hover {
+    background-color: #bbbbbb;
+    color: #ffffff;
+}
+
+[id^="wssuchtermcontainer-"] .wsconnex-category > ul > li {
+    border-bottom: 1px solid #7b2222;
+    margin-bottom: 5px;
+    /*background-color: #7b2222;*/
+}
+
+[id^="wssuchtermcontainer-"] .ws-plus,
+[id^="wssuchtermcontainer-"] .productcontainer .preis,
+[id^="wssuchtermcontainer-"] #ws-btn-close:hover {
+    color: #7b2222;
+}
+
+[id^="wssuchtermcontainer-"] .wsconnex-category-title,
+[id^="wssuchtermcontainer-"] .cat-first {
+	text-transform: uppercase;
+}
+
+[id^="wssuchtermcontainer-"] .ws-selected {
+	background-color: #bbbbbb !important;
+}
+
+[id^="wssuchtermcontainer-"] .productcontainer .bild {
+	position: relative;
+	width: 100%;
+}
+
+[id^="wssuchtermcontainer-"] .productcontainer .bild img {
+	position: absolute;
+	margin: auto;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	max-width: 100%;
+	max-height: 100%;
+	width: auto;
+	height: auto;
+}
+
+[id^="wssuchtermcontainer-"] .productcontainer .productinfo {
+	display: none !important;
+}
+
+[id^="wssuchtermcontainer-"] .customcontainer .bild img {
+	height: 50px;
+	max-width: 100%;
+	width: auto;
+}
+
+#wsconnex-overlay {
+	margin-top: 7px;
+}

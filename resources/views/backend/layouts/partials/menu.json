@@ -17,7 +17,14 @@
             {
                 "title": "Danh sách thuộc tính",
                 "url": "admin.attributes.index"
+            },
+            {
+                "title": "Danh sách thương hiệu",
+                "url": "admin.brands.index"
             }
+        ],
+        "inRoutes": [
+            "admin.categories.index", "admin.attributes.index", "admin.brands.index"
         ]
     }
 ]
