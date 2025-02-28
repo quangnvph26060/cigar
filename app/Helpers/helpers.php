@@ -87,6 +87,7 @@ if (!function_exists('getErrorFunction')) {
 if (!function_exists('successResponse')) {
     function successResponse($message, $data = null, $code = 200)
     {
+        sessionFlash('success', $message);
         return response()->json(['success' => true, 'message' => $message, 'data' => $data], $code);
     }
 }
@@ -106,6 +107,8 @@ if (!function_exists('errorResponse')) {
             'message' => $message
         ];
 
+        sessionFlash('error', $message);
+
         return response()->json($response, $code);
     }
 }
@@ -118,7 +121,7 @@ if (!function_exists('generateSlug')) {
 }
 
 if (!function_exists('saveImages')) {
-    function saveImages($request, string $inputName, string $directory = 'images', $width = 150, $height = 150, $isArray = false, $resize = true)
+    function saveImages($request, string $inputName, string $directory = 'images', $width = 150, $height = 150, $isArray = false, $resize = false)
     {
         $paths = [];
 

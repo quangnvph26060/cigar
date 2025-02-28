@@ -6,6 +6,8 @@ use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\Brand\BrandController;
 use App\Http\Controllers\Backend\BulkActionController;
 use App\Http\Controllers\Backend\Category\CategoryController;
+use App\Http\Controllers\Backend\Config\ConfigController;
+use App\Http\Controllers\Backend\FastUpdateController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +27,8 @@ Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'admin.
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
+    Route::put('handle-fast-update', [FastUpdateController::class, 'handleFastUpdate']);
+
     // auth routes
     Route::prefix('auth')->middleware('admin.guest')->controller(AuthController::class)->name('auth.')->group(function () {
         Route::get('login', 'login')->name('login');
@@ -39,6 +43,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         })->name('dashboard');
 
         Route::post('/delete-items', [BulkActionController::class, 'deleteItems'])->name('delete.items');
+        Route::post('/change-order', [BulkActionController::class, 'changeOrder']);
 
         // route logout
         Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
@@ -47,8 +52,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resources([
             'categories' => CategoryController::class,
             'attributes' => AttributeController::class,
-            'brands' => BrandController::class
+            'brands' => BrandController::class,
         ]);
+
+        Route::prefix('configs')->controller(ConfigController::class)->name('configs.')->group(function () {
+            Route::get('/', 'config')->name('config');
+            Route::post('/', 'postConfig')->name('post_config');
+        });
 
         Route::get('attributes-values/{id}', [AttributeValueController::class, 'index'])->name('attributes-values.index');
         Route::post('attributes-values/{id}', [AttributeValueController::class, 'store'])->name('attributes-values.store');

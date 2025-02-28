@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Config;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('*', function ($view) {
+            $config = Config::query()->firstOrCreate();
+
+            $view->with(['config' => $config]);
+        });
     }
 }

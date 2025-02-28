@@ -93,9 +93,11 @@ class BulkActionController extends Controller
         }
 
         foreach ($order as $index => $id) {
-            $model::where('id', $id)->update(['location' => $index + 1]);
+            $model::where('id', $id)->update(['position' => $index + 1]);
         }
+        return handleResponse('Cập nhật vị trí thành công.', 200);
 
-        return response()->json(['status' => 'success']);
     }
 }
+
+

@@ -11,7 +11,7 @@ class BaseQuery
         $this->modelClass = $modelClass;
     }
 
-    public function buildQuery(array $columns, array $relations = [], $withCount = [], $request = null, string $sortRelationColumn = null, $where = [])
+    public function buildQuery(array $columns, array $relations = [], $withCount = [], $request = null, string $sortRelationColumn = null, $where = [], $order = [])
     {
         $query = $this->modelClass::query()->select($columns);
 
@@ -21,6 +21,10 @@ class BaseQuery
 
         if ($withCount) {
             $query->withCount($withCount);
+        }
+
+        if ($order) {
+            $query->orderBy($order[0], $order[1]);
         }
 
         foreach ($where as $condition) {
