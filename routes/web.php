@@ -6,6 +6,8 @@ use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\Brand\BrandController;
 use App\Http\Controllers\Backend\BulkActionController;
 use App\Http\Controllers\Backend\Category\CategoryController;
+use App\Http\Controllers\Backend\Product\ProductController;
+use App\Http\Controllers\Backend\Variation\VariationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,11 +49,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resources([
             'categories' => CategoryController::class,
             'attributes' => AttributeController::class,
-            'brands' => BrandController::class
+            'brands' => BrandController::class,
+            'products' => ProductController::class,
+            'variations' => VariationController::class
         ]);
 
         Route::get('attributes-values/{id}', [AttributeValueController::class, 'index'])->name('attributes-values.index');
         Route::post('attributes-values/{id}', [AttributeValueController::class, 'store'])->name('attributes-values.store');
         Route::put('attributes-values/{id}', [AttributeValueController::class, 'update'])->name('attributes-values.update');
+
+        Route::post('variations-attributes-values', [VariationController::class, 'variationAttributes'])->name('variations.attributes-values');
     });
 });

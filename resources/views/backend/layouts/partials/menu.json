@@ -21,6 +21,10 @@
             {
                 "title": "Danh sách thương hiệu",
                 "url": "admin.brands.index"
+            },
+            {
+                "title": "Danh sách sản phẩm",
+                "url": "admin.products.index"
             }
         ],
         "inRoutes": [
