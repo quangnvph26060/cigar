@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\AttributeValue;
+use App\Models\Brand;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,8 @@ route::get('/', function () {
         });
     });
 
+    $brands = Brand::query()->limit(8)->orderBy('position', 'asc')->where('status', 1)->get();
 
-    return view('frontend.layouts.master', compact('categories'));
+
+    return view('frontend.pages.home', compact('categories', 'brands'));
 });

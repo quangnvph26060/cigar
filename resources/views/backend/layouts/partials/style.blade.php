@@ -84,6 +84,54 @@
         margin-left: auto;
         /* Đẩy phần tử cuối về bên phải */
     }
+
+    .switch {
+  font-size: 12px;
+  position: relative;
+  display: inline-block;
+  width: 3.5em;
+  height: 2em;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 10px;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 1.4em;
+  width: 1.4em;
+  border-radius: 5px;
+  left: 0.3em;
+  bottom: 0.33333333333em;
+  background-color: white;
+  transition: 0.2s all ease-in-out;
+}
+
+.switch input:checked + .slider {
+  background-color: green;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(1.5em);
+}
 </style>
 
 @stack('styles')
