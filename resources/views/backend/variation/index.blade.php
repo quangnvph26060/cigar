@@ -2,14 +2,14 @@
 
 @section('content')
     @include('backend.layouts.partials.breadcrumb', [
-        'page' => 'Danh sách biến thể',
+        'page' => 'Danh sách biến thể của sản phẩm : '. $product->name . ' - ' . $product->code,
     ])
 
     <div class="card">
         <div class="card-header d-flex justify-content-between align-content-center">
             <h3 class="card-title">DANH SÁCH BIẾN THỂ</h3>
             <div class="card-tool">
-                <a href="{{ route('admin.variations.create') }}" class="btn btn-primary btn-sm"><i
+                <a href="{{ route('admin.variations.product.create', ['id' => $id]) }}" class="btn btn-primary btn-sm"><i
                         class="fas fa-plus-circle me-1"></i> Thêm mới</a>
             </div>
         </div>
@@ -29,8 +29,9 @@
     <script src="{{ asset('backend/assets/js/connectDataTable.js') }}"></script>
     <script>
         $(document).ready(function() {
-            const api = "{{ route('admin.variations.index') }}"
-            dataTables(api, columns, 'Product')
+            const id = "{{ $id }}";
+            const api = "{{ route('admin.variations.product.index', ['id' => '__ID__']) }}".replace('__ID__', id);
+            dataTables(api, columns, 'Variation')
         })
     </script>
 @endpush
