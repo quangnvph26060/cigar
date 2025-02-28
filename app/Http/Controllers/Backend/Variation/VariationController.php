@@ -9,10 +9,12 @@ use App\Models\AttributeValue;
 use App\Models\Product;
 use App\Models\Variation;
 use App\Models\VariationAttributeValue;
+use App\Models\VariationImage;
 use App\Services\BaseQuery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class VariationController extends Controller
 {
@@ -82,12 +84,21 @@ class VariationController extends Controller
 
             $variation = Variation::create($credentials);
 
-            foreach ($request->attribute_value_id as $key => $value) {
+            foreach ($request->attribute_value_id ?? [] as $key => $value) {
                 DB::table('variation_attribute_values')->insert([
                     'variations_id' => $variation->id,
                     'attribute_id' =>  $key,
                     'attribute_value_id' => $value,
                 ]);
+            }
+
+            // dd($request->images);
+            if ($request->hasFile('images')) {
+                    $imagePaths =  saveImages($request, 'images', 'variations_images', 150, 150, true);
+                    collect($imagePaths)->map(fn($imagePath) => VariationImage::create([
+                        'variation_id' => $variation->id,
+                        'image_path' => $imagePath,
+                    ]));
             }
 
             sessionFlash('success', 'Thêm mới thương hiệu thành công.');
@@ -117,8 +128,8 @@ class VariationController extends Controller
         // $attribute_values =
         $attributes_variation_values = VariationAttributeValue::where('variations_id', $variation->id)->get();
         // dd($attributes_variation_values);
-
-        return view('backend.variation.save', compact('attributes', 'products', 'variation', 'attributeIds',  'attributes_variation_values'));
+        $images = VariationImage::where('variation_id', $variation->id)->get();
+        return view('backend.variation.save', compact('attributes', 'products', 'variation', 'attributeIds',  'attributes_variation_values', 'images'));
     }
 
     /**
@@ -146,11 +157,32 @@ class VariationController extends Controller
 
             $variation->update($credentials);
 
-            // $attributes_variation_values = VariationAttributeValue::where('variations_id', $variation->id)->get();
-            $variation->attributes()->syncWithoutDetaching(array_keys($request->attribute_value_id));
-
             // Đồng bộ mà không xóa các dữ liệu cũ
             $variation->attributes()->sync($request->attribute_value_id);
+
+            $oldImages = $request->input('old');
+            $productImages = VariationImage::where('variation_id', $variation->id)->pluck('id')->toArray();
+            $imagesToKeep = array_intersect($oldImages, $productImages);
+            $imagesToDelete = array_diff($productImages, $imagesToKeep);
+
+            // Xóa các ảnh không cần thiết
+            foreach ($imagesToDelete as $imageId) {
+                $image = VariationImage::find($imageId);
+                if ($image) {
+                    // Xóa file ảnh trong thư mục lưu trữ
+                    Storage::delete($image->image_path);
+                    // Xóa ảnh khỏi cơ sở dữ liệu
+                    $image->delete();
+                }
+            }
+
+            if ($request->hasFile('images')) {
+                $imagePaths =  saveImages($request, 'images', 'variations_images', 150, 150, true);
+                collect($imagePaths)->map(fn($imagePath) => VariationImage::create([
+                    'variation_id' => $variation->id,
+                    'image_path' => $imagePath,
+                ]));
+        }
 
 
             sessionFlash('success', 'Thêm mới thương hiệu thành công.');
@@ -174,5 +206,54 @@ class VariationController extends Controller
         return response()->json([
             'data' => $attributes_value
         ]);
+    }
+
+
+    public function variationProduct($id)
+    {
+
+        $product = Product::find($id);
+        if (request()->ajax()) {
+            $columns    = ['id', 'name', 'slug','status', 'image'];
+
+            $query      = $this->queryBuilder->buildQuery(
+                $columns,
+                [],
+                [],
+                request()
+            )->where('product_id', $id);
+
+            return $this->queryBuilder->processDataTable($query, function ($dataTable) use ($id) {
+                return $dataTable
+                    ->editColumn('name', fn($row) => "<a href='" . route('admin.variations.product.edit', ['id' => $id, 'id1' => $row->id]) . "'><strong>{$row->name}</strong></a> ")
+                    ->editColumn('status', fn($row) => $row->status == 1
+                        ? '<span class="badge bg-success">Xuất bản</span>'
+                        : '<span class="badge bg-warning">Chưa xuất bản</span>');
+            }, ['name', 'status']);
+        }
+        return view('backend.variation.index', compact('id', 'product'));
+    }
+
+    public function variationProductCreate($id)
+    {
+        $product = Product::find($id);
+        $attributes = Attribute::get();
+        return view('backend.variation.save', compact('attributes', 'product', 'id'));
+    }
+
+    public function variationProductEdit($id, $id2)
+    {
+        //
+        $product = Product::find($id);
+        $products = Product::get();
+        $attributes = Attribute::get();
+        $variation = Variation::find($id2);
+        $attributes_variation = $variation->load('attributes');
+        $attributeIds = $attributes_variation->attributes->pluck('id')->toArray();
+        // $attribute_values =
+        $attributes_variation_values = VariationAttributeValue::where('variations_id', $variation->id)->get();
+        // dd($attributes_variation_values);
+        $images = VariationImage::where('variation_id', $variation->id)->get();
+        return view('backend.variation.save', compact('attributes', 'products', 'variation', 'attributeIds',  'attributes_variation_values', 'images', 'product', 'id'));
     }
 }
