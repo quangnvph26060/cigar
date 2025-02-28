@@ -178,6 +178,38 @@
             //     }
             // });
         }
+
+        const formatDataInput = function(input) {
+            let $input = $(`#${input}`);
+
+            // Hàm format số theo định dạng tiền tệ Việt Nam
+            function formatNumber(value) {
+                return Number(value).toLocaleString("vi-VN");
+            }
+
+            // Format ngay khi trang load nếu có giá trị
+            let initialValue = $input.val().replace(/\./g, "");
+            if (!isNaN(initialValue) && initialValue !== "") {
+                $input.val(formatNumber(initialValue));
+            }
+
+            // Lắng nghe sự kiện nhập liệu
+            $input.on('input', function() {
+                let value = $(this).val().replace(/\./g, ""); // Xóa dấu chấm cũ
+                if (!isNaN(value)) {
+                    $(this).val(formatNumber(value)); // Format lại số
+                } else {
+                    $(this).val($(this).val().slice(0, -1)); // Xóa ký tự không hợp lệ
+                }
+
+                // Cập nhật giá trị vào input ẩn nếu cần
+                console.log(`name=[${input.slice(5)}]`);
+                console.log(value.replace(/\./g, ""));
+
+
+                $(`input[name=${input.slice(5)}]`).val(value.replace(/\./g, ""));
+            });
+        };
     </script>
 
 
