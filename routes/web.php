@@ -70,5 +70,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('attributes-values/{id}', [AttributeValueController::class, 'update'])->name('attributes-values.update');
 
         Route::post('variations-attributes-values', [VariationController::class, 'variationAttributes'])->name('variations.attributes-values');
+        Route::get('variations/product/{id}', [VariationController::class, 'variationProduct'])->name('variations.product.index');
+        Route::get('variations/product/{id}/create', [VariationController::class, 'variationProductCreate'])->name('variations.product.create');
+        Route::get('variations/product/{id}/edit/{id1}', [VariationController::class, 'variationProductEdit'])->name('variations.product.edit');
     });
 });

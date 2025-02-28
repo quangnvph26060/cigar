@@ -28,7 +28,7 @@
             }
         ],
         "inRoutes": [
-            "admin.categories.index", "admin.attributes.index", "admin.brands.index"
+            "admin.categories.index", "admin.attributes.index", "admin.brands.index", "admin.products.index"
         ]
     },
     {
