@@ -5,9 +5,13 @@ namespace App\Http\Controllers\Backend\Product;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\ProductRequest;
 use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Product;
 use App\Services\BaseQuery;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Can;
+
+use function PHPUnit\Framework\callback;
 
 class ProductController extends Controller
 {
@@ -34,7 +38,7 @@ class ProductController extends Controller
 
             return $this->queryBuilder->processDataTable($query, function ($dataTable) {
                 return $dataTable
-                    ->editColumn('name', fn($row) => "<a href='" . route('admin.products.edit', $row) . "'><strong>{$row->name}</strong></a> <br> | <a href='" . route('admin.products.edit', $row) . "'>
+                    ->editColumn('name', fn($row) => "<a href='" . route('admin.variations.product.index', $row->id) . "'><strong>{$row->name}</strong></a> <br> | <a href='" . route('admin.products.edit', $row) . "'>
                     Sửa
                 </a>")
                     ->editColumn('status', fn($row) => $row->status == 1
@@ -52,7 +56,8 @@ class ProductController extends Controller
     {
         //
         $brands = Brand::get();
-        return view('backend.product.save', compact('brands'));
+        $categorys = Category::get();
+        return view('backend.product.save', compact('brands', 'categorys'));
     }
 
     /**
@@ -96,7 +101,9 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         //
-        return view('backend.product.save', compact('product'));
+        $brands = Brand::get();
+        $categorys = Category::get();
+        return view('backend.product.save', compact('product', 'categorys','brands'));
     }
 
     /**

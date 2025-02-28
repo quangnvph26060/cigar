@@ -23,7 +23,8 @@ class ProductRequest extends FormRequest
     {
         $id = optional($this->route('product'))->id;
         return [
-            'brand_id'            => 'required|exists:brands,id',
+            'category_id'           => 'required|exists:categories,id',
+            'brand_id'              => 'required|exists:brands,id',
             'code'                  => 'required|unique:products,code,' . $id,
             'name'                  => 'nullable|unique:products,name,' . $id,
             'slug'                  => 'nullable|unique:products,slug,' . $id,
@@ -47,6 +48,7 @@ class ProductRequest extends FormRequest
     public function attributes()
     {
         return [
+            'category_id'       => 'Danh mục',
             'brand_id'          => 'Thương hiệu',
             'code'              => 'Mã sản phẩm',
             'name'              => 'Tên sản phẩm',

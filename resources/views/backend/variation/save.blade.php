@@ -3,8 +3,11 @@
 
 @section('content')
     @include('backend.layouts.partials.breadcrumb', [
-        'page' => isset($variation) ? 'Sửa biến thể' : 'Thêm mới biến thể',
-        'href' => route('admin.variations.index'),
+       'page' => isset($variation)
+    ? 'Sửa biến thể của sản phẩm : ' . $product->name . ' - ' . $product->code
+    : 'Thêm mới biến thể của sản phẩm: ' . $product->name . ' - ' . $product->code,
+
+        'href' => route('admin.variations.product.index', ['id' => $product->id]),
     ])
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -166,7 +169,7 @@
             </div>
             <div class="col-lg-3">
 
-                <div class="card">
+                {{-- <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Sản phẩm</h5>
                     </div>
@@ -183,7 +186,8 @@
 
                         </select>
                     </div>
-                </div>
+                </div> --}}
+                <input type="hidden" name="product_id" value="{{ $id }}">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Trạng thái</h5>
@@ -213,6 +217,18 @@
                     </div>
                 </div>
 
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Albums</h5>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="input-images"></div>
+
+                    </div>
+                </div>
+
                 <div class="d-flex justify-content-end">
                     <button id="submitBtn" class="btn btn-primary btn-sm d-flex align-items-center gap-2" type="submit">
                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
@@ -228,6 +244,7 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('backend/assets/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/css/tagify.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/css/image-uploader.min.css') }}">
     <style>
         .col-lg-9 .card {
             border-top-left-radius: 0 !important;
@@ -249,6 +266,13 @@
             height: 350px;
             border: 2px solid #ccc;
         }
+        .upload-text span {
+            display: none !important;
+        }
+        .image-uploader .uploaded .uploaded-image {
+            width: calc(50% - 1rem);
+            padding-bottom: calc(50% - 1rem);
+        }
     </style>
 @endpush
 
@@ -256,7 +280,18 @@
     <script src="{{ asset('backend/assets/js/select2.min.js') }}"></script>
     <script src="{{ asset('backend/assets/js/tagify.min.js') }}"></script>
     <script src="{{ asset('backend/ckeditor/ckeditor.js') }}"></script>
-
+    <script src="{{ asset('backend/assets/js/image-uploader.min.js') }}"></script>
+    @php
+        $preloaded =
+            isset($images) && $images->isNotEmpty()
+                ? $images->map(function ($image) {
+                    return [
+                        'src' => asset('storage/'.$image->image_path), // Đường dẫn ảnh
+                        'id' => $image->id, // ID của ảnh
+                    ];
+                })
+                : [];
+    @endphp
     <script>
         $(document).ready(function() {
 
@@ -271,9 +306,10 @@
                 maxTags: 10,
                 placeholder: "Nhập tags...",
             });
+            let id = "{{ $id }}";
 
             submitForm('#myForm', function(response) {
-                window.location.href = "{{ route('admin.variations.index') }}"
+                window.location.href = "{{ route('admin.variations.product.index', ['id' => '__ID__']) }}".replace('__ID__', id);
             });
 
             $('#product_id').select2({
@@ -330,6 +366,16 @@
 
             ckeditor('description')
             ckeditor('seo_description')
+
+            const preloaded = @json($preloaded);;
+
+            $('.input-images').imageUploader({
+                preloaded: preloaded, // Ảnh đã có sẵn
+                imagesInputName: 'images', // Tên input khi upload ảnh mới
+                preloadedInputName: 'old', // Tên input chứa ảnh cũ
+                maxSize: 2 * 1024 * 1024, // Giới hạn ảnh 2MB
+                maxFiles: 15, // Tối đa 15 ảnh
+            });
 
             // formatDataInput('price');
         });

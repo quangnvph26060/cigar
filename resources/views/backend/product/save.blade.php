@@ -3,7 +3,7 @@
 
 @section('content')
     @include('backend.layouts.partials.breadcrumb', [
-        'page' =>  isset($product) ? 'Sửa sản phẩm' : 'Thêm mới sản phẩm',
+        'page' => isset($product) ? 'Sửa sản phẩm' : 'Thêm mới sản phẩm',
         'href' => route('admin.products.index'),
     ])
 
@@ -22,7 +22,7 @@
         $action = isset($product) ? route('admin.products.update', $product) : route('admin.products.store');
     @endphp
 
-    <form action="{{ $action }}" method="post" enctype="multipart/form-data" id="myForm">
+    <form action="{{ $action }}" method="post" enctype="multipart/form-data" id="myForm" >
 
         @isset($product)
             @method('PUT')
@@ -65,25 +65,9 @@
 
                                     <div class="form-group mb-3">
                                         <div class="mb-3">
-                                            <label for="videoLinkInput" class="form-label">Nhập link video:</label>
-                                            <div class="input-group">
-                                                <input type="text" id="videoLinkInput" class="form-control"
-                                                    placeholder="Dán link video vào đây...">
-                                                <button class="btn btn-primary" onclick="loadVideoFromLink(event)">Xem
-                                                    Video</button>
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-3">
                                             <label for="videoFileInput" class="form-label">Chọn file video:</label>
-                                            <input type="file" id="videoFileInput" class="form-control" accept="video/*">
+                                            <input type="file" name="video[]" id="video" accept="video/*" required>
                                         </div>
-
-                                        <div id="videoContainer" class="video-container">
-                                            <video id="videoPreview" class="w-100" controls></video>
-                                            <iframe id="youtubePreview" frameborder="0" allowfullscreen></iframe>
-                                        </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -91,8 +75,8 @@
                             <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tab">
                                 <div class="form-group mb-3">
                                     <label for="seo_title" class="form-label">Tiêu đề seo</label>
-                                    <input type="text" value="{{ $product->seo_title ?? '' }}"
-                                        placeholder="Tiêu đề seo" id="seo_title" name="seo_title" class="form-control">
+                                    <input type="text" value="{{ $product->seo_title ?? '' }}" placeholder="Tiêu đề seo"
+                                        id="seo_title" name="seo_title" class="form-control">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="seo_description" class="form-label">Mô tả seo</label>
@@ -112,6 +96,25 @@
                 </div>
             </div>
             <div class="col-lg-3">
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Danh mục</h5>
+                    </div>
+
+                    <div class="card-body">
+                        <select id="category_id" class="form-select select2" name="category_id">
+                            <option value="">Chọn danh mục</option>
+                            @foreach ($categorys as $item)
+                                <option value="{{ $item->id }}"
+                                    {{ isset($product) && $product->category_id == $item->id ? 'selected' : '' }}>
+                                    {{ $item->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
 
                 <div class="card">
                     <div class="card-header">
@@ -149,7 +152,8 @@
                     </div>
 
                     <div class="card-body">
-                        <input type="text" value="{{ $product->price ?? '' }}" name="price" id="price" class="form-control">
+                        <input type="text" value="{{ $product->price ?? '' }}" name="price" id="price"
+                            class="form-control">
                     </div>
                 </div>
 
@@ -168,6 +172,8 @@
                     </div>
                 </div>
 
+
+
                 <div class="d-flex justify-content-end">
                     <button id="submitBtn" class="btn btn-primary btn-sm d-flex align-items-center gap-2" type="submit">
                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
@@ -183,6 +189,9 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('backend/assets/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/css/tagify.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/css/image-uploader.min.css') }}">
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+
     <style>
         .col-lg-9 .card {
             border-top-left-radius: 0 !important;
@@ -204,6 +213,15 @@
             height: 350px;
             border: 2px solid #ccc;
         }
+
+        .upload-text span {
+            display: none !important;
+        }
+
+        .image-uploader .uploaded .uploaded-image {
+            width: calc(50% - 1rem);
+            padding-bottom: calc(50% - 1rem);
+        }
     </style>
 @endpush
 
@@ -211,7 +229,9 @@
     <script src="{{ asset('backend/assets/js/select2.min.js') }}"></script>
     <script src="{{ asset('backend/assets/js/tagify.min.js') }}"></script>
     <script src="{{ asset('backend/ckeditor/ckeditor.js') }}"></script>
-
+    <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script src="{{ asset('backend/assets/js/image-uploader.min.js') }}"></script>
     <script>
         $(document).ready(function() {
 
@@ -232,6 +252,11 @@
                 allowClear: true
             })
 
+            $('#category_id').select2({
+                placeholder: 'Chọn một danh mục',
+                allowClear: true
+            })
+
             submitForm('#myForm', function(response) {
                 window.location.href = "{{ route('admin.products.index') }}"
             });
@@ -240,10 +265,32 @@
             ckeditor('seo_description')
 
             formatDataInput('price');
+
+            const preloaded = [];
+
+            $('.input-images').imageUploader({
+                preloaded: preloaded, // Ảnh đã có sẵn
+                imagesInputName: 'images', // Tên input khi upload ảnh mới
+                preloadedInputName: 'old', // Tên input chứa ảnh cũ
+                maxSize: 2 * 1024 * 1024, // Giới hạn ảnh 2MB
+                maxFiles: 15, // Tối đa 15 ảnh
+            });
         });
     </script>
 
     <script>
+        FilePond.registerPlugin();
+
+        const pond = FilePond.create(document.getElementById('video'), {
+            allowMultiple: true,
+            maxFiles: 5,
+            maxFileSize: '50MB',
+            acceptedFileTypes: ['video/mp4', 'video/webm', 'video/ogg'],
+            labelIdle: 'Kéo & thả video hoặc <span class="filepond--label-action">Chọn video</span> 🎬',
+        });
+
+
+
         function loadVideoFromLink(event) {
             event.preventDefault()
             const videoUrl = document.getElementById("videoLinkInput").value;
