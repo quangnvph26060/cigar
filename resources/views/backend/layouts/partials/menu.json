@@ -6,9 +6,9 @@
         "id": "dashboard"
     },
     {
-        "title": "Sản phẩm ",
+        "title": "Sản phẩm",
         "icon": "fas fa-box-open",
-        "id": "base",
+        "id": "products",
         "children": [
             {
                 "title": "Danh sách danh mục",
@@ -29,6 +29,24 @@
         ],
         "inRoutes": [
             "admin.categories.index", "admin.attributes.index", "admin.brands.index"
+        ]
+    },
+    {
+        "title": "Cấu hình",
+        "icon": "fas fa-users-cog",
+        "id": "configtion",
+        "children": [
+            {
+                "title": "Cấu hình chung",
+                "url": "admin.configs.config"
+            },
+            {
+                "title": "Cấu hình slider",
+                "url": "admin.configs.config"
+            }
+        ],
+        "inRoutes": [
+            "admin.configs.config"
         ]
     }
 ]

@@ -24,23 +24,22 @@ class BrandController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $columns    = ['id', 'name', 'slug', 'position', 'status'];
+            $columns    = ['id', 'name', 'slug', 'position', 'status', 'image'];
 
             $query      = $this->queryBuilder->buildQuery(
                 $columns,
                 [],
                 [],
-                request()
+                request(),
+                null,
+                [],
+                ['position', 'asc']
             );
 
             return $this->queryBuilder->processDataTable($query, function ($dataTable) {
                 return $dataTable
-                    ->editColumn('name', fn($row) => "<a href='" . route('admin.brands.edit', $row) . "'><strong>{$row->name}</strong></a>")
-                    ->editColumn('position', fn($row) => $row->position ?? 'NAN')
-                    ->editColumn('status', fn($row) => $row->status == 1
-                        ? '<span class="badge bg-success">Xuất bản</span>'
-                        : '<span class="badge bg-warning">Chưa xuất bản</span>');
-            }, ['name', 'status']);
+                    ->editColumn('position', fn($row) => $row->position ?? 'NAN');
+            });
         }
         return view('backend.brand.index');
     }
@@ -56,7 +55,7 @@ class BrandController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(BrandRequest $request)
+    public function store(Request $request)
     {
         return transaction(function () use ($request) {
 
@@ -67,7 +66,7 @@ class BrandController extends Controller
             }
 
             if ($request->hasFile('image')) {
-                $credentials['image'] = saveImages($request, 'image', 'categories');
+                $credentials['image'] = saveImages($request, 'image', 'brands');
             }
 
             Brand::create($credentials);
@@ -77,6 +76,8 @@ class BrandController extends Controller
             return handleResponse('Thêm mới thương hiệu thành công.', 201);
         });
     }
+
+
 
     /**
      * Display the specified resource.
@@ -108,12 +109,12 @@ class BrandController extends Controller
             }
 
             if ($request->hasFile('image')) {
-                $credentials['image'] = saveImages($request, 'image', 'categories');
+                $credentials['image'] = saveImages($request, 'image', 'brands');
                 deleteImage($brand->image);
             }
 
             $brand->update($credentials);
-            
+
             sessionFlash('success', 'Cập nhật thương hiệu thành công.');
 
             return handleResponse('Cập nhật thương hiệu thành công.', 201);

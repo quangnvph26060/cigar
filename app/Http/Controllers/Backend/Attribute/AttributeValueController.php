@@ -76,7 +76,7 @@ class AttributeValueController extends Controller
             }
 
             if ($request->hasFile('image')) {
-                $credentials['image'] = saveImages($request, 'image', 'categories');
+                $credentials['image'] = saveImages($request, 'image', 'attributes');
             }
 
             AttributeValue::create($credentials);
@@ -119,7 +119,7 @@ class AttributeValueController extends Controller
             }
 
             if ($request->hasFile('image')) {
-                $credentials['image'] = saveImages($request, 'image', 'categories');
+                $credentials['image'] = saveImages($request, 'image', 'attributes');
                 deleteImage($attributeValue->image);
             }
 
