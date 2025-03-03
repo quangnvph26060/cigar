@@ -92,7 +92,7 @@ class BulkActionController extends Controller
             return response()->json(['error' => 'Model không tồn tại'], 400);
         }
 
-        foreach ($order as $index => $id) {
+        foreach ($order ?? [] as $index => $id) {
             $model::where('id', $id)->update(['position' => $index + 1]);
         }
         return handleResponse('Cập nhật vị trí thành công.', 200);

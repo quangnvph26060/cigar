@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\Brand\BrandController;
 use App\Http\Controllers\Backend\BulkActionController;
 use App\Http\Controllers\Backend\Category\CategoryController;
 use App\Http\Controllers\Backend\Product\ProductController;
+use App\Http\Controllers\Backend\Slider\SliderController;
 use App\Http\Controllers\Backend\Variation\VariationController;
 use App\Http\Controllers\Backend\Config\ConfigController;
 use App\Http\Controllers\Backend\FastUpdateController;
@@ -56,8 +57,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             'attributes' => AttributeController::class,
             'brands' => BrandController::class,
             'products' => ProductController::class,
-            'variations' => VariationController::class
-
+            'variations' => VariationController::class,
+            'sliders' => SliderController::class
         ]);
 
         Route::prefix('configs')->controller(ConfigController::class)->name('configs.')->group(function () {

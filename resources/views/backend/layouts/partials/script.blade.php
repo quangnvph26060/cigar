@@ -99,8 +99,6 @@
                 var submitBtn = $("#submitBtn");
                 var spinner = submitBtn.find(".spinner-border");
 
-                // Disable nút và hiển thị hiệu ứng loading
-                submitBtn.prop("disabled", true);
                 spinner.removeClass("d-none");
 
                 // Kiểm tra xem CKEditor đã được khởi tạo trên textarea chưa

@@ -42,11 +42,11 @@
             },
             {
                 "title": "Cấu hình slider",
-                "url": "admin.configs.config"
+                "url": "admin.sliders.index"
             }
         ],
         "inRoutes": [
-            "admin.configs.config"
+            "admin.sliders.index", "admin.configs.config"
         ]
     }
 ]

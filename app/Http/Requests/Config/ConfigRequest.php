@@ -27,6 +27,7 @@ class ConfigRequest extends FormRequest
             'icon' => 'nullable|image|mimes:png,jpg,webp|max:2048',
             'hotline' => 'nullable',
             'phone_number' => 'nullable',
+            'intro_title' => 'nullable',
             'introduction' => 'nullable',
             'address' => 'nullable',
             'email' => 'nullable',
