@@ -8,33 +8,21 @@
                 <div class="inner">
                     <div id="home-carousel" class="carousel slide" data-interval="6000" data-ride="carousel">
                         <ol class="carousel-indicators">
-                            <li data-target="#home-carousel" data-slide-to="0" class="active"></li>
-                            <li data-target="#home-carousel" data-slide-to="1"></li>
-                            <li data-target="#home-carousel" data-slide-to="2"></li>
-                            <li data-target="#home-carousel" data-slide-to="3"></li>
+                            @foreach ($sliders as $slider)
+                                <li data-target="#home-carousel" data-slide-to="{{ $loop->index }}"
+                                    @if ($loop->first) class="active" @endif></li>
+                            @endforeach
                         </ol>
 
                         <div class="carousel-inner">
-                            <a href="/domaine-de-lavalette" class="item active">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                    data-src="/img/banner/banner/e17a6d448a010737a65761499693ee74.jpeg"
-                                    alt="Domaine de Lavalette" />
-                            </a>
-                            <a href="https://www.rauchr.de/zigarillos/niederlande/granger-90014674" class="item">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                    data-src="/img/banner/banner/2d3de5d7f0dd13dcb9a262664b901e8a.jpeg"
-                                    alt="Granger Zigarillos" />
-                            </a>
-                            <a href="/zigarren/dominikanische-republik/baron-ullman-90006477" class="item">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                    data-src="/img/banner/banner/64aa0f8230e0e5407b931dcb48df3f0e.jpeg"
-                                    alt="Baron Ullmann Frandisuarez" />
-                            </a>
-                            <a href="/zigarillos/cuba/cohiba-wide-short-90008454_54972" class="item">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                    data-src="/img/banner/banner/9a11d1e37b6facffdaedaf61b2199fc2.jpg"
-                                    alt="Cohiba Wide Short" />
-                            </a>
+                            @foreach ($sliders as $slider)
+                                <a @if ($slider['url']) target="_blank" @endif
+                                    href="{{ $slider['url'] ?? 'javascript:void(0)' }}"
+                                    class="item  @if ($loop->first) active @endif">
+                                    <img src="{{ showImage($slider['image']) }}"
+                                        data-src="{{ showImage($slider['image']) }}" alt="{{ $slider['alt'] }}" />
+                                </a>
+                            @endforeach
                         </div>
 
                         <a class="left carousel-control" href="#home-carousel" data-slide="prev">
@@ -158,38 +146,46 @@
         <div class="ws-g ws-c colcontent">
             <div class="ws-u-1 ws-u-lg-1-2 leftcol">
                 <div class="ws-g">
-                    <div class="ws-u-1-2 spot" style="vertical-align: middle">
-                        <div class="ws-c">
-                            <div id="c67acb8247e4a4" class="carousel slide accessorieTeaserSpot" data-interval="6000"
-                                data-ride="carousel">
-                                <div class="carousel-inner">
-                                    <div class="item active">
-                                        <a href="/zigarrenzubehoer/cutter?ref=spot" title="Cutter">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/img/accessories/RBA-Cutter.jpg" alt="Cutter" />
-                                            <span>Cutter</span>
-                                        </a>
-                                    </div>
-                                    <div class="item">
-                                        <a href="/zigarrenzubehoer/humidor?ref=spot" title="Humidore">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/img/accessories/RBA-Humidore.jpg" alt="Humidore" />
-                                            <span>Humidore</span>
-                                        </a>
-                                    </div>
-                                </div>
 
-                                <a class="left carousel-control" href="#c67acb8247e4a4" data-slide="prev">
-                                    <span class="fa fa-chevron-left"></span>
-                                </a>
-                                <a class="right carousel-control" href="#c67acb8247e4a4" data-slide="next">
-                                    <span class="fa fa-chevron-right"></span>
-                                </a>
+
+                    @foreach ($sliderSmall as $slider)
+                        <div class="ws-u-1-2 spot" style="vertical-align: middle">
+                            <div class="ws-c">
+                                <div id="carousel-{{ $slider->id }}" class="carousel slide accessorieTeaserSpot"
+                                    data-interval="6000" data-ride="carousel">
+                                    <div class="carousel-inner">
+                                        @php
+                                            $items = $slider->items; // Giải mã JSON
+                                        @endphp
+
+                                        @foreach ($items as $index => $item)
+                                            <div class="item {{ $loop->first ? 'active' : '' }}">
+                                                <a @if ($item['url']) target="_blank" @endif
+                                                    href="{{ $item['url'] ?? '#' }}" title="{{ $item['title'] ?? '' }}">
+                                                    <img src="{{ showImage($item['image'], 'banner_default.jpg') }}"
+                                                        data-src="{{ showImage($item['image'], 'banner_default.jpg') }}"
+                                                        alt="{{ $item['alt'] ?? '' }}" />
+                                                    <span>{{ $item['title'] ?? '' }}</span>
+                                                </a>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+                                    <a class="left carousel-control" href="#carousel-{{ $slider->id }}"
+                                        data-slide="prev">
+                                        <span class="fa fa-chevron-left"></span>
+                                    </a>
+                                    <a class="right carousel-control" href="#carousel-{{ $slider->id }}"
+                                        data-slide="next">
+                                        <span class="fa fa-chevron-right"></span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endforeach
 
-                    <div class="ws-u-1-2 spot" style="vertical-align: middle">
+
+                    {{-- <div class="ws-u-1-2 spot" style="vertical-align: middle">
                         <div class="ws-c">
                             <div id="c67acb8247e4c6" class="carousel slide accessorieTeaserSpot" data-interval="6000"
                                 data-ride="carousel">
@@ -218,7 +214,7 @@
                                 </a>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="ws-u-1-2 spot" style="vertical-align: middle">
                         <div class="ws-c">
@@ -670,12 +666,11 @@
         <div class="ws-g ws-c mt-4 contentpage contentpage--twocol contentpage--index">
             <div class="ws-u-1 contentpage__title">
                 <h1>
-                    Vertrauen Sie auf RAUCHR: Preiswerte Zigarillos und bekannte
-                    Zigarren
+                    {{ $config->intro_title }}
                 </h1>
             </div>
             <div class="ws-u-1 contentpage__content">
-                <div class="tableofcontents">
+                {{-- <div class="tableofcontents">
                     <span class="content-nav-title"><i class="fa fa-list-ol"></i> Inhalt:</span>
                     <ul>
                         <li>
@@ -692,156 +687,12 @@
                             <a href="#raucherzubehoer-und-service">Raucherzubehör und Service</a>
                         </li>
                     </ul>
-                </div>
+                </div> --}}
                 <div class="clear">
                     <hr />
                 </div>
-                <p>
-                    Der Markt an guten Tabakwaren ist riesig – und mit RAUCHR haben
-                    Sie einen Partner an Ihrer Seite, der die gesamte Bandbreite des
-                    Genusses bereithält. Denn unser Anliegen ist es, sämtliche in
-                    Deutschland erhältliche Ware für Sie auf Lager zu haben.
-                    Aficionados finden bei uns alles, was das Herz begehrt:
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/zigarren/cuba?fertigungsart%5B%5D=TAM&mySMKategorie=2&nur_lieferbar=1">kubanische
-                                Longfiller</a></strong></span>
-                    ebenso wie
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/zigarren?Preisvon=10&Preisbis=50&mySMKategorie=2&nur_lieferbar=1&shoporder=Preis+aufsteigend">Zigarren
-                                für kleines Geld</a></strong></span>.
-                </p>
-                <h2 id="zigarren-bei-rauchr-guenstig-kaufen">
-                    <span style="font-size: 18pt">Zigarren bei RAUCHR günstig kaufen</span>
-                </h2>
-                <p>
-                    Kuba steht weltweit als Synonym für exzellente Zigarren. In
-                    unserem Sortiment finden Sie die gesamte Bandbreite der
-                    kubanischen Markenpyramide – von luxuriösen
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/zigarren?hersteller=Cohiba&nur_lieferbar=1&shoporder=Preis+aufsteigend">Cohiba</a></strong></span>
-                    und zeitlosen Klassikern wie
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/shop/suche?hersteller=Montecristo&nur_lieferbar=1&shoporder=Relevanz">Montecristo</a></strong></span>
-                    bis hin zu erschwinglichen
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/zigarren?hersteller=Guantanamera&nur_lieferbar=1&shoporder=Preis+aufsteigend">Guantanamera</a></strong></span>.
-                </p>
-                <p>
-                    Die
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/zigarren/dominikanische-republik?nur_lieferbar=1&shoporder=Preis+aufsteigend">Dominikanische
-                                Republik</a></strong></span>
-                    wird oft mit der Luxusmarke
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/zigarren?hersteller=Davidoff&nur_lieferbar=0&nur_lieferbar=1&shoporder=Preis+aufsteigend&von=0">Davidoff</a></strong></span>
-                    in Verbindung gebracht. Doch auch
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/shop/suche?hersteller=Cusano&nur_lieferbar=0&nur_lieferbar=1&shoporder=Preis+aufsteigend&von=0">Cusano</a></strong></span>
-                    verdient Beachtung. Die Marke bietet sogenannte Bundle-Zigarren
-                    an, die ein hervorragendes Preis-Leistungs-Verhältnis bieten, da
-                    auf eine aufwändige Verpackung bewusst verzichtet wird. Ebenso
-                    setzen Marken wie
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/shop/suche?hersteller=Villa+Zamorano&nur_lieferbar=0&nur_lieferbar=1&shoporder=Preis+aufsteigend&von=0">Villa
-                                Zamorano</a></strong></span>,
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/shop/suche?hersteller=Mustique&nur_lieferbar=0&nur_lieferbar=1&shoporder=Preis+aufsteigend&von=0">Mustique</a></strong></span>,
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/shop/suche?hersteller=Don+Tomas&nur_lieferbar=0&nur_lieferbar=1&shoporder=Preis+aufsteigend&von=0">Don
-                                Tomas</a></strong></span>,
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/shop/suche?hersteller=Dominico&nur_lieferbar=0&nur_lieferbar=1&shoporder=Preis+aufsteigend&von=0">Dominico</a></strong></span>
-                    oder
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/shop/suche?hersteller=Casa+de+Nicaragua&nur_lieferbar=0&nur_lieferbar=1&shoporder=Preis+aufsteigend&von=0">Casa
-                                de Nicaragua</a></strong></span>
-                    auf guten Tabak in schlichter Aufmachung. Bei diesen Preisen gehen
-                    Sie kein Risiko ein!
-                </p>
-                <h2 id="aromatisierte-zigarillos-und-deutsche-klassiker">
-                    <span style="font-size: 18pt">Aromatisierte Zigarillos und deutsche Klassiker</span>
-                </h2>
-                <p>
-                    Das Vollständigkeitsversprechen von RAUCHR gilt selbstverständlich
-                    auch für
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/zigarillos?nur_lieferbar=0&nur_lieferbar=1&shoporder=Preis+aufsteigend&von=0">Zigarillos</a></strong></span>.
-                    Wir führen
-                    <span style="text-decoration: underline"><a title="Kubanische Zigarillos"
-                            href="https://www.rauchr.de/zigarillos/cuba?nur_lieferbar=0&nur_lieferbar=1&shoporder=Preis+aufsteigend&von=0"><strong>Shortfiller
-                                aus Kuba</strong></a></span>
-                    ebenso wie europäische Bestseller, darunter die Marken
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/shop/suche?hersteller=Willem+II&nur_lieferbar=0&nur_lieferbar=1&shoporder=Preis+aufsteigend&von=0">Willem
-                                II</a></strong></span>,
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/shop/suche?hersteller=De+Olifant&nur_lieferbar=0&nur_lieferbar=1&shoporder=Preis+aufsteigend&von=0">De
-                                Olifant</a></strong></span>,
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/zigarillos/sonstige-herkunft/handelsgold-zigarillos-90001210">Handelsgold</a></strong></span>
-                    und
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/zigarren/deutschland/handelsgold-tropenschatz-90001658">Tropenschatz</a></strong></span>.
-                    Insbesondere
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/shop/suche?hersteller=Moods&nur_lieferbar=0&nur_lieferbar=1&shoporder=Relevanz&von=0">Dannemann
-                                Moods</a></strong></span>
-                    und
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/zigarillos/deutschland/villiger-zigarillos-90004529">Villiger
-                                Mini</a></strong></span>
-                    sind echte Legenden unter Zigarillo-Rauchern – bei uns sind Ihre
-                    Lieblingsmarken zuhause.
-                </p>
-                <h2 id="pfeifen-und-pfeifentabak-bei-rauchr">
-                    <span style="font-size: 18pt">Pfeifen und Pfeifentabak bei RAUCHR</span>
-                </h2>
-                <p>
-                    Gleiches gilt für
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/pfeifen?nur_lieferbar=0&nur_lieferbar=1&shoporder=Preis+aufsteigend&von=0">Pfeifen</a></strong></span>
-                    und
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/pfeifentabak?nur_lieferbar=0&nur_lieferbar=1&shoporder=Preis+aufsteigend&von=0">Pfeifentabake</a></strong></span>.
-                    Pfeifen renommierter Hersteller wie
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/shop/suche?hersteller=Vauen&nur_lieferbar=0&nur_lieferbar=1&shoporder=Preis+aufsteigend&von=0">Vauen</a></strong></span>,
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/shop/suche?hersteller=Peterson&nur_lieferbar=0&nur_lieferbar=1&shoporder=Preis+aufsteigend&von=0">Peterson</a></strong></span>
-                    und
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/shop/suche?hersteller=Savinelli&nur_lieferbar=0&nur_lieferbar=1&shoporder=Preis+aufsteigend&von=0">Savinelli</a></strong></span>
-                    erfreuen sich großer Beliebtheit. Unser Angebot an Pfeifentabaken
-                    reicht von klassischen
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/shop/suche?hersteller=Mac+Baren&nur_lieferbar=0&nur_lieferbar=1&shoporder=Relevanz&von=0">Mac
-                                Baren</a></strong></span>
-                    Tabaken bis hin zu den kreativen Eigenkreationen von
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/pfeifentabak/pfeifentabak/pipe-republic-pfeifentabak-90015274">Pipe
-                                Republic</a></strong></span>.
-                </p>
-                <h2 id="raucherzubehoer-und-service">
-                    <span style="font-size: 18pt">Raucherzubehör und Service</span>
-                </h2>
-                <p>
-                    Falls Sie noch einen
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/zigarrenzubehoer/ascher?nur_lieferbar=0&nur_lieferbar=1&shoporder=Relevanz&von=0">Zigarrenaschenbecher</a></strong></span>,
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/zigarrenzubehoer/humidor?nur_lieferbar=0&nur_lieferbar=1&shoporder=Relevanz&von=0">Humidor</a></strong></span>
-                    oder
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/zigarrenzubehoer/cutter?nur_lieferbar=0&nur_lieferbar=1&shoporder=Preis+aufsteigend&von=0">Cutter</a></strong></span>
-                    suchen, finden Sie in unserem Sortiment das passende Zubehör. Und
-                    falls dennoch einmal ein Wunsch unerfüllt bleibt, steht Ihnen
-                    unser kompetenter
-                    <span style="text-decoration: underline"><strong><a
-                                href="https://www.rauchr.de/service/kontakt">RAUCHR
-                                Kundenservice</a></strong></span>
-                    jederzeit gerne zur Verfügung. Alles für Ihren perfekten Genuss –
-                    unkompliziert und zuverlässig.
-                </p>
+
+                {!! $config->introduction  !!}
             </div>
         </div>
     </div>

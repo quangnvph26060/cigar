@@ -65,7 +65,7 @@ const dataTables = (api, columns, model, sortable = false) => {
         },
         drawCallback: function () {
             // Kiểm tra xem có cần khởi tạo sortable hay không
-            if (sortable) {
+            if ($("#myTable tbody tr").length > 1 && sortable) {
                 // Khởi tạo SortableJS mỗi khi DataTables vẽ lại bảng
                 new Sortable(document.querySelector("#myTable tbody"), {
                     handle: "td", // Vùng kéo thả
@@ -73,7 +73,6 @@ const dataTables = (api, columns, model, sortable = false) => {
                         var order = [];
                         $("#myTable tbody tr").each(function (index) {
                             order.push($(this).data("id"));
-
                             $(this)
                                 .find("td.position")
                                 .text(index + 1);

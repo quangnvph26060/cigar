@@ -15,6 +15,7 @@ class Config extends Model
         'icon',
         'hotline',
         'phone_number',
+        'intro_title',
         'introduction',
         'address',
         'email',

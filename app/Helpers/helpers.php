@@ -155,6 +155,36 @@ if (!function_exists('saveImages')) {
     }
 }
 
+if (!function_exists('uploadImages')) {
+    function uploadImages($image, string $directory = 'images', $width = 150, $height = 150, $isArray = false, $resize = false)
+    {
+        $paths = [];
+
+        if ($image instanceof \Illuminate\Http\UploadedFile) {
+            // Sử dụng ImageManager để xử lý ảnh
+            $manager = new ImageManager(['driver' => 'gd']);
+            $img = $manager->make($image->getRealPath());
+
+            // Resize nếu $resize = true
+            if ($resize) {
+                $img->resize($width, $height);
+            }
+
+            // Tạo tên file duy nhất
+            $filename = time() . uniqid() . '.' . 'webp';
+
+            // Lưu ảnh vào thư mục public
+            Storage::disk('public')->put($directory . '/' . $filename, $img->encode());
+
+            // Thêm đường dẫn vào mảng
+            $paths[] = $directory . '/' . $filename;
+        }
+
+        return $isArray ? $paths : $paths[0] ?? null;
+    }
+}
+
+
 
 if (!function_exists('isActiveMenu')) {
     function isActiveMenu($menuItem)

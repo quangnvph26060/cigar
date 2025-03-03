@@ -3,10 +3,17 @@
 use App\Models\AttributeValue;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Slider;
 use Illuminate\Support\Facades\Route;
 
 
 route::get('/', function () {
+
+    $slider =  Slider::query()->where('type', 'big')->first();
+
+    $sliders = collect($slider->items)->sortBy('position')->values()->all();
+
+    $sliderSmall = Slider::query()->where('type', 'small')->limit(2)->get();
 
     $categories = Category::with([
         'attributes:id,name',
@@ -31,6 +38,5 @@ route::get('/', function () {
 
     $brands = Brand::query()->limit(8)->orderBy('position', 'asc')->where('status', 1)->get();
 
-
-    return view('frontend.pages.home', compact('categories', 'brands'));
+    return view('frontend.pages.home', compact('categories', 'brands', 'sliders', 'sliderSmall'));
 });
