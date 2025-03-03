@@ -1,12 +1,18 @@
 const columns = [
     {
+        className: "dt-control",
+        orderable: false,
+        data: null,
+        defaultContent: "",
+    },
+    {
         data: "code",
         name: "code",
         title: "MÃ SẢN PHẨM",
     },
     {
-        data: "name",
-        name: "name",
+        data: "name_edit",
+        name: "name_edit",
         title: "TÊN SẢN PHẨM",
     },
     {
@@ -15,8 +21,8 @@ const columns = [
         title: "ĐƯỜNG DẪN",
     },
     {
-        data: "status",
-        name: "status",
+        data: "statuss",
+        name: "statuss",
         title: "TRẠNG THÁI",
     },
 ];

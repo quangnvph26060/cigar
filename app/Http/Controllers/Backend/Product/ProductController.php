@@ -38,13 +38,13 @@ class ProductController extends Controller
 
             return $this->queryBuilder->processDataTable($query, function ($dataTable) {
                 return $dataTable
-                    ->editColumn('name', fn($row) => "<a href='" . route('admin.variations.product.index', $row->id) . "'><strong>{$row->name}</strong></a> <br> | <a href='" . route('admin.products.edit', $row) . "'>
+                    ->editColumn('name_edit', fn($row) => "<a href='" . route('admin.variations.product.index', $row->id) . "'><strong>{$row->name}</strong></a> <br> | <a href='" . route('admin.products.edit', $row) . "'>
                     Sửa
                 </a>")
-                    ->editColumn('status', fn($row) => $row->status == 1
+                    ->editColumn('statuss', fn($row) => $row->status == 1
                         ? '<span class="badge bg-success">Xuất bản</span>'
                         : '<span class="badge bg-warning">Chưa xuất bản</span>');
-            }, ['name', 'status']);
+            }, ['name_edit', 'statuss']);
         }
         return view('backend.product.index');
     }
@@ -70,6 +70,7 @@ class ProductController extends Controller
 
             $credentials = $request->validated();
 
+            $credentials['code'] = 'SP' . str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
 
             if (!$credentials['slug']) {
                 $credentials['slug'] = generateSlug($credentials['name']);

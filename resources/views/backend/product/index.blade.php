@@ -25,9 +25,52 @@
 
 @push('scripts')
     <script src="{{ asset('backend/assets/js/plugin/datatables/datatables.min.js') }}"></script>
-    <script src="{{ asset('backend/assets/js/columns/variation.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/columns/product.js') }}"></script>
     <script src="{{ asset('backend/assets/js/connectDataTable.js') }}"></script>
     <script>
+        function format(d) {
+            console.log(d);
+
+            let image = "{{ env('APP_URL') }}" + '/storage/' + d.image
+            return `
+                <form id="myForm" enctype="multipart/form-data">
+                    <div class="row">
+
+                        <div class="mb-3 col-2">
+                            <label for="image" class="form-label">Ảnh sản phẩm</label>
+                            <img class="img-fluid img-thumbnail w-100" id="show_image-${d.id}" style="cursor: pointer"
+                            src="${image}" alt="${d.name}"
+                            onclick="document.getElementById('image-${d.id}').click();">
+                            <input type="file" name="image" id="image-${d.id}" class="form-control d-none"
+                                accept="image/*" onchange="previewImage(event, 'show_image-${d.id}')">
+                        </div>
+
+                        <div class="col-10">
+                            <div class="row">
+                                <div class="mb-3 col-12">
+                                    <label for="name" class="form-label">Tên san phẩm</label>
+                                    <input type="text" name="name" class="form-control" id="name" value="${d.name}">
+                                </div>
+
+                                <div class="mb-3 col-12 d-flex align-items-center gap-3">
+                                    <label for="name" class="form-label mb-0">Trạng thái</label>
+                                    <label class="switch">
+                                        <input name="status" type="checkbox" ${d.status == 1 ? 'checked' : ''}/>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                              
+                                <div class="mb-3">
+                                    <button type="submit" class="btn btn-primary btn-sm">Cập nhật</button>
+                                    <button type="button" class="btn btn-secondary btn-sm" id="cancelEditBtn">Hủy</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            `;
+        }
         $(document).ready(function() {
             const api = "{{ route('admin.products.index') }}"
             dataTables(api, columns, 'Product')
