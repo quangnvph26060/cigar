@@ -160,18 +160,18 @@ class VariationController extends Controller
             // Đồng bộ mà không xóa các dữ liệu cũ
             $variation->attributes()->sync($request->attribute_value_id);
 
-            $oldImages = $request->input('old');
+            $oldImages = $request->input('old', []);
             $productImages = VariationImage::where('variation_id', $variation->id)->pluck('id')->toArray();
-            $imagesToKeep = array_intersect($oldImages, $productImages);
+            $imagesToKeep = array_intersect($oldImages, $productImages) ;
             $imagesToDelete = array_diff($productImages, $imagesToKeep);
+
+            Log::info($imagesToDelete);
 
             // Xóa các ảnh không cần thiết
             foreach ($imagesToDelete as $imageId) {
                 $image = VariationImage::find($imageId);
                 if ($image) {
-                    // Xóa file ảnh trong thư mục lưu trữ
                     Storage::delete($image->image_path);
-                    // Xóa ảnh khỏi cơ sở dữ liệu
                     $image->delete();
                 }
             }
