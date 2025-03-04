@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\Brand\BrandController;
 use App\Http\Controllers\Backend\BulkActionController;
 use App\Http\Controllers\Backend\Category\CategoryController;
+use App\Http\Controllers\Backend\Post\PostController;
 use App\Http\Controllers\Backend\Product\ProductController;
 use App\Http\Controllers\Backend\Slider\SliderController;
 use App\Http\Controllers\Backend\Variation\VariationController;
@@ -58,7 +59,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             'brands' => BrandController::class,
             'products' => ProductController::class,
             'variations' => VariationController::class,
-            'sliders' => SliderController::class
+            'sliders' => SliderController::class,
+            'posts' => PostController::class,
         ]);
 
         Route::prefix('configs')->controller(ConfigController::class)->name('configs.')->group(function () {

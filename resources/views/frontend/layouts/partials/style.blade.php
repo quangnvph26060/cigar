@@ -11,8 +11,11 @@
 
 <link rel="preload" href="//app.usercentrics.eu/browser-ui/latest/loader.js" as="script" />
 
-<link rel="stylesheet" href="{{ asset('frontend/assets/css/custom.css') }}">
+
 <link href="{{ asset('frontend/assets/css/wsconnex-search.css') }}" type="text/css" rel="stylesheet" />
 
 <link type="text/css" href="{{ asset('frontend/assets/css/fbeb9c80f3389159630a63f52a261ebe_10014165865.css') }}"
     rel="stylesheet" />
+<link rel="stylesheet" href="{{ asset('frontend/assets/css/custom.css') }}">
+
+@stack('styles')

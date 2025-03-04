@@ -26,33 +26,33 @@ const dataTables = (api, columns, model, sortable = false) => {
     // Nếu có dt-control, đảm bảo nó ở vị trí đầu tiên
     let finalColumns = hasDtControl
         ? [
-              {
-                  className: "dt-control",
-                  orderable: false,
-                  data: null,
-                  defaultContent: "",
-              },
-              {
-                  data: "checkbox",
-                  name: "checkbox",
-                  orderable: false,
-                  searchable: false,
-                  width: "5px",
-                  className: "text-center",
-              },
-              ...columns.filter((col) => col.className !== "dt-control"),
-          ]
+            {
+                className: "dt-control",
+                orderable: false,
+                data: null,
+                defaultContent: "",
+            },
+            {
+                data: "checkbox",
+                name: "checkbox",
+                orderable: false,
+                searchable: false,
+                width: "5px",
+                className: "text-center",
+            },
+            ...columns.filter((col) => col.className !== "dt-control"),
+        ]
         : [
-              {
-                  data: "checkbox",
-                  name: "checkbox",
-                  orderable: false,
-                  searchable: false,
-                  width: "5px",
-                  className: "text-center",
-              },
-              ...columns,
-          ];
+            {
+                data: "checkbox",
+                name: "checkbox",
+                orderable: false,
+                searchable: false,
+                width: "5px",
+                className: "text-center",
+            },
+            ...columns,
+        ];
 
     const table = $("#myTable").DataTable({
         // Định nghĩa biến table

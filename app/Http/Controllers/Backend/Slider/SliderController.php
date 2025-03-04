@@ -7,6 +7,7 @@ use App\Http\Requests\Slider\SliderRequest;
 use App\Models\Slider;
 use App\Services\BaseQuery;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class SliderController extends Controller
 {
@@ -23,19 +24,33 @@ class SliderController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $columns    = ['id', 'type', 'items'];
+            $columns    = ['id', 'name', 'items', 'position'];
 
             $query      = $this->queryBuilder->buildQuery(
                 $columns,
                 [],
                 [],
-                request()
+                request(),
+                null,
+                [],
+                ['position', 'asc']
             );
 
             return $this->queryBuilder->processDataTable($query, function ($dataTable) {
                 return $dataTable
-                    ->addColumn('count_items', fn($row) => count($row->items));
-            });
+                    ->editColumn('created_at', function ($row) {
+                        $createdAt = Carbon::parse($row->created_at);
+                        return $createdAt->format('d-m-Y') . " (" . $createdAt->diffForHumans() . ")";
+                    })
+                    ->addColumn('images', function ($row) {
+                        $items = is_array($row->items) ? $row->items : json_decode($row->items, true);
+                        if (!is_array($items)) return '';
+
+                        return collect($items)->map(function ($item) {
+                            return "<img src='" . showImage($item['image']) . "' width='50' height='50' />";
+                        })->implode(' ');
+                    });
+            }, ['images']);
         }
         return view('backend.slider.index');
     }
@@ -58,13 +73,13 @@ class SliderController extends Controller
             $items = $credentials['items'];
 
 
-            [$width, $height] = $credentials['type'] == 'big' ? [900, 650] : [374, 262];
+            [$width, $height] = [900, 650];
 
             // Duyệt qua từng item và xử lý ảnh
             foreach ($items as $key => &$item) {
                 if (isset($item['image']) && $item['image'] instanceof \Illuminate\Http\UploadedFile) {
                     // Lưu ảnh và lấy đường dẫn ảnh
-                    $imagePath = uploadImages($item['image'], 'sliders', $width, $height, false, true);
+                    $imagePath = uploadImages($item['image'], 'sliders', $width, $height, false);
                     $item['image'] = $imagePath; // Cập nhật đường dẫn ảnh vào `items`
                 }
             }
@@ -73,7 +88,7 @@ class SliderController extends Controller
             Slider::query()->create(
                 [
                     'items' => $items,
-                    'type' => $credentials['type']
+                    'name' => $credentials['name']
                 ]
             );
 
@@ -111,7 +126,7 @@ class SliderController extends Controller
             $newItems = $credentials['items']; // Dữ liệu gửi lên
             $oldItems = $slider->items ?? [];  // Dữ liệu cũ từ DB
 
-            [$width, $height] = $credentials['type'] == 'big' ? [900, 650] : [374, 262];
+            [$width, $height] = [900, 650];
 
             $updatedItems = [];
 
@@ -136,7 +151,7 @@ class SliderController extends Controller
             // Cập nhật dữ liệu
             $slider->update([
                 'items' => $updatedItems,
-                'type' => $credentials['type']
+                'name' => $credentials['name']
             ]);
 
             return handleResponse('Cập nhật slider thành công', 200);

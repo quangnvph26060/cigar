@@ -28,11 +28,7 @@
             <div class="card-body">
                 <div class="form-group mb-3">
                     <label for="type" class="form-label">Tên</label>
-                    <input type="text" placeholder="Tên" name="name" id="name" class="form-control">
-                    {{-- <select name="type" id="type" class="form-select">
-                        <option value="big" @selected(optional($slider)->type == 'big')>Slider Lớn</option>
-                        <option value="small" @selected(optional($slider)->type == 'small')>Slider Nhỏ</option>
-                    </select> --}}
+                    <input type="text" placeholder="Tên" name="name" id="name" value="{{ optional($slider)->name }}" class="form-control">
                 </div>
                 <div class="sliders">
                     {{-- @dd($slider->items) --}}
