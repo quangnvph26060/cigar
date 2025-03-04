@@ -24,13 +24,13 @@ class SliderRequest extends FormRequest
         $id = optional($this->route('slider'))->id;
 
         return [
+            'name' => 'required',
             'items' => 'required|array',
             'items.*.image' => ($id ? 'nullable' : 'required') . '|image|mimes:png,jpg,jpeg,gif,webp|max:2048',
             'items.*.title' => 'nullable|string|max:255',
             'items.*.alt' => 'nullable|string|max:255',
             'items.*.url' => 'nullable|url|max:255',
             'items.*.position' => 'required|integer|min:1',
-            'type' => 'required|in:big,small'
         ];
     }
 
@@ -43,6 +43,7 @@ class SliderRequest extends FormRequest
     public function attributes()
     {
         return [
+            'name' => 'Tên',
             'items.*.title' => 'Tiêu đề',
             'items.*.image' => 'Ảnh',
             'items.*.alt' => 'Văn bản thay thế',
@@ -51,7 +52,6 @@ class SliderRequest extends FormRequest
             'items.*.attributes' => 'Thuộc tính',
             'items.*.attributes.*.key' => 'Khóa thuộc tính',
             'items.*.attributes.*.value' => 'Giá trị thuộc tính',
-            'type' => 'Loại'
         ];
     }
 }

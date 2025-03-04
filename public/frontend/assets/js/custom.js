@@ -19,10 +19,6 @@
     }
 })();
 
-// $(document).ready(function() {
-//     paintAroma(NameArrObj);
-//     createSchieber();
-// });
 $("img[data-src]:not(.swiper-lazy)").unveil(100, function() {
     $(this).on("load", function() {
         $(this).addClass("unveiled");

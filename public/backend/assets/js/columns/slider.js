@@ -1,15 +1,28 @@
 const columns = [
     {
-        data: "type",
-        name: "type",
-        title: "KIỂU SLIDER",
-        render: function(data, type, row){
-            return `<a class="fw-bold" href="/admin/sliders/${row.id}/edit">${data == "big" ? 'Slider Lớn' : 'Slider Nhỏ'}</a>`
-        }
+        data: "name",
+        name: "name",
+        title: "TÊN",
+        render: function (data, type, row) {
+            return `<a href='/admin/sliders/${row.id}/edit'><strong>${data}</strong></a>`;
+        },
     },
     {
-        data: "count_items",
-        name: "count_items",
-        title: "SỐ LƯỢNG ẢNH",
+        data: "images",
+        name: "images",
+        title: "Ảnh",
+        orderable: false,
+        searchable: false,
+    },
+    {
+        data: "position",
+        name: "position",
+        title: "VỊ TRÍ",
+        className: "position",
+    },
+    {
+        data: "created_at",
+        name: "created_at",
+        title: "NGÀY TẠO",
     },
 ];

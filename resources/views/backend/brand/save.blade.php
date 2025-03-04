@@ -4,7 +4,7 @@
 @section('content')
     @include('backend.layouts.partials.breadcrumb', [
         'page' => 'Thêm mới danh mục',
-        'href' => route('admin.categories.index'),
+        'href' => route('admin.brands.index'),
     ])
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">

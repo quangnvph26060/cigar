@@ -15,3 +15,5 @@
 <script src="https://www.ws-connex.de/jsloader/509222017/search:2.2"></script>
 
 <script src="{{ asset('frontend/assets/js/custom.js') }}"></script>
+
+@stack('scripts')

@@ -48,5 +48,19 @@
         "inRoutes": [
             "admin.sliders.index", "admin.configs.config"
         ]
+    },
+    {
+        "title": "Marketing",
+        "icon": "fas fa-bullseye",
+        "id": "marketing",
+        "children": [
+            {
+                "title": "Danh sách bài viết",
+                "url": "admin.posts.index"
+            }
+        ],
+        "inRoutes": [
+            "admin.posts.index", "admin.posts.create"
+        ]
     }
 ]

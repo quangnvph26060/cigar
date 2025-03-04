@@ -2,27 +2,32 @@
 
 
 @section('content')
+    @php
+        $firstSlider = $sliders->first();
+    @endphp
     <div class="ws-container">
         <div class="ws-g ws-c bigspots">
             <div class="ws-u-1 ws-u-lg-1-2 bigspots-left">
                 <div class="inner">
                     <div id="home-carousel" class="carousel slide" data-interval="6000" data-ride="carousel">
                         <ol class="carousel-indicators">
-                            @foreach ($sliders as $slider)
+                            @foreach ($firstSlider->items as $slider)
                                 <li data-target="#home-carousel" data-slide-to="{{ $loop->index }}"
                                     @if ($loop->first) class="active" @endif></li>
                             @endforeach
                         </ol>
 
                         <div class="carousel-inner">
-                            @foreach ($sliders as $slider)
-                                <a @if ($slider['url']) target="_blank" @endif
-                                    href="{{ $slider['url'] ?? 'javascript:void(0)' }}"
+                            @foreach ($firstSlider->items as $item)
+                                <a @if ($item['url']) target="_blank" @endif
+                                    href="{{ $item['url'] ?? 'javascript:void(0)' }}"
                                     class="item  @if ($loop->first) active @endif">
-                                    <img src="{{ showImage($slider['image']) }}"
-                                        data-src="{{ showImage($slider['image']) }}" alt="{{ $slider['alt'] }}" />
+                                    <img src="{{ showImage($item['image']) }}" data-src="{{ showImage($item['image']) }}"
+                                        alt="{{ $item['alt'] }}" />
                                 </a>
                             @endforeach
+
+
                         </div>
 
                         <a class="left carousel-control" href="#home-carousel" data-slide="prev">
@@ -36,7 +41,7 @@
             </div>
             <div class="ws-u-1 ws-u-lg-1-2 bigspots-right">
                 <div class="ws-g">
-                    <div class="ws-u-1-2 spot-4">
+                    {{-- <div class="ws-u-1-2 spot-4">
                         <div class="inner">
                             <a href="/content/kubanische-zigarillos?ref=spot">
                                 <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
@@ -46,41 +51,33 @@
                                 </div>
                             </a>
                         </div>
-                    </div>
+                    </div> --}}
 
-                    <div class="ws-u-1-2 spot-5">
-                        <div class="inner">
-                            <a href="/flor-de-copan?ref=spot">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                    data-src="/img/banner/spot/dfd653a4b8d9d4f136d154d4be78c1c4.jpg" alt="flor de copan" />
-                            </a>
-                        </div>
-                    </div>
 
-                    <div class="ws-u-1-2 spot-2">
-                        <div class="inner">
-                            <a href="https://www.rauchr.de/content/worldofvegafina?ref=spot?ref=spot">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                    data-src="/img/banner/spot/b3c50f671336312af08438b91db099d8.jpg"
-                                    alt="Vega Fina Zigarren" />
-                            </a>
+                    @foreach ($posts as $post)
+                        <div class="ws-u-1-2 spot-4">
+                            <div class="inner">
+                                <a href="{{ route('content', $post->slug) }}">
+                                    <img src="{{ showImage($post->image) }}" alt="{{ $post->title }}" />
+                                    <div class="overlay"></div> <!-- Lớp phủ mờ -->
+                                    <div class="excerpt">
+                                        <p style="margin-bottom: 0">{{ $post->excerpt }}</p>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    @endforeach
 
-                    <div class="ws-u-1-2 spot-3">
-                        <div class="inner">
-                            <a href="https://www.rauchr.de/domaine-de-lavalette?ref=spot">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                    data-src="/img/banner/spot/b4204c57f8ebe95ff734566e8f216810.jpeg"
-                                    alt="domaine-de-lavalette" />
-                            </a>
-                        </div>
-                    </div>
+
+
+
+
+
                 </div>
             </div>
         </div>
 
-        <div class="ws-g">
+        {{-- <div class="ws-g">
             <div class="ws-u-1-2 ws-u-lg-1-4" style="vertical-align: middle">
                 <div class="ws-c">
                     <a href="https://www.rauchr.de/casa-de-alegria?ref=spot" style="display: block; position: relative"
@@ -123,7 +120,7 @@
                     </a>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
 
         <div class="ws-g ws-c topbrands">
@@ -131,8 +128,8 @@
             @foreach ($brands as $brand)
                 <div class="ws-u-1-4 ws-u-lg-1-8 brand">
                     <a href="/#" title="{{ $brand->name }}" class="inner">
-                        <img class="logo" src="{{ showImage($brand->image) }}"
-                            data-src="{{ showImage($brand->image) }}" alt="{{ $brand->name }}" />
+                        <img class="logo" src="{{ showImage($brand->image) }}" data-src="{{ showImage($brand->image) }}"
+                            alt="{{ $brand->name }}" />
                         <div class="name">
                             <div class="ws-g">
                                 <span class="ws-u-1">{{ $brand->name }}</span>
@@ -146,9 +143,7 @@
         <div class="ws-g ws-c colcontent">
             <div class="ws-u-1 ws-u-lg-1-2 leftcol">
                 <div class="ws-g">
-
-
-                    @foreach ($sliderSmall as $slider)
+                    @foreach ($sliders->skip(1) as $slider)
                         <div class="ws-u-1-2 spot" style="vertical-align: middle">
                             <div class="ws-c">
                                 <div id="carousel-{{ $slider->id }}" class="carousel slide accessorieTeaserSpot"
@@ -692,7 +687,7 @@
                     <hr />
                 </div>
 
-                {!! $config->introduction  !!}
+                {!! $config->introduction !!}
             </div>
         </div>
     </div>
@@ -709,3 +704,105 @@
 
     </div>
 @endsection
+
+@push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        document.querySelectorAll(".inner").forEach((item) => {
+            const excerpt = item.querySelector(".excerpt");
+            const overlay = item.querySelector(".overlay");
+
+            item.addEventListener("mouseenter", () => {
+                gsap.to(overlay, {
+                    opacity: 1,
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+                gsap.to(excerpt, {
+                    y: 0,
+                    duration: 0.5,
+                    ease: "power2.out"
+                });
+            });
+
+            item.addEventListener("mouseleave", () => {
+                gsap.to(overlay, {
+                    opacity: 0,
+                    duration: 0.3,
+                    ease: "power2.in"
+                });
+                gsap.to(excerpt, {
+                    y: "100%",
+                    duration: 0.5,
+                    ease: "power2.in"
+                });
+            });
+        });
+    </script>
+@endpush
+
+@push('styles')
+    <style>
+        .inner {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .inner img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Màu đen mờ */
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .excerpt {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            /* Màu nền sáng với độ trong */
+            padding: 20px;
+            box-sizing: border-box;
+            transform: translateY(100%);
+            transition: transform 0.5s ease-out;
+            max-height: 100%;
+            /* Chiều cao không giới hạn */
+            overflow-y: auto;
+            /* Cho phép cuộn dọc khi nội dung dài */
+        }
+
+        .inner:hover .overlay {
+            opacity: 1;
+        }
+
+        .inner:hover .excerpt {
+            transform: translateY(0);
+            /* Nội dung xuất hiện từ từ */
+        }
+
+        .excerpt::-webkit-scrollbar {
+            width: 0px;
+            /* Ẩn thanh cuộn */
+            background: transparent;
+            /* Không có màu nền */
+        }
+
+        .excerpt::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* Không hiển thị thanh cuộn */
+        }
+    </style>
+@endpush

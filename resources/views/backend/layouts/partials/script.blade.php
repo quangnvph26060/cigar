@@ -177,6 +177,37 @@
             // });
         }
 
+        function updateCharCount(inputSelector, maxLength) {
+            // Tìm label có 'for' tương ứng với inputSelector
+            const labelSelector = $('label[for="' + inputSelector.substring(1) + '"]');
+
+            // Tạo thẻ charCountSelector và thêm vào sau label
+            const charCountSelector = $('<span></span>').addClass('char-count').css({
+                'margin-left': '10px',
+                'font-size': '14px',
+                'color': '#555'
+            }).insertAfter(labelSelector);
+
+            // Đặt maxlength ban đầu cho phần tử input/textarea
+            $(inputSelector).attr('maxlength', maxLength);
+
+            // Hàm cập nhật số ký tự
+            $(inputSelector).on('input', function() {
+                var currentLength = $(this).val().length;
+                charCountSelector.text(currentLength + '/' + maxLength);
+
+                // Kiểm tra khi đã đạt maxLength, ngừng nhập
+                if (currentLength >= maxLength) {
+                    $(this).attr('maxlength', maxLength); // Ngừng cho phép nhập thêm ký tự
+                }
+            });
+
+            // Cập nhật số ký tự ban đầu khi trang tải
+            var initialLength = $(inputSelector).val().length;
+            charCountSelector.text(initialLength + '/' + maxLength);
+        }
+
+
         const formatDataInput = function(input) {
             let $input = $(`#${input}`);
 

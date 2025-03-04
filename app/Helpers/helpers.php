@@ -95,6 +95,7 @@ if (!function_exists('successResponse')) {
 if (!function_exists('handleResponse')) {
     function handleResponse($message, $code = 200)
     {
+        sessionFlash('success', $message);
         return response()->json(['success' => true, 'message' => $message], $code);
     }
 }

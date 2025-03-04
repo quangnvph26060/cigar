@@ -2,15 +2,14 @@
 
 @section('content')
     @include('backend.layouts.partials.breadcrumb', [
-        'page' => 'DANH SÁCH GIÁ TRỊ',
-        'href' => route('admin.attributes.index'),
+        'page' => 'Danh sách bài viết',
     ])
 
     <div class="card">
         <div class="card-header d-flex justify-content-between align-content-center">
-            <h3 class="card-title">DANH SÁCH SLIDER</h3>
+            <h3 class="card-title">DANH SÁCH BÀI VIẾT</h3>
             <div class="card-tool">
-                <a href="{{ route('admin.sliders.create', ['type' => 'bigsc']) }}" class="btn btn-primary btn-sm"><i
+                <a href="{{ route('admin.posts.create') }}" class="btn btn-primary btn-sm"><i
                         class="fas fa-plus-circle me-1"></i> Thêm mới</a>
             </div>
         </div>
@@ -25,14 +24,14 @@
 @endsection
 
 @push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
     <script src="{{ asset('backend/assets/js/plugin/datatables/datatables.min.js') }}"></script>
-    <script src="{{ asset('backend/assets/js/columns/slider.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/columns/post.js') }}"></script>
     <script src="{{ asset('backend/assets/js/connectDataTable.js') }}"></script>
     <script>
         $(document).ready(function() {
-            const api = "{{ route('admin.sliders.index') }}"
-            dataTables(api, columns, 'Slider', true)
+
+            const api = "{{ route('admin.posts.index') }}"
+            dataTables(api, columns, 'Post')
         })
     </script>
 @endpush
