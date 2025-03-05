@@ -69,12 +69,17 @@ class FastUpdateController extends Controller
             [
                 'name' => 'required|unique:brands,name,' . $request->id,
                 'image' => 'nullable|image|mimes:png,jpg,webp',
+                'price' => 'required|numeric|min:0', // Giá phải là số và lớn hơn hoặc bằng 0
+                'discount_value' => 'nullable|numeric|lte:price', // Discount phải nhỏ hơn hoặc bằng price
                 'status' => 'nullable'
             ],
             __('request.messages'),
             [
                 'name' => 'Tên sản phẩm',
-                'image' => 'Ảnh'
+                'image' => 'Ảnh',
+                'price' => 'Giá',
+                'discount_value' => 'Giảm giá',
+                'status' => 'Trạng thái'
             ]
         );
 

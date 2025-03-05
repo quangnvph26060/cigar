@@ -9,7 +9,7 @@
     rel="stylesheet" />
 
 
-<link rel="preload" href="//app.usercentrics.eu/browser-ui/latest/loader.js" as="script" />
+<link rel="preload" href="//app.usercentrics.eu/browser-ui/latest/loader.js"  />
 
 
 <link href="{{ asset('frontend/assets/css/wsconnex-search.css') }}" type="text/css" rel="stylesheet" />

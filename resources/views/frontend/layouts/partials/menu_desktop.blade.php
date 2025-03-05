@@ -30,24 +30,42 @@
 
                 @foreach ($categoryList as $cat)
                     <div class="col-auto">
-                        <a href="/zigarren" class="h4 text-uppercase dropnav-h-1">{{ $cat->name }}</a>
+                        <a href="{{ route('products', $cat->slug) }}"
+                            class="h4 text-uppercase dropnav-h-1">{{ $cat->name }}</a>
                         <div class="row g-0 justify-content-start">
-                            @foreach ($cat->attributes as $attribute)
+                            @foreach ($category->attributes as $attribute)
                                 <div class="col-auto">
                                     <span class="h5 dropnav-h-2">{{ $attribute->name }}</span>
                                     <ul>
-                                        @foreach ($attribute->values as $attrValue)
+                                        @foreach ($attribute->values as $av)
                                             <li>
-                                                <a href="/zigarren/brasilien" title="{{ $attrValue }}">
-                                                    <span>{{ $attrValue }}</span>
+                                                <a href="{{ route('products', [$cat->slug, $av['slug']]) }}"
+                                                    title="{{ $av['name'] }}">
+                                                    <span>{{ $av['name'] }}</span> <!-- Hiển thị name -->
                                                 </a>
                                             </li>
                                         @endforeach
                                     </ul>
                                 </div>
                             @endforeach
+
+
+                            <!-- Hiển thị các thương hiệu trong cùng row với thuộc tính -->
+                            <div class="col-auto">
+                                <span class="h5 dropnav-h-2">Thương hiệu</span>
+                                <ul>
+                                    @foreach ($cat->brands as $brand)
+                                        <li>
+                                            <a href="/zigarren/brand/{{ $brand->slug }}" title="{{ $brand->name }}">
+                                                <span>{{ $brand->name }}</span>
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
                         </div>
                     </div>
+
                     <div class="col-auto dropnav-divider-col">
                         <div class="dropnav-divider"></div>
                     </div>
@@ -55,4 +73,6 @@
             </div>
         </div>
     @endforeach
+
+
 </div>

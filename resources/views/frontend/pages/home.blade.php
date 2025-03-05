@@ -274,40 +274,6 @@
                                         </div>
                                     </div>
                                 </a>
-                                <a class="ws-u-1 item" href="/zigarren/cuba/regulares/trinidad-01021">
-                                    <div class="ws-g tab-pane-item">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/21_28905_34396.jpg" alt="Trinidad " />
-                                        </div>
-                                        <div class="ws-u-15-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">Trinidad </span>
-                                            <span class="subtitle nobr">Vigia</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <span><span data-eurval="53.00">53.00 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="ws-u-1 item"
-                                    href="/zigarren/dominikanische-republik/arturo-fuente-hemingway-01101020">
-                                    <div class="ws-g tab-pane-item">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/1552_38417_56640.jpg"
-                                                alt="Arturo Fuente Hemingway" />
-                                        </div>
-                                        <div class="ws-u-15-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">Arturo Fuente Hemingway</span>
-                                            <span class="subtitle nobr">Between the Lines</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <span><span data-eurval="44.60">44.60 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
 
                                 <a class="ws-u-1 more" href="/shop/restbestand">Weitere Restbestände
                                     anzeigen</a>
@@ -325,41 +291,6 @@
                                         <div class="ws-u-20-24 ws-u-md-11-24 content">
                                             <span class="title nobr">Ashton Classic</span>
                                             <span class="subtitle nobr">Cordial</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <span><span data-eurval="7.60">7.60 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="ws-u-1 item"
-                                    href="/zigarren/dominikanische-republik/ashton-cabinet-no-3-01104_3371">
-                                    <div class="ws-g tab-pane-item item-row">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/1318_3371_21665.jpg"
-                                                alt="Ashton Cabinet" />
-                                        </div>
-                                        <div class="ws-u-20-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">Ashton Cabinet</span>
-                                            <span class="subtitle nobr">No. 3</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <span><span data-eurval="13.60">13.60 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="ws-u-1 item" href="/zigarren/dominikanische-republik/don-diego-classic-01105">
-                                    <div class="ws-g tab-pane-item item-row">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/27_204_21727.jpg"
-                                                alt="Don Diego Classic" />
-                                        </div>
-                                        <div class="ws-u-20-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">Don Diego Classic</span>
-                                            <span class="subtitle nobr">Coronas Major AT</span>
                                         </div>
                                         <div
                                             class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
@@ -389,130 +320,47 @@
                     <div class="tab-content">
                         <div id="tab-pane-new" class="ws-u-1 tab-pane new active fade in">
                             <div class="ws-g inner">
-                                <a class="ws-u-1 item" href="/zigarrenzubehoer/cutter/villiger-cutter-90017090">
-                                    <div class="ws-g tab-pane-item">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/16444_59782_164826.jpg"
-                                                alt="Villiger Cutter" />
+
+                                @foreach ($newVariants as $nv)
+                                    @php
+                                        // Lấy bản ghi priceVariant đầu tiên cho biến thể này
+                                        $firstPriceVariant = $nv->priceVariants->first();
+                                    @endphp
+
+                                    <a class="ws-u-1 item" href="#">
+                                        <div class="ws-g tab-pane-item">
+                                            <div class="ws-u-4-24 image">
+                                                <img src="{{ showImage($nv->image) }}"
+                                                    data-src="{{ showImage($nv->image) }}" alt="{{ $nv->name }}" />
+                                            </div>
+                                            <div class="ws-u-15-24 ws-u-md-11-24 content">
+                                                <span class="title nobr">{{ $nv->name }}</span>
+                                                <span class="subtitle nobr">{{ $nv->short_description }}</span>
+                                            </div>
+                                            <div
+                                                class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
+                                                @if ($firstPriceVariant && isDiscounted($firstPriceVariant))
+                                                    <del class="altpreis"><span data-eurval="12.00"
+                                                            data-curiso="USD">{{ $firstPriceVariant->price }}
+                                                            €</span></del>
+                                                    <span>
+                                                        <span data-eurval="{{ $firstPriceVariant->discount_value }}">
+                                                            {{ $firstPriceVariant->discount_value }}
+                                                            €
+                                                        </span>
+                                                    </span>
+                                                @else
+                                                    <!-- Nếu không có giảm giá, hiển thị giá gốc -->
+                                                    <span
+                                                        data-eurval="{{ $firstPriceVariant->price }}">{{ $firstPriceVariant->price }}
+                                                        €</span>
+                                                @endif
+                                            </div>
                                         </div>
-                                        <div class="ws-u-15-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">Villiger Cutter</span>
-                                            <span class="subtitle nobr">schwarz, V-Cut mit Logo</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <del class="altpreis"><span data-eurval="8.95">8.95 €</span></del>
-                                            <span><span data-eurval="6.95">6.95 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="ws-u-1 item" href="/zigarrenzubehoer/humidor/passatore-reisehumidor-02001002">
-                                    <div class="ws-g tab-pane-item">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/1573_59781_164810.jpg"
-                                                alt="Passatore Reisehumidor" />
-                                        </div>
-                                        <div class="ws-u-15-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">Passatore Reisehumidor</span>
-                                            <span class="subtitle nobr">Cigar Case Acryl schwarz für 4 Zigarren
-                                                (560808)</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <del class="altpreis"><span data-eurval="22.00">22.00 €</span></del>
-                                            <span><span data-eurval="20.90">20.90 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="ws-u-1 item" href="/zigarren/honduras/rocky-patel-seed-to-smoke-shade-90017075">
-                                    <div class="ws-g tab-pane-item">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/16427_59780_164790.jpg"
-                                                alt="Rocky Patel Seed to Smoke Shade" />
-                                        </div>
-                                        <div class="ws-u-15-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">Rocky Patel Seed to Smoke Shade</span>
-                                            <span class="subtitle nobr">Toro (Shortfiller)</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <span><span data-eurval="3.40">3.40 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="ws-u-1 item" href="/zigarrenzubehoer/cutter/adorini-cutter-90010963">
-                                    <div class="ws-g tab-pane-item">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/10461_59779_164803.jpg"
-                                                alt="Adorini Cutter" />
-                                        </div>
-                                        <div class="ws-u-15-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">Adorini Cutter</span>
-                                            <span class="subtitle nobr">Special Edition Carbon golden
-                                                (16328)</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <span><span data-eurval="45.00">45.00 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="ws-u-1 item" href="/zigarrenzubehoer/cutter/adorini-cutter-90010963">
-                                    <div class="ws-g tab-pane-item">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/10461_59778_164798.jpg"
-                                                alt="Adorini Cutter" />
-                                        </div>
-                                        <div class="ws-u-15-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">Adorini Cutter</span>
-                                            <span class="subtitle nobr">Special Edition Carbon gunmetal
-                                                (16327)</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <span><span data-eurval="45.00">45.00 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="ws-u-1 item" href="/zigarrenzubehoer/bohrer/st-dupont-double-puncher-90017087">
-                                    <div class="ws-g tab-pane-item">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/16440_59777_164729.jpg"
-                                                alt="S.T. Dupont Double Puncher" />
-                                        </div>
-                                        <div class="ws-u-15-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">S.T. Dupont Double Puncher</span>
-                                            <span class="subtitle nobr">schwarz/golden (003282P)</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <span><span data-eurval="230.00">230.00 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="ws-u-1 item" href="/zigarrenzubehoer/bohrer/st-dupont-double-puncher-90017087">
-                                    <div class="ws-g tab-pane-item">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/16440_59776_164726.jpg"
-                                                alt="S.T. Dupont Double Puncher" />
-                                        </div>
-                                        <div class="ws-u-15-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">S.T. Dupont Double Puncher</span>
-                                            <span class="subtitle nobr">schwarz (003281P)</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <span><span data-eurval="230.00">230.00 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
+                                    </a>
+                                @endforeach
+
+
 
                                 <a class="ws-u-1 more" href="/shop/neu/zigarren">Alle neuen Produkte
                                     anzeigen</a>
@@ -521,133 +369,42 @@
 
                         <div id="tab-pane-reduced" class="ws-u-1 tab-pane reduced fade in">
                             <div class="ws-g inner">
-                                <a class="ws-u-1 item" href="/zigarren/nicaragua/blanco-cigars-nine-90008812">
-                                    <div class="ws-g tab-pane-item item-row">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/8653_40981_69342.jpg"
-                                                alt="Blanco Cigars Nine" />
+                                @foreach ($discountVariants as $dv)
+                                    @php
+                                        $discountFirstPrice = $dv->priceVariants->first();
+                                    @endphp
+                                    <a class="ws-u-1 item"
+                                        href="/zigarren/nicaragua/blanco-cigars-nine-{{ $dv->id }}">
+                                        <div class="ws-g tab-pane-item item-row">
+                                            <div class="ws-u-4-24 image">
+                                                <img src="{{ showImage($dv->image) }}"
+                                                    data-src="{{ showImage($dv->image) }}" alt="{{ $dv->name }}" />
+                                            </div>
+                                            <div class="ws-u-20-24 ws-u-md-11-24 content">
+                                                <span class="title nobr">{{ $dv->name }}</span>
+                                                <span class="subtitle nobr">{{ $dv->short_description }}</span>
+                                            </div>
+                                            <div
+                                                class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
+
+                                                <!-- Nếu có giảm giá, hiển thị giá sau giảm -->
+                                                <del class="altpreis"><span
+                                                        data-eurval="{{ $discountFirstPrice->price }}"
+                                                        data-curiso="USD">{{ $discountFirstPrice->price }}
+                                                        €</span></del>
+                                                <span>
+                                                    <span data-eurval="{{ $discountFirstPrice->discount_value }}">
+                                                        {{ $discountFirstPrice->discount_value }}
+                                                        €
+                                                    </span>
+                                                </span>
+
+                                            </div>
                                         </div>
-                                        <div class="ws-u-20-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">Blanco Cigars Nine</span>
-                                            <span class="subtitle nobr">Lancero</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <del class="altpreis"><span data-eurval="7.90">7.90 €</span></del>
-                                            <span><span data-eurval="6.50">6.50 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="ws-u-1 item"
-                                    href="/zigarren/dominikanische-republik/kristoff-gc-signature-series-90013403">
-                                    <div class="ws-g tab-pane-item item-row">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/12627_27763_58275.jpg"
-                                                alt="Kristoff GC Signature Series" />
-                                        </div>
-                                        <div class="ws-u-20-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">Kristoff GC Signature Series</span>
-                                            <span class="subtitle nobr">GC Robusto</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <del class="altpreis"><span data-eurval="9.50">9.50 €</span></del>
-                                            <span><span data-eurval="8.50">8.50 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="ws-u-1 item" href="/zigarren/nicaragua/horacio-classic-90015167">
-                                    <div class="ws-g tab-pane-item item-row">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/14454_38206_55742.jpg"
-                                                alt="Horacio Classic" />
-                                        </div>
-                                        <div class="ws-u-20-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">Horacio Classic</span>
-                                            <span class="subtitle nobr">No. 5</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <del class="altpreis"><span data-eurval="8.90">8.90 €</span></del>
-                                            <span><span data-eurval="7.50">7.50 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="ws-u-1 item" href="/zigarren/panama/colon-vintage-2001-90004606">
-                                    <div class="ws-g tab-pane-item item-row">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/5282_13426_105848.jpg"
-                                                alt="Colon Vintage 2001" />
-                                        </div>
-                                        <div class="ws-u-20-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">Colon Vintage 2001</span>
-                                            <span class="subtitle nobr">Doble Perfecto</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <del class="altpreis"><span data-eurval="42.20">42.20 €</span></del>
-                                            <span><span data-eurval="28.00">28.00 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="ws-u-1 item" href="/zigarren/dominikanische-republik/baron-ullmann-90006477">
-                                    <div class="ws-g tab-pane-item item-row">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/15887.jpg" alt="Baron Ullmann " />
-                                        </div>
-                                        <div class="ws-u-20-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">Baron Ullmann </span>
-                                            <span class="subtitle nobr">Lanceros</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <del class="altpreis"><span data-eurval="16.00">16.00 €</span></del>
-                                            <span><span data-eurval="6.90">6.90 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="ws-u-1 item" href="/zigarren/nicaragua/fratello-classico-90014862">
-                                    <div class="ws-g tab-pane-item item-row">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/14127_35964_47405.jpg"
-                                                alt="Fratello Classico" />
-                                        </div>
-                                        <div class="ws-u-20-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">Fratello Classico</span>
-                                            <span class="subtitle nobr">Corona 5.5x46</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <del class="altpreis"><span data-eurval="7.90">7.90 €</span></del>
-                                            <span><span data-eurval="6.50">6.50 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a class="ws-u-1 item"
-                                    href="/zigarren/dominikanische-republik/smoking-jacket-by-hendrik-kelner-jr-90014856">
-                                    <div class="ws-g tab-pane-item item-row">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/14121_35931_47285.jpg"
-                                                alt="Smoking Jacket by Hendrik Kelner Jr." />
-                                        </div>
-                                        <div class="ws-u-20-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">Smoking Jacket by Hendrik Kelner Jr.</span>
-                                            <span class="subtitle nobr">Red Label Favoritos</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <del class="altpreis"><span data-eurval="10.50">10.50 €</span></del>
-                                            <span><span data-eurval="8.50">8.50 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
+                                    </a>
+                                @endforeach
+
+
 
                                 <a class="ws-u-1 more" href="/shop/reduzierte-sonderposten/zigarren">Alle
                                     reduzierten Artikel anzeigen</a>

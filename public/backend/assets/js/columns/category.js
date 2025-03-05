@@ -28,8 +28,9 @@ const columns = [
         searchable: false,
     },
     {
-        data: "product_count",
-        name: "product_count",
-        title: "SỐ LƯỢNG SẢN PHẨM",
+        data: "products_count",
+        name: "products_count",
+        title: "SẢN PHẨM",
+        width: "10%"
     },
 ];

@@ -30,7 +30,7 @@ class VariationController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $columns    = ['id', 'name', 'slug','status', 'image'];
+            $columns    = ['id', 'name', 'slug', 'status', 'image'];
 
             $query      = $this->queryBuilder->buildQuery(
                 $columns,
@@ -41,11 +41,11 @@ class VariationController extends Controller
 
             return $this->queryBuilder->processDataTable($query, function ($dataTable) {
                 return $dataTable
-                    ->editColumn('name', fn($row) => "<a href='" . route('admin.variations.edit', $row) . "'><strong>{$row->name}</strong></a> ")
+                    // ->editColumn('name', fn($row) => "<a href='" . route('admin.variations.edit', $row) . "'><strong>{$row->name}</strong></a> ")
                     ->editColumn('status', fn($row) => $row->status == 1
                         ? '<span class="badge bg-success">Xuất bản</span>'
                         : '<span class="badge bg-warning">Chưa xuất bản</span>');
-            }, ['name', 'status']);
+            }, ['status']);
         }
         return view('backend.variation.index');
     }
@@ -94,11 +94,11 @@ class VariationController extends Controller
 
             // dd($request->images);
             if ($request->hasFile('images')) {
-                    $imagePaths =  saveImages($request, 'images', 'variations_images', 150, 150, true);
-                    collect($imagePaths)->map(fn($imagePath) => VariationImage::create([
-                        'variation_id' => $variation->id,
-                        'image_path' => $imagePath,
-                    ]));
+                $imagePaths =  saveImages($request, 'images', 'variations_images', 150, 150, true);
+                collect($imagePaths)->map(fn($imagePath) => VariationImage::create([
+                    'variation_id' => $variation->id,
+                    'image_path' => $imagePath,
+                ]));
             }
 
             sessionFlash('success', 'Thêm mới thương hiệu thành công.');
@@ -120,15 +120,16 @@ class VariationController extends Controller
      */
     public function edit(Variation $variation)
     {
-        //
+
         $products = Product::get();
         $attributes = Attribute::get();
         $attributes_variation = $variation->load('attributes');
         $attributeIds = $attributes_variation->attributes->pluck('id')->toArray();
-        // $attribute_values =
         $attributes_variation_values = VariationAttributeValue::where('variations_id', $variation->id)->get();
-        // dd($attributes_variation_values);
         $images = VariationImage::where('variation_id', $variation->id)->get();
+
+
+
         return view('backend.variation.save', compact('attributes', 'products', 'variation', 'attributeIds',  'attributes_variation_values', 'images'));
     }
 
@@ -137,15 +138,10 @@ class VariationController extends Controller
      */
     public function update(VariationRequest $request, Variation $variation)
     {
-
-        // dd($request->attribute_value_id);
-
+        // dd($request->toArray());
         return transaction(function () use ($request, $variation) {
 
             $credentials = $request->validated();
-            $credentials['prices'] = json_encode($credentials['prices']);
-            $credentials['quantity'] = json_encode($credentials['quantity']);
-            $credentials['unit'] = json_encode($credentials['unit']);
 
             if (!$credentials['slug']) {
                 $credentials['slug'] = generateSlug($credentials['name']);
@@ -157,17 +153,16 @@ class VariationController extends Controller
 
             $variation->update($credentials);
 
-            // Đồng bộ mà không xóa các dữ liệu cũ
             $variation->attributes()->sync($request->attribute_value_id);
+
+            $variation->priceVariants()->delete();
+            $variation->priceVariants()->createMany($request->options);
 
             $oldImages = $request->input('old', []);
             $productImages = VariationImage::where('variation_id', $variation->id)->pluck('id')->toArray();
-            $imagesToKeep = array_intersect($oldImages, $productImages) ;
+            $imagesToKeep = array_intersect($oldImages, $productImages);
             $imagesToDelete = array_diff($productImages, $imagesToKeep);
 
-            Log::info($imagesToDelete);
-
-            // Xóa các ảnh không cần thiết
             foreach ($imagesToDelete as $imageId) {
                 $image = VariationImage::find($imageId);
                 if ($image) {
@@ -177,13 +172,12 @@ class VariationController extends Controller
             }
 
             if ($request->hasFile('images')) {
-                $imagePaths =  saveImages($request, 'images', 'variations_images', 150, 150, true);
+                $imagePaths = saveImages($request, 'images', 'variations_images', 150, 150, true);
                 collect($imagePaths)->map(fn($imagePath) => VariationImage::create([
                     'variation_id' => $variation->id,
                     'image_path' => $imagePath,
                 ]));
-        }
-
+            }
 
             sessionFlash('success', 'Thêm mới thương hiệu thành công.');
 
@@ -214,14 +208,18 @@ class VariationController extends Controller
 
         $product = Product::find($id);
         if (request()->ajax()) {
-            $columns    = ['id', 'name', 'slug','status', 'image'];
+            $columns    = ['id', 'name', 'slug', 'status', 'image'];
 
             $query      = $this->queryBuilder->buildQuery(
                 $columns,
                 [],
                 [],
-                request()
-            )->where('product_id', $id);
+                request(),
+                null,
+                [
+                    ['product_id', $id]
+                ]
+            );
 
             return $this->queryBuilder->processDataTable($query, function ($dataTable) use ($id) {
                 return $dataTable
@@ -247,12 +245,12 @@ class VariationController extends Controller
         $product = Product::find($id);
         $products = Product::get();
         $attributes = Attribute::get();
-        $variation = Variation::find($id2);
+        $variation = Variation::query()->with('priceVariants:variation_id,price,discount_value,discount_start,discount_end,unit')->find($id2);
         $attributes_variation = $variation->load('attributes');
         $attributeIds = $attributes_variation->attributes->pluck('id')->toArray();
-        // $attribute_values =
+
         $attributes_variation_values = VariationAttributeValue::where('variations_id', $variation->id)->get();
-        // dd($attributes_variation_values);
+
         $images = VariationImage::where('variation_id', $variation->id)->get();
         return view('backend.variation.save', compact('attributes', 'products', 'variation', 'attributeIds',  'attributes_variation_values', 'images', 'product', 'id'));
     }

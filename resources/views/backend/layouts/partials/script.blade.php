@@ -151,30 +151,6 @@
                     }
                 });
             });
-
-            // let isFormChanged = false;
-
-            // // Khi có bất kỳ thay đổi nào trong form
-            // $(formId).on('change input', function() {
-            //     isFormChanged = true;
-            // });
-
-            // // Cảnh báo khi rời khỏi trang
-            // $(window).on('beforeunload', function(e) {
-            //     if (isFormChanged) {
-            //         return "Bạn có chắc chắn muốn rời khỏi trang? Những thay đổi chưa được lưu sẽ mất.";
-            //     }
-            // });
-
-            // // Xử lý khi bấm nút reload hoặc chuyển trang nội bộ
-            // $('a').on('click', function(e) {
-            //     if (isFormChanged) {
-            //         let confirmLeave = confirm("Bạn có thay đổi chưa lưu. Bạn có chắc muốn rời đi?");
-            //         if (!confirmLeave) {
-            //             e.preventDefault(); // Hủy hành động nếu người dùng bấm "Hủy"
-            //         }
-            //     }
-            // });
         }
 
         function updateCharCount(inputSelector, maxLength) {
@@ -211,32 +187,25 @@
         const formatDataInput = function(input) {
             let $input = $(`#${input}`);
 
-            // Hàm format số theo định dạng tiền tệ Việt Nam
+            // Hàm format số theo định dạng tiền tệ USD
             function formatNumber(value) {
-                return Number(value).toLocaleString("vi-VN");
+                return Number(value).toLocaleString("en-US");
             }
 
             // Format ngay khi trang load nếu có giá trị
-            let initialValue = $input.val().replace(/\./g, "");
+            let initialValue = $input.val().replace(/,/g, ""); // Thay dấu phẩy thành rỗng
             if (!isNaN(initialValue) && initialValue !== "") {
                 $input.val(formatNumber(initialValue));
             }
 
             // Lắng nghe sự kiện nhập liệu
             $input.on('input', function() {
-                let value = $(this).val().replace(/\./g, ""); // Xóa dấu chấm cũ
+                let value = $(this).val().replace(/,/g, ""); // Xóa dấu phẩy cũ
                 if (!isNaN(value)) {
                     $(this).val(formatNumber(value)); // Format lại số
                 } else {
                     $(this).val($(this).val().slice(0, -1)); // Xóa ký tự không hợp lệ
                 }
-
-                // Cập nhật giá trị vào input ẩn nếu cần
-                console.log(`name=[${input.slice(5)}]`);
-                console.log(value.replace(/\./g, ""));
-
-
-                $(`input[name=${input.slice(5)}]`).val(value.replace(/\./g, ""));
             });
         };
     </script>

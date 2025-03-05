@@ -29,7 +29,10 @@ class ProductRequest extends FormRequest
             'name'                  => 'nullable|unique:products,name,' . $id,
             'slug'                  => 'nullable|unique:products,slug,' . $id,
             'image'                 => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'price'                => 'required',
+            'price'                 => 'required|numeric',  // thêm xác nhận cho price là số
+            'discount_value'        => 'nullable|numeric|lt:price', // kiểm tra discount_value nhỏ hơn price nếu có giá trị
+            'discount_start'        => 'nullable|date',
+            'discount_end'          => 'nullable|date|after_or_equal:discount_start', // discount_end phải lớn hơn hoặc bằng discount_start
             'tags'                  => 'nullable',
             'description'           => 'nullable',
             'seo_title'             => 'nullable|max:100',
@@ -54,6 +57,9 @@ class ProductRequest extends FormRequest
             'name'              => 'Tên sản phẩm',
             'slug'              => 'Đường dẫn',
             'image'             => 'Ảnh sản phẩm',
+            'discount_value'    => 'Giá trị giảm giá',
+            'discount_start'    => 'Ngày bắt đầu giảm giá',
+            'discount_end'      => 'Ngày kết thúc giảm giá',
             'price'            => 'Giá',
             'tags'              => 'Thẻ',
             'description'       => 'Mô tả',
