@@ -2,7 +2,7 @@
 
 @section('content')
     @include('backend.layouts.partials.breadcrumb', [
-        'page' => 'Danh sách biến thể của sản phẩm : '. $product->name . ' - ' . $product->code,
+        'page' => 'Danh sách biến thể của sản phẩm : '. $product->name,
     ])
 
     <div class="card">

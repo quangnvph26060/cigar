@@ -3,9 +3,9 @@
 
 @section('content')
     @include('backend.layouts.partials.breadcrumb', [
-       'page' => isset($variation)
-    ? 'Sửa biến thể của sản phẩm : ' . $product->name . ' - ' . $product->code
-    : 'Thêm mới biến thể của sản phẩm: ' . $product->name . ' - ' . $product->code,
+        'page' => isset($variation)
+            ? 'Sửa biến thể của sản phẩm : ' . $product->name
+            : 'Thêm mới biến thể của sản phẩm: ' . $product->name,
 
         'href' => route('admin.variations.product.index', ['id' => $product->id]),
     ])
@@ -30,7 +30,7 @@
         @isset($variation)
             @method('PUT')
         @endisset
-        {{-- @csrf --}}
+
         <div class="row">
             <div class="col-lg-9">
                 <div class="card">
@@ -70,8 +70,6 @@
                                             @endforeach
 
                                         </select>
-
-                                        {{-- @dd($attributes_variation->attributes) --}}
                                         <div id="additional-selects" class="mt-3 row">
 
                                             @if (isset($variation))
@@ -80,8 +78,8 @@
                                                         id="select-wrapper-{{ $item->attribute->id }}">
                                                         <label
                                                             for="select-${selectedId}">{{ $item->attribute->name }}</label>
-                                                        {{-- @dd($item->attribute->attributeValues); --}}
-                                                        <select name="attribute_value_id[{{ $item->attribute->id }}][attribute_value_id]"
+                                                        <select
+                                                            name="attribute_value_id[{{ $item->attribute->id }}][attribute_value_id]"
                                                             id="select-{{ $item->attribute->id }}" class="form-select"
                                                             style="width: 100%;">
                                                             @foreach ($item->attribute->attributeValues as $value)
@@ -99,13 +97,62 @@
                                     </div>
 
                                     <div class="col-lg-12 form-group">
-                                        <div id="additional-detail" class="form-group">
+                                        <div id="additional-detail">
+                                            @foreach ($variation->priceVariants as $index => $pv)
+                                                <div class="row mb-3">
+                                                    <div class="col-lg-2">
+                                                        <label for="price" class="form-label">Giá</label>
+                                                        <input class="form-control" type="text"
+                                                            name="options[{{ $index }}][price]"
+                                                            value="{{ $pv->price }}">
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <label for="discount_value" class="form-label">Giá Khuyến
+                                                            mãi</label>
+                                                        <input class="form-control" type="text"
+                                                            name="options[{{ $index }}][discount_value]"
+                                                            value="{{ $pv->discount_value }}">
+                                                    </div>
+                                                    <div class="col-lg-3-5">
+                                                        <label for="discount_start" class="form-label">Ngày bắt đầu</label>
+                                                        <input class="form-control" type="date"
+                                                            name="options[{{ $index }}][discount_start]"
+                                                            value="{{ $pv->discount_start ? $pv->discount_end->format('Y-m-d') : '' }}">
+                                                    </div>
+                                                    <div class="col-lg-3-5">
+                                                        <label for="discount_end" class="form-label">Ngày kết thúc</label>
+                                                        <input class="form-control" type="date"
+                                                            name="options[{{ $index }}][discount_end]"
+                                                            value="{{ $pv->discount_end ? $pv->discount_end->format('Y-m-d') : '' }}">
+
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <label for="unit" class="form-label">Đơn vị</label>
+                                                        <input class="form-control" type="text"
+                                                            name="options[{{ $index }}][unit]"
+                                                            value="{{ $pv->unit }}">
+                                                    </div>
+                                                    <div class="col-lg-1">
+                                                        <button type="button"
+                                                            class="btn {{ $loop->first ? 'btn-primary add-detail' : 'btn-danger remove-detail' }}"
+                                                            style="margin-top: 2rem !important;">
+                                                            <i
+                                                                class="fa-solid {{ $loop->first ? 'fa-plus' : 'fa-minus' }}"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endforeach
 
                                         </div>
                                     </div>
 
                                     <div class="form-group mb-3 col-lg-12">
-                                        <label for="slug" class="form-label">Mô tả chi tiết</label>
+                                        <label for="short_description" class="form-label">Mô tả ngắn</label>
+                                        <textarea name="short_description" class="form-control" id="short_description" rows="3" placeholder="Mô tả ngắn">{{ $variation->short_description ?? '' }}</textarea>
+                                    </div>
+
+                                    <div class="form-group mb-3 col-lg-12">
+                                        <label for="description" class="form-label">Mô tả chi tiết</label>
                                         <textarea name="description" class="form-control" id="description" placeholder="Mô tả seo">{!! $variation->description ?? '' !!}</textarea>
                                     </div>
 
@@ -169,25 +216,8 @@
             </div>
             <div class="col-lg-3">
 
-                {{-- <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">Sản phẩm</h5>
-                    </div>
-
-                    <div class="card-body">
-                        <select id="product_id" class="form-select select2" name="product_id">
-                            <option value="">Chọn sản phẩm</option>
-                            @foreach ($products as $item)
-                                <option value="{{ $item->id }}"
-                                    {{ isset($variation) && $variation->product_id == $item->id ? 'selected' : '' }}>
-                                    {{ $item->name }} - {{ $item->code }}
-                                </option>
-                            @endforeach
-
-                        </select>
-                    </div>
-                </div> --}}
                 <input type="hidden" name="product_id" value="{{ $id }}">
+
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Trạng thái</h5>
@@ -246,6 +276,13 @@
     <link rel="stylesheet" href="{{ asset('backend/assets/css/tagify.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/css/image-uploader.min.css') }}">
     <style>
+        @media (min-width: 992px) {
+            .col-lg-3-5 {
+                flex: 0 0 auto;
+                width: 20%;
+            }
+        }
+
         .col-lg-9 .card {
             border-top-left-radius: 0 !important;
             border-top-right-radius: 0 !important;
@@ -266,9 +303,11 @@
             height: 350px;
             border: 2px solid #ccc;
         }
+
         .upload-text span {
             display: none !important;
         }
+
         .image-uploader .uploaded .uploaded-image {
             width: calc(50% - 1rem);
             padding-bottom: calc(50% - 1rem);
@@ -286,7 +325,7 @@
             isset($images) && $images->isNotEmpty()
                 ? $images->map(function ($image) {
                     return [
-                        'src' => asset('storage/'.$image->image_path), // Đường dẫn ảnh
+                        'src' => asset('storage/' . $image->image_path), // Đường dẫn ảnh
                         'id' => $image->id, // ID của ảnh
                     ];
                 })
@@ -309,7 +348,8 @@
             let id = "{{ $id }}";
 
             submitForm('#myForm', function(response) {
-                window.location.href = "{{ route('admin.variations.product.index', ['id' => '__ID__']) }}".replace('__ID__', id);
+                window.location.href = "{{ route('admin.variations.product.index', ['id' => '__ID__']) }}"
+                    .replace('__ID__', id);
             });
 
             $('#product_id').select2({
@@ -365,7 +405,6 @@
             });
 
             ckeditor('description')
-            ckeditor('seo_description')
 
             const preloaded = @json($preloaded);;
 
@@ -377,96 +416,66 @@
                 maxFiles: 15, // Tối đa 15 ảnh
             });
 
-            // formatDataInput('price');
+            var container = $("#additional-detail")
+
         });
     </script>
 
     <script>
         $(document).ready(function() {
-            var container = $("#additional-detail");
 
-            // Kiểm tra nếu $variation tồn tại thì lấy dữ liệu, ngược lại dùng mảng rỗng
-            var pricesData = {
-                prices: @json(isset($variation) ? json_decode($variation->prices, true) : []),
-                quantity: @json(isset($variation) ? json_decode($variation->quantity, true) : []),
-                unit: @json(isset($variation) ? json_decode($variation->unit, true) : []),
-            };
+            let counter =
+                {{ isset($variation->priceVariants) ? $variation->priceVariants->count() : 0 }}; // Biến đếm để thay đổi chỉ số trong tên trường
 
-            function createForm(price = "", quantity = "", unit = "") {
-                return `
-                    <div class="row form-group-item">
-                        <div class="form-group  col-lg-4">
-                            <label class="form-label">Price</label>
-                            <input name="prices[]" class="form-control" type="text" placeholder="Giá" value="${price}">
-                        </div>
-
-                        <div class="form-group  col-lg-2">
-                            <label class="form-label">Số lượng</label>
-                            <input name="quantity[]" class="form-control" type="text" placeholder="number" value="${quantity}">
-                        </div>
-
-                        <div class="form-group  col-lg-4">
-                            <label class="form-label">Đơn vị</label>
-                            <input name="unit[]" class="form-control" type="text" placeholder="Đơn vị" value="${unit}">
-                        </div>
-
-                        <div class="form-group  col-lg-2 d-flex align-items-end">
-                            <div class="d-flex gap-1">
-                                <button type="button" class="btn btn-success btn-sm p-2 add-form">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                                <button type="button" class="btn btn-danger btn-sm p-2 remove-form d-none">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                            </div>
-                        </div>
-
+            let _html = (index, isFirst = false) => `
+                <div class="row mb-3">
+                    <div class="col-lg-2">
+                        <label for="price" class="form-label">Giá</label>
+                        <input class="form-control" type="text" name="options[${index}][price]">
                     </div>
-                `;
+                    <div class="col-lg-2">
+                        <label for="discount_value" class="form-label">Giá Khuyến mãi</label>
+                        <input class="form-control" type="text" name="options[${index}][discount_value]">
+                    </div>
+                    <div class="col-lg-3-5">
+                        <label for="discount_start" class="form-label">Ngày bắt đầu</label>
+                        <input class="form-control" type="date" name="options[${index}][discount_start]">
+                    </div>
+                    <div class="col-lg-3-5">
+                        <label for="discount_end" class="form-label">Ngày kết thúc</label>
+                        <input class="form-control" type="date" name="options[${index}][discount_end]">
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="unit" class="form-label">Đơn vị</label>
+                        <input class="form-control" type="text" name="options[${index}][unit]">
+                    </div>
+                    <div class="col-lg-1">
+                        <button type="button" class="btn ${isFirst ? 'btn-primary add-detail' : 'btn-danger remove-detail'}" style="margin-top: 2rem !important;">
+                            <i class="fa-solid ${isFirst ? 'fa-plus' : 'fa-minus'}"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            var hasPriceVariants = @json($variation->priceVariants->count() > 0);
+
+            if (!hasPriceVariants) {
+                $('#additional-detail').append(_html(counter, true));
+                counter++;
             }
 
-            function updateRemoveButtons() {
-                var totalForms = $(".form-group-item").length;
-                $(".form-group-item").each(function() {
-                    if (totalForms === 1) {
-                        $(this).find(".remove-form").addClass("d-none");
-                    } else {
-                        $(this).find(".remove-form").removeClass("d-none");
-                    }
-                });
-            }
 
-            // Xóa form cũ trước khi thêm mới từ JSON
-            container.empty();
-
-            // Kiểm tra nếu có dữ liệu từ JSON thì load, ngược lại hiển thị form trống
-            if (pricesData.prices.length > 0) {
-                for (var i = 0; i < pricesData.prices.length; i++) {
-                    container.append(createForm(
-                        pricesData.prices[i] ?? "",
-                        pricesData.quantity[i] ?? "",
-                        pricesData.unit[i] ?? ""
-                    ));
-                }
-            } else {
-                container.append(createForm());
-            }
-
-            updateRemoveButtons();
-
-            // Sự kiện thêm form
-            container.on("click", ".add-form", function() {
-                $(this).closest(".form-group-item").after(createForm());
-                updateRemoveButtons();
+            $('.add-detail').on('click', function() {
+                $('#additional-detail').append(_html(counter));
+                counter++;
             });
 
-            // Sự kiện xóa form
-            container.on("click", ".remove-form", function() {
-                if ($(".form-group-item").length > 1) {
-                    $(this).closest(".form-group-item").remove();
-                    updateRemoveButtons();
-                }
+            $(document).on('click', '.remove-detail', function() {
+                $(this).closest('.row').remove();
             });
+
+            updateCharCount('#seo_description', 150)
+
         });
     </script>
 @endpush

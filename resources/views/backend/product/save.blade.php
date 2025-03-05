@@ -22,7 +22,7 @@
         $action = isset($product) ? route('admin.products.update', $product) : route('admin.products.store');
     @endphp
 
-    <form action="{{ $action }}" method="post" enctype="multipart/form-data" id="myForm" >
+    <form action="{{ $action }}" method="post" enctype="multipart/form-data" id="myForm">
 
         @isset($product)
             @method('PUT')
@@ -52,6 +52,28 @@
                                             class="form-control" type="text" placeholder="Đường dẫn thân thiện">
                                     </div>
 
+                                    <div class="form-group mb-3 col-lg-3">
+                                        <label for="price" class="form-label">Giá bán</label>
+                                        <input type="text" value="{{ $product->price ?? '' }}" name="price"
+                                            id="price" class="form-control">
+                                    </div>
+                                    <div class="form-group mb-3 col-lg-3">
+                                        <label for="discount_value" class="form-label">Giá khuyến mãi</label>
+                                        <input type="text" value="{{ $product->discount_value ?? '' }}"
+                                            name="discount_value" id="discount_value" class="form-control">
+                                    </div>
+
+                                    <div class="form-group mb-3 col-lg-3">
+                                        <label for="discount_start" class="form-label">Ngày bắt đầu</label>
+                                        <input type="text" value="{{ optional($product)->discount_start ? $product->discount_start->format('d-m-Y') : '' }}"
+                                            name="discount_start" id="discount_start" class="form-control">
+                                    </div>
+                                    <div class="form-group mb-3 col-lg-3">
+                                        <label for="discount_end" class="form-label">Ngày kết thúc</label>
+                                        <input type="text" value="{{ optional($product)->discount_end ? $product->discount_end->format('d-m-Y') : '' }}" name="discount_end"
+                                            id="discount_end" class="form-control">
+                                    </div>
+
                                     <div class="form-group mb-3 col-lg-12">
                                         <label for="slug" class="form-label">Mô tả chi tiết</label>
                                         <textarea name="description" class="form-control" id="description" placeholder="Mô tả seo">{!! $products->description ?? '' !!}</textarea>
@@ -65,8 +87,9 @@
 
                                     <div class="form-group mb-3">
                                         <div class="mb-3">
-                                            <label for="videoFileInput" class="form-label">Chọn file video:</label>
-                                            <input type="file" name="video[]" id="video" accept="video/*" required>
+                                            <label for="videos" class="form-label fw-bold">Chọn file MP3:</label>
+                                            <input class="form-control filepond" type="file" name="videos[]" multiple
+                                                accept="video/mp4">
                                         </div>
                                     </div>
                                 </div>
@@ -75,8 +98,8 @@
                             <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tab">
                                 <div class="form-group mb-3">
                                     <label for="seo_title" class="form-label">Tiêu đề seo</label>
-                                    <input type="text" value="{{ $product->seo_title ?? '' }}" placeholder="Tiêu đề seo"
-                                        id="seo_title" name="seo_title" class="form-control">
+                                    <input type="text" value="{{ $product->seo_title ?? '' }}"
+                                        placeholder="Tiêu đề seo" id="seo_title" name="seo_title" class="form-control">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="seo_description" class="form-label">Mô tả seo</label>
@@ -96,6 +119,16 @@
                 </div>
             </div>
             <div class="col-lg-3">
+
+                @isset($product)
+                    <div class="card">
+                        <div class="card-body m-auto">
+                            <label for="qr-code"></label>
+                            <img width="100" height="100" src="data:image/png;base64, {!! base64_encode($product->qr_code) !!}"
+                                alt="">
+                        </div>
+                    </div>
+                @endisset
 
                 <div class="card">
                     <div class="card-header">
@@ -146,16 +179,7 @@
                     </div>
                 </div>
 
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">Giá sản phẩm</h5>
-                    </div>
 
-                    <div class="card-body">
-                        <input type="text" value="{{ $product->price ?? '' }}" name="price" id="price"
-                            class="form-control">
-                    </div>
-                </div>
 
                 <div class="card">
                     <div class="card-header">
@@ -165,7 +189,7 @@
                     <div class="card-body">
 
                         <img class="img-fluid img-thumbnail w-100" id="show_image" style="cursor: pointer"
-                            src="{{ showImage($products->image ?? '') }}" alt=""
+                            src="{{ showImage($product->image ?? '') }}" alt=""
                             onclick="document.getElementById('image').click();">
                         <input type="file" name="image" id="image" class="form-control d-none"
                             accept="image/*" onchange="previewImage(event, 'show_image')">
@@ -187,10 +211,11 @@
 @endsection
 
 @push('styles')
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css">
     <link rel="stylesheet" href="{{ asset('backend/assets/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/css/tagify.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/css/image-uploader.min.css') }}">
-    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
 
     <style>
         .col-lg-9 .card {
@@ -226,14 +251,16 @@
 @endpush
 
 @push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
+    </script>
     <script src="{{ asset('backend/assets/js/select2.min.js') }}"></script>
     <script src="{{ asset('backend/assets/js/tagify.min.js') }}"></script>
     <script src="{{ asset('backend/ckeditor/ckeditor.js') }}"></script>
-    <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-fileinput/js/fileinput.min.js"></script>
     <script src="{{ asset('backend/assets/js/image-uploader.min.js') }}"></script>
     <script>
         $(document).ready(function() {
+
 
             var input = document.querySelector('#seo_keywords');
             var tagify = new Tagify(input, {
@@ -262,9 +289,8 @@
             });
 
             ckeditor('description')
-            ckeditor('seo_description')
 
-            formatDataInput('price');
+            // formatDataInput('price');
 
             const preloaded = [];
 
@@ -275,67 +301,16 @@
                 maxSize: 2 * 1024 * 1024, // Giới hạn ảnh 2MB
                 maxFiles: 15, // Tối đa 15 ảnh
             });
-        });
-    </script>
 
-    <script>
-        FilePond.registerPlugin();
+            $('#discount_start').datetimepicker({
+                format: 'd-m-Y',
+                lang: 'vi',
+            });
 
-        const pond = FilePond.create(document.getElementById('video'), {
-            allowMultiple: true,
-            maxFiles: 5,
-            maxFileSize: '50MB',
-            acceptedFileTypes: ['video/mp4', 'video/webm', 'video/ogg'],
-            labelIdle: 'Kéo & thả video hoặc <span class="filepond--label-action">Chọn video</span> 🎬',
-        });
-
-
-
-        function loadVideoFromLink(event) {
-            event.preventDefault()
-            const videoUrl = document.getElementById("videoLinkInput").value;
-            const videoPreview = document.getElementById("videoPreview");
-            const youtubePreview = document.getElementById("youtubePreview");
-            const videoContainer = document.getElementById("videoContainer");
-
-            if (videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")) {
-
-                const videoId = getYouTubeID(videoUrl);
-                if (videoId) {
-                    document.getElementById("videoFileInput").value = "";
-                    youtubePreview.src = `https://www.youtube.com/embed/${videoId}`;
-                    youtubePreview.style.display = "block";
-                    videoPreview.style.display = "none";
-                    videoContainer.style.display = "block";
-                }
-            } else {
-
-                videoPreview.src = videoUrl;
-                videoPreview.style.display = "block";
-                youtubePreview.style.display = "none";
-                videoContainer.style.display = "block";
-            }
-        }
-
-        function getYouTubeID(url) {
-            const regex = /(?:youtube\.com\/.*v=|youtu\.be\/)([^&]+)/;
-            const match = url.match(regex);
-            return match ? match[1] : null;
-        }
-
-        document.getElementById("videoFileInput").addEventListener("change", function(event) {
-            const file = event.target.files[0];
-            const videoPreview = document.getElementById("videoPreview");
-            const youtubePreview = document.getElementById("youtubePreview");
-            const videoContainer = document.getElementById("videoContainer");
-
-            if (file) {
-                document.getElementById("videoLinkInput").value = "";
-                videoPreview.src = URL.createObjectURL(file);
-                videoPreview.style.display = "block";
-                youtubePreview.style.display = "none";
-                videoContainer.style.display = "block";
-            }
+            $('#discount_end').datetimepicker({
+                format: 'd-m-Y',
+                lang: 'vi',
+            });
         });
     </script>
 @endpush

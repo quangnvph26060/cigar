@@ -19,6 +19,7 @@ class VariationRequest extends FormRequest
     public function rules(): array
     {
         $id = optional($this->route('variation'))->id;
+
         return [
             'product_id'            => 'required|exists:products,id',
             'name'                  => 'required|unique:variations,name,' . $id,
@@ -29,7 +30,6 @@ class VariationRequest extends FormRequest
             'radius'                => 'nullable',
             'length'                => 'nullable',
             'quantity'              => 'nullable',
-            'prices'                => 'required',
             'unit'                  => 'nullable',
             'tags'                  => 'nullable',
             'description'           => 'nullable',
@@ -38,6 +38,25 @@ class VariationRequest extends FormRequest
             'seo_keywords'          => 'nullable',
             'position'              => 'nullable|numeric|min:1',
             'status'                => 'required|in:1,2',
+
+            'options'                   => 'required|array|min:1',
+            'options.*.price'            => 'required|numeric|min:0',
+            'options.*.discount_value'   => [
+                'nullable',
+                'numeric',
+                'min:0',
+                function ($attribute, $value, $fail) {
+                    $index = explode('.', $attribute)[1]; // Lấy index của options.*
+                    $price = request()->input("options.$index.price"); // Lấy giá trị price tương ứng
+
+                    if ($value >= $price) {
+                        $fail("Giá trị giảm giá phải nhỏ hơn giá gốc.");
+                    }
+                }
+            ],
+            'options.*.discount_start'   => 'nullable|date|after_or_equal:today',
+            'options.*.discount_end'     => 'nullable|date|after_or_equal:options.*.discount_start',
+            'options.*.unit'             => 'required|string|max:50',
         ];
     }
 
@@ -67,6 +86,13 @@ class VariationRequest extends FormRequest
             'seo_keywords'      => 'Từ khóa SEO',
             'position'          => 'Vị trí',
             'status'            => 'Trạng thái',
+
+            'options'                   => 'Danh sách giá',
+            'options.*.price'            => 'Giá',
+            'options.*.discount_value'   => 'Giá trị giảm giá',
+            'options.*.discount_start'   => 'Ngày bắt đầu giảm giá',
+            'options.*.discount_end'     => 'Ngày kết thúc giảm giá',
+            'options.*.unit'             => 'Đơn vị',
         ];
     }
 }

@@ -34,14 +34,13 @@ class CategoryController extends Controller
             $query      = $this->queryBuilder->buildQuery(
                 $columns,
                 ['attributes', 'parent'],
-                [],
+                ['products'],
                 request()
             );
 
             return $this->queryBuilder->processDataTable($query, function ($dataTable) {
                 return $dataTable
                     ->addColumn('attribute_name', fn($row) => count($row->attributes) > 0 ? implode(', ', $row->attributes->pluck('name')->toArray()) : '-----')
-                    ->addColumn('product_count', fn($row) => 1)
                     ->editColumn('parent_id', fn($row) => $row->parent->name ?? '--------')
                 ;
             });

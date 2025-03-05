@@ -9,7 +9,9 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Services\BaseQuery;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rules\Can;
+// use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Storage;
+
 
 use function PHPUnit\Framework\callback;
 
@@ -27,24 +29,20 @@ class ProductController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $columns    = ['id', 'code', 'name', 'slug', 'price', 'status', 'image'];
+            $columns    = ['id', 'code', 'name', 'slug', 'price', 'status', 'image', 'discount_value'];
 
             $query      = $this->queryBuilder->buildQuery(
                 $columns,
-                [],
-                [],
+                ['variations'],
+                ['variations'],
                 request()
             );
 
             return $this->queryBuilder->processDataTable($query, function ($dataTable) {
                 return $dataTable
-                    ->editColumn('name_edit', fn($row) => "<a href='" . route('admin.variations.product.index', $row->id) . "'><strong>{$row->name}</strong></a> <br> | <a href='" . route('admin.products.edit', $row) . "'>
-                    Sửa
-                </a>")
-                    ->editColumn('statuss', fn($row) => $row->status == 1
-                        ? '<span class="badge bg-success">Xuất bản</span>'
-                        : '<span class="badge bg-warning">Chưa xuất bản</span>');
-            }, ['name_edit', 'statuss']);
+                    ->editColumn('variations_count', fn($row) => "<a href='" . route('admin.variations.product.index', $row->id) . "'><strong>{$row->variations_count}</strong>")
+                    ->editColumn('code', fn($row) => "<a href='" . route('admin.products.edit', $row) . "'><b>$row->code</b></a>");
+            }, ['variations_count', 'code']);
         }
         return view('backend.product.index');
     }
@@ -54,18 +52,29 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+
+
+        // $qrCode = $this->genQrCode();
+        // return "<img src='data:image/png;base64," . base64_encode($qrCode)  . "' />";
+
         $brands = Brand::get();
         $categorys = Category::get();
         return view('backend.product.save', compact('brands', 'categorys'));
     }
 
+    protected function genQrCode()
+    {
+        $qrCodeData = 'SP' . str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        return \SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(300)->generate($qrCodeData);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store( ProductRequest $request)
+
+    public function store(ProductRequest $request)
     {
-        //
         return transaction(function () use ($request) {
 
             $credentials = $request->validated();
@@ -80,13 +89,17 @@ class ProductController extends Controller
                 $credentials['image'] = saveImages($request, 'image', 'variations');
             }
 
+            $credentials['qrCode'] = $this->genQrCode();
+
+            // Tạo mới sản phẩm
             Product::create($credentials);
 
-            sessionFlash('success', 'Thêm mới thương hiệu thành công.');
+            sessionFlash('success', 'Thêm mới sản phẩm thành công.');
 
-            return handleResponse('Thêm mới thương hiệu thành công.', 201);
+            return handleResponse('Thêm mới sản phẩm thành công.', 201);
         });
     }
+
 
     /**
      * Display the specified resource.
@@ -101,10 +114,10 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+
         $brands = Brand::get();
         $categorys = Category::get();
-        return view('backend.product.save', compact('product', 'categorys','brands'));
+        return view('backend.product.save', compact('product', 'categorys', 'brands'));
     }
 
     /**

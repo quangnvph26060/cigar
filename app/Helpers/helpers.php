@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -198,5 +199,56 @@ if (!function_exists('isActiveMenu')) {
         }
 
         return '';
+    }
+}
+
+if (!function_exists('isDiscountValid')) {
+    /**
+     * Kiểm tra xem sản phẩm có giảm giá hợp lệ hay không.
+     *
+     * @param  \App\Models\Product  $product
+     * @return bool
+     */
+    function isDiscountValid($product)
+    {
+        // Kiểm tra nếu discount_value có giá trị và nếu discount_start có giá trị
+        if ($product->discount_value) {
+            // Nếu discount_start có giá trị và nó trong khoảng thời gian hợp lệ
+            if ($product->discount_start && $product->discount_end) {
+                $currentDate = now(); // Lấy ngày hiện tại
+                return $currentDate->between($product->discount_start, $product->discount_end);
+            }
+
+            // Nếu discount_start là null thì discount vẫn hợp lệ
+            return true;
+        }
+
+        // Nếu không có discount_value thì trả về false
+        return false;
+    }
+
+
+    if (!function_exists('isDiscounted')) {
+        // Hàm kiểm tra xem giá có giảm giá hay không (chỉ so sánh ngày)
+        function isDiscounted($model)
+        {
+            if ($model->discount_value <= 0) return false;
+
+            $now =  Carbon::today();
+
+            if (!$model->discount_start && !$model->discount_end) return true;
+
+            if ($model->discount_start && !$model->discount_end) return true;
+
+            if (
+                (isset($model->discount_start) && Carbon::parse($model->discount_start)->lessThanOrEqualTo($now)) ||
+                (isset($model->discount_end) && Carbon::parse($model->discount_end)->greaterThanOrEqualTo($now))
+            ) {
+                return true;
+            }
+
+            return false;
+
+        }
     }
 }

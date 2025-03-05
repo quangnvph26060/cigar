@@ -29,7 +29,7 @@ class BrandController extends Controller
             $query      = $this->queryBuilder->buildQuery(
                 $columns,
                 [],
-                [],
+                ['products'],
                 request(),
                 null,
                 [],

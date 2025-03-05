@@ -29,7 +29,6 @@
     <script src="{{ asset('backend/assets/js/connectDataTable.js') }}"></script>
     <script>
         function format(d) {
-            console.log(d);
 
             let image = "{{ env('APP_URL') }}" + '/storage/' + d.image
             return `
@@ -47,19 +46,27 @@
 
                         <div class="col-10">
                             <div class="row">
-                                <div class="mb-3 col-12">
-                                    <label for="name" class="form-label">Tên san phẩm</label>
+                                <div class="mb-3 col-6">
+                                    <label for="name" class="form-label">Tên sản phẩm</label>
                                     <input type="text" name="name" class="form-control" id="name" value="${d.name}">
+                                </div>
+                                <div class="mb-3 col-3">
+                                    <label for="price" class="form-label">Giá sản phẩm</label>
+                                    <input type="text" name="price" class="form-control" id="price" value="${d.price}">
+                                </div>
+                                <div class="mb-3 col-3">
+                                    <label for="discount_value" class="form-label">Giá khuyến mãi</label>
+                                    <input type="text" name="discount_value" class="form-control" id="discount_value" value="${d.discount_value}">
                                 </div>
 
                                 <div class="mb-3 col-12 d-flex align-items-center gap-3">
                                     <label for="name" class="form-label mb-0">Trạng thái</label>
                                     <label class="switch">
-                                        <input name="status" type="checkbox" ${d.status == 1 ? 'checked' : ''}/>
+                                        <input name="status"  type="checkbox" ${d.status == 1 ? 'checked' : ''}/>
                                         <span class="slider"></span>
                                     </label>
                                 </div>
-                              
+
                                 <div class="mb-3">
                                     <button type="submit" class="btn btn-primary btn-sm">Cập nhật</button>
                                     <button type="button" class="btn btn-secondary btn-sm" id="cancelEditBtn">Hủy</button>

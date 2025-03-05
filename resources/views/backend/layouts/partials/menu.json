@@ -11,6 +11,10 @@
         "id": "products",
         "children": [
             {
+                "title": "Danh sách sản phẩm",
+                "url": "admin.products.index"
+            },
+            {
                 "title": "Danh sách danh mục",
                 "url": "admin.categories.index"
             },
@@ -21,10 +25,6 @@
             {
                 "title": "Danh sách thương hiệu",
                 "url": "admin.brands.index"
-            },
-            {
-                "title": "Danh sách sản phẩm",
-                "url": "admin.products.index"
             }
         ],
         "inRoutes": [
