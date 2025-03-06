@@ -65,12 +65,12 @@
 
                                     <div class="form-group mb-3 col-lg-3">
                                         <label for="discount_start" class="form-label">Ngày bắt đầu</label>
-                                        <input type="text" value="{{ optional($product)->discount_start ? $product->discount_start->format('d-m-Y') : '' }}"
+                                        <input type="date" value="{{ optional($product)->discount_start ? $product->discount_start->format('Y-m-d') : '' }}"
                                             name="discount_start" id="discount_start" class="form-control">
                                     </div>
                                     <div class="form-group mb-3 col-lg-3">
                                         <label for="discount_end" class="form-label">Ngày kết thúc</label>
-                                        <input type="text" value="{{ optional($product)->discount_end ? $product->discount_end->format('d-m-Y') : '' }}" name="discount_end"
+                                        <input type="date" value="{{ optional($product)->discount_end ? $product->discount_end->format('Y-m-d') : '' }}" name="discount_end"
                                             id="discount_end" class="form-control">
                                     </div>
 
@@ -211,8 +211,8 @@
 @endsection
 
 @push('styles')
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css">
+    {{-- <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css"> --}}
     <link rel="stylesheet" href="{{ asset('backend/assets/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/css/tagify.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/css/image-uploader.min.css') }}">
@@ -251,8 +251,8 @@
 @endpush
 
 @push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
-    </script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
+    </script> --}}
     <script src="{{ asset('backend/assets/js/select2.min.js') }}"></script>
     <script src="{{ asset('backend/assets/js/tagify.min.js') }}"></script>
     <script src="{{ asset('backend/ckeditor/ckeditor.js') }}"></script>
@@ -302,15 +302,15 @@
                 maxFiles: 15, // Tối đa 15 ảnh
             });
 
-            $('#discount_start').datetimepicker({
-                format: 'd-m-Y',
-                lang: 'vi',
-            });
+            // $('#discount_start').datetimepicker({
+            //     format: 'd-m-Y H:i',
+            //     lang: 'vi',
+            // });
 
-            $('#discount_end').datetimepicker({
-                format: 'd-m-Y',
-                lang: 'vi',
-            });
+            // $('#discount_end').datetimepicker({
+            //     format: 'd-m-Y H:i',
+            //     lang: 'vi',
+            // });
         });
     </script>
 @endpush

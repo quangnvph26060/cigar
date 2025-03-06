@@ -14,6 +14,8 @@ class Brand extends Model
         'slug',
         'image',
         'description',
+        'excerpt',
+        'title',
         'seo_title',
         'seo_description',
         'seo_keywords',

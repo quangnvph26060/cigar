@@ -12,6 +12,8 @@ class ProductController extends Controller
 {
     public function productList($paramOne = null, $paramTwo = null, $paramThree = null)
     {
+        $sortOption = request('sortOrder', 'Relevanz');
+
         if ($paramThree) {
             preg_match('/-(\d+)$/', $paramThree, $matches);
 
@@ -44,8 +46,6 @@ class ProductController extends Controller
                 ->inRandomOrder()
                 ->limit(5)
                 ->get();
-
-
 
             return view('frontend.pages.product.product-variants', compact('product', 'relatedProducts', 'unpublishedVariations'));
         }
@@ -81,8 +81,45 @@ class ProductController extends Controller
                     $products = $products->merge($category->parent->products);
                 }
 
+                $products->selectRaw('
+                    CASE
+                        WHEN discount_value <= 0 THEN price
+
+                        WHEN (discount_start IS NULL AND discount_end IS NULL) THEN discount_value
+
+                        WHEN
+                            (discount_start IS NOT NULL AND discount_end IS NOT NULL AND
+                                (CAST(discount_start AS DATETIME) <= NOW() AND CAST(discount_end AS DATETIME) >= NOW()))
+                            THEN discount_value
+
+                        WHEN discount_start IS NOT NULL AND discount_end IS NULL AND CAST(discount_start AS DATETIME) <= NOW()
+                            THEN discount_value
+
+                        WHEN discount_start IS NULL AND discount_end IS NOT NULL AND CAST(discount_end AS DATETIME) >= NOW()
+                            THEN discount_value
+
+                        ELSE price
+                    END as final_price');
+
+                switch ($sortOption) {
+                    case 'preis_desc': // Sắp xếp giá giảm dần
+                        $products->orderBy('final_price', 'desc');
+                        break;
+                    case 'preis_asc': // Sắp xếp giá tăng dần
+                        $products->orderBy('final_price', 'asc');
+                        break;
+                    case 'neueste': // Sắp xếp theo mới nhất
+                        $products->orderByDesc('created_at');
+                        break;
+                    default:
+                        // 'relevanz' - mặc định không sắp xếp
+                        break;
+                }
+
                 // Sử dụng phân trang (paginate) với 30 sản phẩm mỗi trang
                 $products = $products->paginate(30);
+
+                // dd($products);
 
                 return view('frontend.pages.product.list', compact('products', 'category'));
             }

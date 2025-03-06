@@ -56,7 +56,8 @@
                                 <ul>
                                     @foreach ($cat->brands as $brand)
                                         <li>
-                                            <a href="/zigarren/brand/{{ $brand->slug }}" title="{{ $brand->name }}">
+                                            <a href="{{ route('products', $brand->slug) }}"
+                                                title="{{ $brand->name }}">
                                                 <span>{{ $brand->name }}</span>
                                             </a>
                                         </li>

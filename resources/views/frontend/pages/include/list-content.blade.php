@@ -18,4 +18,5 @@
         </a>
     </div>
 @endforeach
-{{ $posts->links() }}
+
+{{ $posts->appends(request()->query())->links() }}

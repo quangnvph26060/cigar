@@ -99,7 +99,8 @@
                                 </li>
                             @endforeach
                             <li class="ws-u-1 rdsgn-List-foot">
-                                <a class="rdsgn-List-footLink" href="/arturo-fuente">Marke anzeigen</a>
+                                <a class="rdsgn-List-footLink" href="{{ route('products', $product->brand->slug) }}">Marke
+                                    anzeigen</a>
                             </li>
                         </ul>
                     </div>
@@ -230,40 +231,42 @@
                             </a>
 
                             <div class="ws-u-1 ws-u-lg-9-24 ws-u-xl-7-24 DetailVariant-col">
-                                <form class="ws-g DetailVariant-form" method="post" action="/warenkorb/show"
-                                    data-ajaction="/ajax/warenkorb/show" data-addtocart="form">
-                                    <div class="ws-u-1 DetailVariant-formRow">
-                                        <div class="ws-g">
-                                            <div class="ws-u-1-3 ws-u-lg-1-4 DetailVariant-formPriceTitle">
-                                                Preis
-                                            </div>
-                                            <div class="ws-u-1-3 ws-u-lg-1-4 DetailVariant-formQuantityTitle">
-                                                Menge
-                                            </div>
-                                            <div class="ws-u-1-3 ws-u-lg-1-2 DetailVariant-formUnitTitle">
-                                                Einheit
-                                            </div>
+                                {{-- <form class="ws-g DetailVariant-form" method="post" action=""> --}}
+                                <div class="ws-u-1 DetailVariant-formRow">
+                                    <div class="ws-g">
+                                        <div class="ws-u-1-3 ws-u-lg-1-4 DetailVariant-formPriceTitle">
+                                            Preis
+                                        </div>
+                                        <div class="ws-u-1-3 ws-u-lg-1-4 DetailVariant-formQuantityTitle">
+                                            Menge
+                                        </div>
+                                        <div class="ws-u-1-3 ws-u-lg-1-2 DetailVariant-formUnitTitle">
+                                            Einheit
                                         </div>
                                     </div>
+                                </div>
 
-
-
-
+                                <form action="" method="post" class="form-add-to-cart">
                                     @foreach ($pv->priceVariants as $pirceV)
                                         <div class="ws-u-1 DetailVariant-formRow">
                                             <div class="ws-g">
                                                 <div class="ws-u-1-3 ws-u-lg-1-4 DetailVariant-formPrice">
-                                                    <input type="hidden" name="wk_artikelid[2]" value="19532" />
+                                                    <input type="hidden"
+                                                        value="{{ $product->id . '-' . $pv->id . '-' . $pirceV->id }}"
+                                                        id="group_id" name="options[{{ $pirceV->id }}][group_id]" />
                                                     <span class="preis">
-                                                        <span data-eurval="{{ isDiscounted($pirceV) ? $pirceV->discount_value : $pirceV->price }}">
-                                                            {{ isDiscounted($pirceV) ? $pirceV->discount_value : $pirceV->price }} €
+                                                        <span
+                                                            data-eurval="{{ isDiscounted($pirceV) ? $pirceV->discount_value : $pirceV->price }}">
+                                                            {{ isDiscounted($pirceV) ? $pirceV->discount_value : $pirceV->price }}
+                                                            €
                                                         </span>
                                                     </span>
 
                                                     <!-- Chỉ hiển thị phần tử del khi có giảm giá -->
                                                     @if (isDiscounted($pirceV))
                                                         <del class="altpreis">
-                                                            statt <span data-eurval="{{ $pirceV->price }}" data-curiso="USD">{{ $pirceV->price }} $</span>
+                                                            statt <span data-eurval="{{ $pirceV->price }}"
+                                                                data-curiso="USD">{{ $pirceV->price }} $</span>
                                                         </del>
                                                     @endif
 
@@ -272,14 +275,16 @@
 
 
                                                 <div class="ws-u-1-3 ws-u-lg-1-4 DetailVariant-formQuantity">
-                                                    <input type="number" style="width: 40px" id="wk_anzahl_auswahl_2"
-                                                        name="wk_anzahl[2]">
+                                                    <input type="number" style="width: 40px"
+                                                        name="options[{{ $pirceV->id }}][qty]" value="0"
+                                                       >
                                                 </div>
 
                                                 <div class="ws-u-1-3 ws-u-lg-1-2 DetailVariant-formUnit">
                                                     <label for="wk_anzahl_auswahl_2">
-                                                        <input type="hidden" name="wk_einheit[2]" value="11329" /><span
-                                                            class="einheitlabel avail_1" title="">{{ $pirceV->unit  }} </span>
+                                                        <span class="einheitlabel avail_1"
+                                                            title="">{{ $pirceV->unit }}
+                                                        </span>
                                                     </label>
                                                 </div>
                                             </div>
@@ -519,4 +524,41 @@
 
 
     </div>
+
+    {{-- @dd(Cart::instance('shopping')->content()) --}}
 @endsection
+
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $(document).on('submit', '.form-add-to-cart', function(e) {
+                e.preventDefault();
+
+                let form = $(this); // Lưu form hiện tại
+                let formData = form.serialize(); // Lấy dữ liệu từ form
+
+                $.ajax({
+                    url: "{{ route('addToCart') }}",
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        // Cập nhật số lượng sản phẩm trong giỏ hàng
+                        $('.ws-u-5-24.ws-u-xl-6-24.cart span.text.nobr').html(
+                            `Warenkorb (${response.count})`);
+
+                        // Reset giá trị ô input qty về 0
+                        form.find('input[type="number"]').val(0);
+
+                        setTimeout(() => {
+                            showNotification(response.addedItems);
+                        }, 1000);
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Lỗi kết nối, vui lòng thử lại!');
+                    }
+                });
+            });
+        });
+    </script>
+@endpush

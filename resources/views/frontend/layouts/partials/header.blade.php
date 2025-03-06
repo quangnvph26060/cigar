@@ -30,7 +30,7 @@
                 <div class="ws-u-5-24 ws-u-xl-6-24 cart">
                     <a href="/warenkorb/show">
                         <i class="fa fa-shopping-bag"></i>
-                        <span class="text nobr">Warenkorb (0)</span>
+                        <span class="text nobr">Warenkorb ({{ Cart::instance('shopping')->count() }})</span>
                     </a>
                 </div>
             </div>
