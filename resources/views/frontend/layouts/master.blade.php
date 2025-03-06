@@ -84,6 +84,16 @@
         @include('frontend.layouts.partials.footer')
     </footer>
 
+    <div class="cart-notification" id="cartNotification">
+        <button class="close-btn" onclick="hideNotification()">×</button>
+        <h4>Giỏ hàng</h4>
+        <div class="product-info">
+            <span><strong>Áo Sơ Mi</strong></span>
+            <span>150.000đ x 1</span>
+        </div>
+        <a href="/cart" class="view-cart">Xem giỏ hàng</a>
+    </div>
+
 
     {{-- <script type="application/ld+json">
 			[

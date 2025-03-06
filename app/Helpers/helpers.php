@@ -241,14 +241,26 @@ if (!function_exists('isDiscountValid')) {
             if ($model->discount_start && !$model->discount_end) return true;
 
             if (
-                (isset($model->discount_start) && Carbon::parse($model->discount_start)->lessThanOrEqualTo($now)) ||
-                (isset($model->discount_end) && Carbon::parse($model->discount_end)->greaterThanOrEqualTo($now))
+                (isset($model->discount_start) && Carbon::parse($model->discount_start)->toDateString() <= $now->toDateString()) &&
+                (isset($model->discount_end) && Carbon::parse($model->discount_end)->toDateString() >= $now->toDateString())
             ) {
                 return true;
             }
 
             return false;
+        }
+    }
 
+    if (!function_exists('calculateDiscountPercentage')) {
+
+        function calculateDiscountPercentage($originalPrice, $discountedPrice)
+        {
+            if ($originalPrice <= 0) {
+                return 0; // Tránh chia cho 0
+            }
+
+            $discountPercentage = (($originalPrice - $discountedPrice) / $originalPrice) * 100;
+            return number_format($discountPercentage, 1);
         }
     }
 }

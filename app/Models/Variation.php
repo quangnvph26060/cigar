@@ -47,4 +47,9 @@ class Variation extends Model
     {
         return $this->hasOne(PriceVariant::class);
     }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

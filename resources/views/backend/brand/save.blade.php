@@ -53,12 +53,22 @@
                                     </div>
 
                                     <div class="form-group mb-3 col-lg-12">
+                                        <label for="excerpt" class="form-label">Mô tả ngắn</label>
+                                        <textarea name="excerpt" class="form-control ckeditor" id="excerpt" placeholder="Mô tả seo">{!! $brand->excerpt ?? '' !!}</textarea>
+                                    </div>
+
+                                    <div class="form-group mb-3 col-lg-12">
                                         <label for="slug" class="form-label">Mô tả chi tiết</label>
-                                        <textarea name="description" class="form-control" id="description" placeholder="Mô tả seo">{!! $brand->description ?? '' !!}</textarea>
+                                        <textarea name="description" class="form-control ckeditor" id="description" placeholder="Mô tả seo">{!! $brand->description ?? '' !!}</textarea>
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tab">
+                                <div class="form-group mb-3">
+                                    <label for="title" class="form-label">Tiêu đề</label>
+                                    <input type="text" value="{{ $brand->title ?? '' }}" placeholder="Tiêu đề"
+                                        id="title" name="title" class="form-control">
+                                </div>
                                 <div class="form-group mb-3">
                                     <label for="seo_title" class="form-label">Tiêu đề seo</label>
                                     <input type="text" value="{{ $brand->seo_title ?? '' }}" placeholder="Tiêu đề seo"
@@ -151,6 +161,7 @@
             });
 
             ckeditor('description')
+            ckeditor('excerpt', 150)
         });
     </script>
 @endpush

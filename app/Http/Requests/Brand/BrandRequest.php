@@ -27,6 +27,8 @@ class BrandRequest extends FormRequest
             'slug'                  => 'nullable|unique:brands,slug,' . $id,
             'image'                 => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'description'           => 'nullable',
+            'excerpt'               => 'nullable',
+            'title'                 => 'nullable|max:150',
             'seo_title'             => 'nullable|max:100',
             'seo_description'       => 'nullable|max:150',
             'seo_keywords'          => 'nullable',

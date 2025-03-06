@@ -79,13 +79,14 @@
             $(targetSelector).val(slug);
         }
 
-        function ckeditor(id) {
+        function ckeditor(id, height = 200) {
             if (CKEDITOR.instances[id]) {
                 CKEDITOR.instances[id].destroy(true);
             }
 
             CKEDITOR.replace(id, {
                 filebrowserUploadMethod: 'form',
+                height: height
             });
         }
 

@@ -211,7 +211,7 @@
                         </div>
                     </div> --}}
 
-                    <div class="ws-u-1-2 spot" style="vertical-align: middle">
+                    {{-- <div class="ws-u-1-2 spot" style="vertical-align: middle">
                         <div class="ws-c">
                             <div class="accessorieTeaserSpot">
                                 <div class="item">
@@ -242,7 +242,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <div class="ws-g ws-c tabs-left" style="margin-top: 25px">
@@ -282,22 +282,27 @@
 
                         <div id="tab-pane-discontinued" class="ws-u-1 tab-pane discontinued fade in">
                             <div class="ws-g inner">
-                                <a class="ws-u-1 item" href="/zigarren/dominikanische-republik/ashton-classic-01102">
-                                    <div class="ws-g tab-pane-item item-row">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/25_181_90085.jpg" alt="Ashton Classic" />
+
+                                @foreach ($statusTwoProducts as $sTP)
+                                    <a class="ws-u-1 item"
+                                        href="{{ route('products', [$sTP->category->slug, $sTP->brand->slug, $sTP->slug . '-' . $sTP->id]) }}">
+                                        <div class="ws-g tab-pane-item item-row">
+                                            <div class="ws-u-4-24 image">
+                                                <img src="{{ showImage($sTP->image) }}"
+                                                    data-src="{{ showImage($sTP->image) }}" alt="{{ $sTP->name }}" />
+                                            </div>
+                                            <div class="ws-u-20-24 ws-u-md-11-24 content">
+                                                <span class="title nobr">{{ $sTP->name }}</span>
+                                                <span class="subtitle nobr">{{ $sTP->short_description }}</span>
+                                            </div>
+                                            <div
+                                                class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
+                                                <span><span
+                                                        data-eurval="{{ isDiscounted($sTP) ? $sTP->discount_value : $sTP->price }}">{{ isDiscounted($sTP) ? $sTP->discount_value : $sTP->price }} €</span></span>
+                                            </div>
                                         </div>
-                                        <div class="ws-u-20-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">Ashton Classic</span>
-                                            <span class="subtitle nobr">Cordial</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <span><span data-eurval="7.60">7.60 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
+                                    </a>
+                                @endforeach
 
                                 <a class="ws-u-1 more" href="/shop/discontinued">zu den Auslaufartikeln</a>
                             </div>

@@ -13,11 +13,53 @@
                         href="/zigarren/brasilien" class="breadcrumb-link"><span>Brasilien</span></a></span></div>
         </div>
 
-        <div class="ws-g ws-cx mb-2 mb-lg-4 mt-2 mt-lg-0 contentpage contentpage--teaser">
-            <div class="ws-u-1">
-                <h1 class="h2 mb-2">Brasilien</h1>
+        @isset($category)
+            <div class="ws-g ws-cx mb-2 mb-lg-4 mt-2 mt-lg-0 contentpage contentpage--teaser">
+                <div class="ws-u-1">
+                    <h1 class="h2 mb-2">Brasilien</h1>
+                </div>
             </div>
-        </div>
+        @else
+            <div class="ws-g ws-cx wgrbanner mb-2 mb-lg-4 mt-2 mt-lg-0">
+                <div class="ws-u-1 wgrbanner__inner">
+                    {{-- <div class="wgrbanner-wrapper-outer mt-2 mt-lg-0 mb-0 mb-lg-3">
+                        <div class="wgrbanner-wrapper">
+                            <img style="width: 100%;" src="https://www.rauchr.de/img/warengruppen/aa2e1ccf139f2caca1f534cb89b152a8_1600.jpeg"
+                                class="wgrbanner__image" alt="Cohiba – Zigarren, Zigarillos und Zigarrenzubehör"
+                                title="Cohiba – Zigarren, Zigarillos und Zigarrenzubehör">
+                        </div>
+                    </div> --}}
+
+                    <h1 class="h2 mb-2">{{ $brand->title }}</h1>
+
+                    <p class="mb-0 contentpage contentpage--teaser">
+                        {!! $brand->excerpt !!}
+                    </p>
+                    <style>
+                        .wgrbanner__inner img {
+                            display: block !important;
+                        }
+
+                        .wgrbanner__inner p {
+                            line-height: 26px;
+                        }
+
+                        @media only screen and (max-width: 768px) {
+                            .wgrbanner__inner p {
+                                font-size: 14px;
+                                line-height: 1.4em;
+                                text-align: justify;
+                                margin-bottom: 0;
+                            }
+                        }
+                    </style>
+
+                </div>
+            </div>
+        @endisset
+
+
+
 
         <div class="search-filter mb-2 mb-lg-3">
             <div class="ws-g ws-cx">
@@ -176,14 +218,19 @@
 
                             <!-- -->
                         </ul>
-                        <input type="hidden" name="mySMKategorie" value="2" />
                     </form>
                 </div>
             </div>
         </div>
-
+        {{-- <form action="" method="get">
+            <select name="" id="">
+                <option value="">1</option>
+                <option value="">2</option>
+            </select>
+        </form> --}}
         <div class="ws-g ws-cx mb-2 search-row-info">
-            <form action="/zigarren" method="GET" class="ws-form">
+            <form action="" method="get" class="ws-form">
+                {{-- <input type="hidden" name="page" value="{{ request('page') }}"> --}}
                 <div class="ws-u-1 ws-u-lg-12-24 mb-2 mb-lg-0">
                     {{ $products->total() }} Artikel gefunden
                 </div>
@@ -192,42 +239,35 @@
                         <div class="d-inline-block ml-lg-3 ms-lg-3">
                             <label for="shoporder_select" class="d-block d-lg-inline-block text-start mt-0">Sortieren
                                 nach:</label>
-                            <select id="shoporder_select" name="shoporder" class="d-inline-block">
-                                <option value="Relevanz" selected="">Relevanz</option>
-                                <option value="Artikelname">Artikelname</option>
-                                <option value="Preis absteigend">Preis absteigend</option>
-                                <option value="Preis aufsteigend">Preis aufsteigend</option>
-                                <option value="Neuste zuerst">Neueste zuerst</option>
+                            <select id="shoporder_select" name="sortOrder" class="d-inline-block"
+                                onchange="submitFormWithDelay()">
+                                <option value="relevanz" {{ request('sortOrder') == 'relevanz' ? 'selected' : '' }}>
+                                    Relevanz</option>
+                                <option value="preis_desc" {{ request('sortOrder') == 'preis_desc' ? 'selected' : '' }}>Giá
+                                    giảm dần</option>
+                                <option value="preis_asc" {{ request('sortOrder') == 'preis_asc' ? 'selected' : '' }}>Giá
+                                    tăng dần</option>
+                                <option value="neueste" {{ request('sortOrder') == 'neueste' ? 'selected' : '' }}>Mới nhất
+                                </option>
                             </select>
                         </div>
-                        <div class="d-inline-block ml-lg-3 ms-lg-3">
-                            <label for="pagination_select"
-                                class="d-block d-lg-inline-block text-start mt-0">Seite:</label>
-                            <select id="pagination_select" class="d-inline-block search-pagination" name="von">
-                                <option value="0" selected="">1</option>
-                                <option value="30">2</option>
-                                <option value="60">3</option>
-                                <option value="90">4</option>
-                                <option value="120">5</option>
-                                <option value="150">6</option>
-                                <option value="180">7</option>
-                                <option value="210">8</option>
-                                <option value="240">9</option>
-                            </select>
-                            <span>von 44</span>
-                        </div>
+
                     </div>
                 </div>
             </form>
         </div>
         <div class="ws-g search-result">
-
             @foreach ($products as $item)
                 {{-- @dd($item) --}}
                 <div class="ws-u-1-2 ws-u-md-1-3 ws-u-xl-1-5 search-result-item"> <a class="search-result-item-inner"
-                        href="{{ route('products', [$category->slug, $item->brand->slug, $item->slug . '-' . $item->id]) }}"
+                        href="{{ route('products', [$item->category->slug, $item->brand->slug, $item->slug . '-' . $item->id]) }}"
                         title="{{ $item->name ?? $item->brand->name }}">
-                        <div class="product-badge-wrapper"> </div>
+                        <div class="product-badge-wrapper">
+                            @if (isDiscounted($item))
+                                <span
+                                    class="product-badge product-badge--discount">{{ calculateDiscountPercentage($item->price, $item->discount_value) }}%</span>
+                            @endif
+                        </div>
                         <div class="ws-g search-result-item-content">
                             <div class="ws-u-1 image"> <img src="{{ showImage($item->image) }}"
                                     alt="{{ $item->name ?? $item->brand->name }} "
@@ -270,16 +310,37 @@
             @endforeach
         </div>
 
-        {!! $products->links('vendor.pagination.default') !!}
+        {{ $products->appends(request()->query())->links('vendor.pagination.default') }}
 
-        {{-- <div class="ws-g ws-cx search-pagination-bottom mt-3">
-            <form action="/zigarren/brasilien" method="get" class="ws-u-1 ws-form pagination-select"
-                data-cssloader="true"><span class="ws-button ws-button-disabled"><i
-                        class="fa fa-chevron-left"></i></span> <select class="search-pagination" name="von">
-                    <option value="0" selected="">1</option>
-                </select> <span>von 1</span> <span class="ws-button ws-button-disabled"><i
-                        class="fa fa-chevron-right"></i></span> <noscript><button type="submit"
-                        class="ws-button">OK</button></noscript></form>
-        </div> --}}
+        @isset($brand)
+            <div id="text-cohiba---zigarren--zigarillos-und-zigarrenzubehoer"
+                class="ws-g ws-c mt-4 contentpage contentpage--twocol">
+                <div class="ws-u-1 contentpage__title"><span class="h1">Cohiba – Zigarren, Zigarillos und
+                        Zigarrenzubehör</span></div>
+                <div class="ws-u-1 contentpage__content">
+                    {!! $brand->description !!}
+                </div>
+            </div>
+        @endisset
+
+
     </div>
 @endsection
+
+@push('scripts')
+    {{-- <script>
+        function submitFormWithParams() {
+            const form = document.querySelector('.search-row-info .ws-form');
+            const page = new URLSearchParams(window.location.search).get('page');
+            if (page) {
+                // Add the current page to the form before submitting
+                const pageInput = document.createElement('input');
+                pageInput.type = 'hidden';
+                pageInput.name = 'page';
+                pageInput.value = page;
+                form.appendChild(pageInput);
+            }
+            form.submit();
+        }
+    </script> --}}
+@endpush

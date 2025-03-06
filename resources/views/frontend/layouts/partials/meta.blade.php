@@ -1,5 +1,6 @@
 <meta charset="utf-8" />
 <meta name="revisit-after" content="2 days" />
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="description"
     content="Große Auswahl an Zigarren und Zigarillos. Preiswerte Humidore & gute Pfeifen ➨ Zufriedene Kunden ✓ 100% Zuverlässigkeit ✓ Sortiment entdecken ✓" />
 <meta http-equiv="Content-Language" content="de" />

@@ -16,4 +16,63 @@
 
 <script src="{{ asset('frontend/assets/js/custom.js') }}"></script>
 
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    function showNotification(data) {
+        let notification = document.getElementById("cartNotification");
+
+        let productList = "";
+        $.each(data, function(index, item) {
+            productList += `
+                <div class="product-info">
+                    <span><strong>${item.name}</strong></span>
+                    <span>${item.price} €<small>/${item.unit}</small> x ${item.qty}</span>
+                </div>
+        `;
+        });
+
+        notification.innerHTML = `
+            <button class="close-btn" onclick="hideNotification()">×</button>
+            <h4>Giỏ hàng</h4>
+            ${productList}
+            <a href="{{ route('cartList') }}" class="view-cart">Xem giỏ hàng</a>
+    `;
+
+        notification.classList.add("show");
+
+        // Tự động ẩn sau 3 giây
+        setTimeout(() => {
+            hideNotification();
+        }, 3000);
+    }
+
+    function hideNotification() {
+        let notification = document.getElementById("cartNotification");
+        notification.style.bottom = "-100px";
+        notification.style.opacity = "0";
+        notification.classList.remove("show");
+    }
+
+    function submitFormWithDelay() {
+        const params = new URLSearchParams(window.location.search); // Lấy tất cả tham số hiện tại
+        const formInputs = document.querySelectorAll('.ws-form input, .ws-form select');
+
+        // Cập nhật params từ form
+        formInputs.forEach(input => {
+            if ((input.type === 'checkbox' || input.type === 'radio') && !input.checked) return;
+            params.set(input.name, input.value);
+        });
+
+        // console.log(params.toString());
+
+
+        // Điều hướng đến URL mới
+        window.location.href = window.location.pathname + '?' + params.toString();
+    }
+</script>
 @stack('scripts')

@@ -20,7 +20,7 @@ class PriceVariant extends Model
 
     public function variant()
     {
-        return $this->belongsTo(Variation::class);
+        return $this->belongsTo(Variation::class, 'variation_id');
     }
 
     protected $casts = [
