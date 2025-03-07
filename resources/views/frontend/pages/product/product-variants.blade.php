@@ -123,7 +123,7 @@
                 @endif
             </ul>
 
-            <form class="ws-u-1 ws-u-lg-1-3 DetailVariant-orderby" method="post" action="">
+            {{-- <form class="ws-u-1 ws-u-lg-1-3 DetailVariant-orderby" method="post" action="">
                 <label for="orderby">Sortieren nach: </label>
                 <select name="orderby" id="orderby">
                     <option value="">Standard</option>
@@ -135,8 +135,8 @@
                     <option value="length">Länge</option>
                     <option value="price">Preis</option>
                 </select>
-            </form>
-            <script>
+            </form> --}}
+            {{-- <script>
                 (function() {
                     var form = document.body.querySelector(".DetailVariant-orderby");
                     var select = form.querySelector("select");
@@ -144,7 +144,7 @@
                         form.submit();
                     });
                 })();
-            </script>
+            </script> --}}
         </div>
         <div class="ws-g ws-c tab-content DetailVariant-tabcontent">
             <div id="tab-pane-variants" class="ws-u-1 tab-pane active fade in sortable">
