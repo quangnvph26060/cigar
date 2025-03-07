@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\Brand\BrandController;
 use App\Http\Controllers\Backend\BulkActionController;
 use App\Http\Controllers\Backend\Category\CategoryController;
+use App\Http\Controllers\Backend\Order\OrderController;
 use App\Http\Controllers\Backend\Post\PostController;
 use App\Http\Controllers\Backend\Product\ProductController;
 use App\Http\Controllers\Backend\Slider\SliderController;
@@ -74,6 +75,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
             route::get('/filters', 'filter')->name('filter');
             route::post('/filters', 'handleSubmitFilter')->name('handleSubmitFilter');
             route::post('config-filter-update/{id}', 'handleSubmitChangeFilter')->name('handleSubmitChangeFilter');
+        });
+
+        Route::prefix('orders')->name('orders.')->controller(OrderController::class)->group(function () {
+            Route::get('/',  'index')->name('index');
+            Route::get('/{order}',  'show')->name('show');
+            Route::post('updateStatus',  'updateOrderStatus')->name('updateOrderStatus');
+            Route::post('export-pdf',  'exportPDF')->name('exportPDF');
+            route::post('change-status', 'changeOrderStatus')->name('change-order-status');
+            route::post('cancel-order/{id}', 'cancelOrder')->name('cancel-order');
+            route::get('confirm-payment/{id}', 'confirmPayment')->name('confirm-payment');
+            route::get('ransfer-history', 'transferHistory')->name('transfer-history');
         });
 
         Route::get('attributes-values/{id}', [AttributeValueController::class, 'index'])->name('attributes-values.index');

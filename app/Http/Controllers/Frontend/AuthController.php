@@ -92,4 +92,12 @@ class AuthController extends Controller
 
         return redirect(route('home'));
     }
+
+    public function myInfo()
+    {
+        $id = auth()->id();
+        $user = User::query()->with('orders')->find($id);
+
+        return view('frontend.pages.info', compact('user'));
+    }
 }

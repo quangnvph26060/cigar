@@ -280,3 +280,37 @@ if (!function_exists('isDiscountValid')) {
         }
     }
 }
+
+if (!function_exists('statusColor')) {
+    function statusColor($status)
+    {
+        switch ($status) {
+            case 'pending':
+                return '<span class="badge bg-warning">Chờ xử lý...</span>';
+            case 'confirmed':
+                return '<span class="badge bg-primary">Đã xác nhận</span>';
+            case 'completed':
+                return '<span class="badge bg-success">Đơn hàng đã hoàn thành</span>';
+            case 'cancelled':
+                return '<span class="badge bg-danger">Đã hủy</span>';
+            default:
+                return '<span class="badge bg-warning">Chờ xử lý...</span>';
+        }
+    }
+}
+
+if (!function_exists('paymentStatus')) {
+    function paymentStatus($status)
+    {
+        switch ($status) {
+            case '0':
+                return '<span class="badge bg-danger">Chưa thanh toán...</span>';
+            case '1':
+                return '<span class="badge bg-success">Đã thanh toán</span>';
+            case '2':
+                return '<span class="badge bg-warning">Thanh toán đặt cọc</span>';
+            default:
+                return '<span class="badge bg-danger ">Chưa thanh toán...</span>';
+        }
+    }
+}

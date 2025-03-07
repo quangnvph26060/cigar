@@ -165,8 +165,7 @@
                     }
 
                     if (key === 'selection_type') {
-
-                        $(`#filter-${value}`).prop('checked', true); // Chọn radio/checkbox phù hợp
+                        $(`#filter-${value}`).prop('checked', true);
                     }
                 });
 

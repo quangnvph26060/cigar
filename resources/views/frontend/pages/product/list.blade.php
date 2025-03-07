@@ -1,17 +1,30 @@
 @extends('frontend.layouts.master')
 
 @section('content')
+    {{-- paramOne, paramTwo, attribute_name --}}
     <div class="ws-container">
-        <div class="ws-g ws-c breadcrumbs">
-            <div class="ws-u-1"><span class="breadcrumb-title">Sie befinden sich hier: </span><span class="breadcrumb-item"><a
-                        href="/" class="breadcrumb-link"><span>Startseite</span></a></span><i
-                    class="fa fa-angle-right breadcrumb-icon"></i><span class="breadcrumb-item"><a href="/shop/index"
-                        class="breadcrumb-link"><span>Shop</span></a></span><i
-                    class="fa fa-angle-right breadcrumb-icon"></i><span class="breadcrumb-item"><a href="/zigarren"
-                        class="breadcrumb-link"><span>Zigarren</span></a></span><i
-                    class="fa fa-angle-right breadcrumb-icon"></i><span class="breadcrumb-item"><a
-                        href="/zigarren/brasilien" class="breadcrumb-link"><span>Brasilien</span></a></span></div>
-        </div>
+
+        @php
+            $data = [];
+
+            if ($paramOne) {
+                $data[$category->name ?? $brand->name] = $category ? route('products', $category->slug) : null;
+            }
+
+            if($paramOne && $paramTwo) {
+                $data[$attribute_name] = null;
+            }
+
+            // if()
+
+            // if ($paramOne) {
+            // }
+            // dd($data);
+        @endphp
+
+        @include('frontend.pages.include.breadcrumb', [
+            'data' => $data,
+        ])
 
         @isset($category)
             <div class="ws-g ws-cx mb-2 mb-lg-4 mt-2 mt-lg-0 contentpage contentpage--teaser">
@@ -22,13 +35,6 @@
         @else
             <div class="ws-g ws-cx wgrbanner mb-2 mb-lg-4 mt-2 mt-lg-0">
                 <div class="ws-u-1 wgrbanner__inner">
-                    {{-- <div class="wgrbanner-wrapper-outer mt-2 mt-lg-0 mb-0 mb-lg-3">
-                        <div class="wgrbanner-wrapper">
-                            <img style="width: 100%;" src="https://www.rauchr.de/img/warengruppen/aa2e1ccf139f2caca1f534cb89b152a8_1600.jpeg"
-                                class="wgrbanner__image" alt="Cohiba – Zigarren, Zigarillos und Zigarrenzubehör"
-                                title="Cohiba – Zigarren, Zigarillos und Zigarrenzubehör">
-                        </div>
-                    </div> --}}
 
                     <h1 class="h2 mb-2">{{ $brand->title }}</h1>
 

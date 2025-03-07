@@ -6,6 +6,17 @@
         "id": "dashboard"
     },
     {
+        "title": "Đơn hàng",
+        "icon": "fas fa-truck",
+        "id": "orders",
+        "children": [
+            {
+                "title": "Danh sách đơn hàng",
+                "url": "admin.orders.index"
+            }
+        ]
+    },
+    {
         "title": "Sản phẩm",
         "icon": "fas fa-box-open",
         "id": "products",
@@ -29,6 +40,21 @@
         ],
         "inRoutes": [
             "admin.categories.index", "admin.attributes.index", "admin.brands.index", "admin.products.index"
+        ]
+    },
+
+    {
+        "title": "Marketing",
+        "icon": "fas fa-bullseye",
+        "id": "marketing",
+        "children": [
+            {
+                "title": "Danh sách bài viết",
+                "url": "admin.posts.index"
+            }
+        ],
+        "inRoutes": [
+            "admin.posts.index", "admin.posts.create"
         ]
     },
     {
@@ -55,20 +81,6 @@
         ],
         "inRoutes": [
             "admin.sliders.index", "admin.configs.config", "admin.configs.payment"
-        ]
-    },
-    {
-        "title": "Marketing",
-        "icon": "fas fa-bullseye",
-        "id": "marketing",
-        "children": [
-            {
-                "title": "Danh sách bài viết",
-                "url": "admin.posts.index"
-            }
-        ],
-        "inRoutes": [
-            "admin.posts.index", "admin.posts.create"
         ]
     }
 ]

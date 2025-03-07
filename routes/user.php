@@ -38,4 +38,6 @@ route::get('erfolg/{code}', [CheckoutController::class, 'orderSuccess'])->name('
 
 route::get('logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
+route::get('meinkonto', [AuthController::class, 'myInfo'])->name('myInfo')->middleware('auth');
+
 route::get('{paramOne?}/{paramTwo?}/{paramThree?}', [ProductController::class, 'productList'])->name('products');
