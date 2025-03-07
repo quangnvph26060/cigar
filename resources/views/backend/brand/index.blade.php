@@ -30,7 +30,6 @@
     <script src="{{ asset('backend/assets/js/connectDataTable.js') }}"></script>
     <script>
         function format(d) {
-            console.log(d);
 
             let image = "{{ env('APP_URL') }}" + '/storage/' + d.image
             return `

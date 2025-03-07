@@ -20,7 +20,7 @@
                                 <div class="tencol">
                                     <div class="wrapper ">
                                         <p style="text-align: right;" class="shoppingcart__buttons">
-                                            <a href="/bestellung/index"
+                                            <a href="{{ route('checkout') }}"
                                                 class="ws-button ws-button-checkout ws-button-md shoppingcart__button-proceed">
                                                 Zur Kasse &nbsp; <i class="fa fa-angle-right"></i></a>
                                         </p>
@@ -228,7 +228,7 @@
                                             <a href="?clear" class="ws-button ws-button-md shoppingcart__button-clear"
                                                 style="float:left;">
                                                 <i class="fa fa-trash-o"></i> &nbsp; Warenkorb leeren </a>
-                                            <a href="/bestellung/index"
+                                            <a href="{{ route('checkout') }}"
                                                 class="ws-button ws-button-checkout ws-button-md shoppingcart__button-proceed"
                                                 style="float:right;"> Zur Kasse &nbsp; <i
                                                     class="fa fa-angle-right"></i></a>
@@ -243,9 +243,9 @@
                                 <p class="warning tencol">Ihr Warenkorb ist leer!</p>
                             @endif
 
-                            <p>
-                                <a href="/shop/index" class="StandardButton">Zum Shop</a>
-                            </p>
+                            {{-- <p>
+                                <a href="/shop/index" class="StandardButton">Kaufen Sie bald weiter</a>
+                            </p> --}}
                         </article>
                     </div>
                 </div>

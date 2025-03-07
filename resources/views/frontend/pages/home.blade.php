@@ -127,7 +127,7 @@
 
             @foreach ($brands as $brand)
                 <div class="ws-u-1-4 ws-u-lg-1-8 brand">
-                    <a href="/#" title="{{ $brand->name }}" class="inner">
+                    <a href="{{ route('products', $brand->slug) }}" title="{{ $brand->name }}" class="inner">
                         <img class="logo" src="{{ showImage($brand->image) }}" data-src="{{ showImage($brand->image) }}"
                             alt="{{ $brand->name }}" />
                         <div class="name">
@@ -275,8 +275,8 @@
                                     </div>
                                 </a>
 
-                                <a class="ws-u-1 more" href="/shop/restbestand">Weitere Restbestände
-                                    anzeigen</a>
+                                {{-- <a class="ws-u-1 more" href="/shop/restbestand">Weitere Restbestände
+                                    anzeigen</a> --}}
                             </div>
                         </div>
 
@@ -304,7 +304,7 @@
                                     </a>
                                 @endforeach
 
-                                <a class="ws-u-1 more" href="/shop/discontinued">zu den Auslaufartikeln</a>
+                                {{-- <a class="ws-u-1 more" href="/shop/discontinued">zu den Auslaufartikeln</a> --}}
                             </div>
                         </div>
                     </div>
@@ -367,8 +367,8 @@
 
 
 
-                                <a class="ws-u-1 more" href="/shop/neu/zigarren">Alle neuen Produkte
-                                    anzeigen</a>
+                                {{-- <a class="ws-u-1 more" href="/shop/neu/zigarren">Alle neuen Produkte
+                                    anzeigen</a> --}}
                             </div>
                         </div>
 
@@ -409,10 +409,8 @@
                                     </a>
                                 @endforeach
 
-
-
-                                <a class="ws-u-1 more" href="/shop/reduzierte-sonderposten/zigarren">Alle
-                                    reduzierten Artikel anzeigen</a>
+                                {{-- <a class="ws-u-1 more" href="{{ route('shop', 'reduzierte-sonderposten') }}">Alle
+                                    reduzierten Artikel anzeigen</a> --}}
                             </div>
                         </div>
                     </div>

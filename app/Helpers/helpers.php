@@ -1,5 +1,6 @@
 <?php
 
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -248,6 +249,21 @@ if (!function_exists('isDiscountValid')) {
             }
 
             return false;
+        }
+    }
+
+    if (!function_exists('getFormattedSubTotal')) {
+
+        function getFormattedSubTotal($subTotal)
+        {
+            $formattedTotal = number_format($subTotal, 2, ',', '.'); // Định dạng số với dấu phân cách thập phân là ',' và dấu phân cách hàng nghìn là '.'
+
+            // Kiểm tra nếu phần thập phân là ,00 thì bỏ đi
+            if (substr($formattedTotal, -3) == ',00') {
+                $formattedTotal = substr($formattedTotal, 0, -3); // Loại bỏ phần thập phân nếu là ,00
+            }
+
+            return $formattedTotal;
         }
     }
 

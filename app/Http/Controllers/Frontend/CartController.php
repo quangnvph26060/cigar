@@ -25,11 +25,15 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
+        
         if ($request->ajax()) {
-            $addedItems = []; // Lưu danh sách sản phẩm vừa thêm
+            $addedItems = []; // Lưu danh sách sản phẩm vừa thê
 
             foreach ($request->options as $key => $value) {
-                $qty = isset($value['qty']) ? (int) $value['qty'] : 0;
+
+                $qty = isset($value['qty']) && $value['qty'] > 0 ? (int) $value['qty'] : 0;
+
+                $ids = explode('-', $value['group_id']);
 
                 if ($qty > 0) { // Chỉ xử lý nếu số lượng > 0
                     $priceVariant = PriceVariant::query()
@@ -59,6 +63,8 @@ class CartController extends Controller
                             'qty' => $qty,
                             'price' => $price,
                             'options' => [
+                                'product_id' => $ids['0'],
+                                'variant_id' => $ids['1'],
                                 'image' => $priceVariant->variant->image,
                                 'unit' => $priceVariant->unit,
                                 'slug' => route('products', [

@@ -74,5 +74,43 @@
         // Điều hướng đến URL mới
         window.location.href = window.location.pathname + '?' + params.toString();
     }
+
+    $(document).ready(function() {
+        $(".login a.is-logger").on("click", function(e) {
+            e.preventDefault(); // Ngăn chặn điều hướng mặc định
+
+            // Kiểm tra nếu popover chưa tồn tại, thì thêm vào DOM
+            if ($(".MyaccountPopover").length === 0) {
+                $(".ws-u-5-24.ws-u-xl-5-24.login").append(`
+                <div class="popover MyaccountPopover bottom in" role="tooltip" style="top: 96.9861px; left: 1100px; display: none;">
+                    <div class="arrow" style="left: 50%;"></div>
+                    <h3 class="popover-title" style="display: none;"></h3>
+                    <div class="popover-content">
+                        <div class="ws-g myaccount-popover">
+                            <a class="ws-u-1 item" href="/meinkonto">Tài khoản của tôi</a>
+                            <a class="ws-u-1 item" href="/meinkonto/bestellungen">Đơn đặt hàng</a>
+                            <a class="ws-u-1 item item-logout" href="logout">Đăng xuất</a>
+                        </div>
+                    </div>
+                </div>
+            `);
+            }
+
+            // Toggle hiển thị
+            $(".MyaccountPopover").toggle();
+
+            // Nếu bị ẩn thì xóa display để khi hiện lại vẫn giữ vị trí cũ
+            if (!$(".MyaccountPopover").is(":visible")) {
+                $(".MyaccountPopover").css("display", "none");
+            }
+        });
+
+        // Ẩn popover khi click ra ngoài
+        $(document).on("click", function(e) {
+            if (!$(e.target).closest(".login, .MyaccountPopover").length) {
+                $(".MyaccountPopover").hide();
+            }
+        });
+    });
 </script>
 @stack('scripts')

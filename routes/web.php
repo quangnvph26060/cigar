@@ -66,6 +66,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::prefix('configs')->controller(ConfigController::class)->name('configs.')->group(function () {
             Route::get('/', 'config')->name('config');
             Route::post('/', 'postConfig')->name('post_config');
+
+            route::get('payments/{id?}', 'payment')->name('payment');
+            route::put('payments', 'handleChangePublishPayment')->name('handleChangePublishPayment');
+            route::post('config-transfer-payment',  'configTransferPayment')->name('configTransferPayment');
+
+            route::get('/filters', 'filter')->name('filter');
+            route::post('/filters', 'handleSubmitFilter')->name('handleSubmitFilter');
+            route::post('config-filter-update/{id}', 'handleSubmitChangeFilter')->name('handleSubmitChangeFilter');
         });
 
         Route::get('attributes-values/{id}', [AttributeValueController::class, 'index'])->name('attributes-values.index');
