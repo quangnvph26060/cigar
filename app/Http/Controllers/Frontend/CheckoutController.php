@@ -105,6 +105,13 @@ class CheckoutController extends Controller
 
     public function orderSuccess($code)
     {
+        if (!auth()->check()) {
+            // Lưu lại URL hiện tại vào session
+            session()->put('url.intended', url()->current());
+
+            // Chuyển hướng đến trang login
+            return redirect()->route('login');
+        }
         $order = Order::query()->with('orderDetails')->where('code', $code)->firstOrFail();
 
         return view('frontend.pages.order-success', compact('order'));

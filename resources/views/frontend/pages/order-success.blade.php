@@ -1,7 +1,11 @@
 @extends('frontend.layouts.master')
 
 @section('content')
-    <div class="ws-container" style="margin-top: 30px">
+    <div class="ws-container">
+        @include('frontend.pages.include.breadcrumb', [
+            'data' => ['Information' => route('myInfo'), 'Bestelldetails' => null],
+        ])
+
         <div class="container-custom ">
             <!-- Section 1: Thông báo đặt hàng thành công -->
             <div class="section-1">

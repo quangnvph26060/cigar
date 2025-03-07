@@ -75,6 +75,23 @@
         window.location.href = window.location.pathname + '?' + params.toString();
     }
 
+    function getFormattedSubTotal(subTotal) {
+        // Định dạng số với dấu phân cách thập phân là ',' và dấu phân cách hàng nghìn là '.'
+        let formattedTotal = subTotal.toLocaleString('en-GB', {
+            style: 'decimal',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+        // Kiểm tra nếu phần thập phân là .00 thì bỏ đi
+        if (formattedTotal.endsWith('.00')) {
+            formattedTotal = formattedTotal.slice(0, -3); // Loại bỏ phần thập phân nếu là .00
+        }
+
+        return formattedTotal;
+    }
+
+
     $(document).ready(function() {
         $(".login a.is-logger").on("click", function(e) {
             e.preventDefault(); // Ngăn chặn điều hướng mặc định
