@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
-        
+
 
         View::composer('*', function ($view) {
             $config = Config::query()->firstOrCreate();
@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with(['config' => $config]);
         });
 
-        View::composer('frontend.layouts.partials.menu_desktop', function ($view) {
+        View::composer(['frontend.layouts.partials.menu_desktop', 'frontend.layouts.partials.menu_mobile'], function ($view) {
 
             $categories = Category::with([
                 'children' => function ($query) {

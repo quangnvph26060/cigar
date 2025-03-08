@@ -68,14 +68,13 @@
 @push('styles')
     <style>
         .container-custom {
-
             font-family: 'Times New Roman', serif;
             background-color: #f5e8d3;
             color: #4a2c0f;
-
             max-width: 900px;
             margin: 0 auto;
-            padding: 30px;
+            padding: 15px;
+            /* Giảm padding cho màn hình nhỏ */
             border: 2px solid #8b5a2b;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
@@ -92,55 +91,128 @@
         /* Section 1 */
         .section-1 {
             text-align: center;
-            padding: 20px 0;
+            padding: 15px 0;
+            /* Giảm padding cho màn hình nhỏ */
         }
 
         .success-message {
-            font-size: 24px;
+            font-size: 20px;
+            /* Giảm font-size cho màn hình nhỏ */
             font-weight: bold;
         }
 
         /* Section 2 */
         .section-2 {
             display: flex;
+            flex-wrap: wrap;
+            /* Cho phép các box xuống dòng khi màn hình nhỏ */
             justify-content: space-between;
-            margin: 20px 0;
+            margin: 15px 0;
+            /* Giảm margin */
+            gap: 10px;
+            /* Khoảng cách giữa các box */
         }
 
         .box {
-            width: 48%;
+            width: 100%;
+            /* Mặc định full width cho màn hình nhỏ */
             background-color: #fdf6e8;
-            padding: 15px;
+            padding: 10px;
+            /* Giảm padding */
             border: 1px solid #d4a373;
         }
 
         .box h2 {
-            font-size: 18px;
+            font-size: 16px;
+            /* Giảm font-size */
             margin-top: 0;
         }
 
         /* Section 3 */
         .section-3 {
-            margin-top: 20px;
+            margin-top: 15px;
+            /* Giảm margin */
         }
 
         .order-items {
             border: 1px solid #d4a373;
-            padding: 15px;
+            padding: 10px;
+            /* Giảm padding */
         }
 
         .order-item {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
+            padding: 8px 0;
+            /* Giảm padding */
             border-bottom: 1px dashed #d4a373;
+            flex-wrap: wrap;
+            /* Cho phép nội dung xuống dòng nếu cần */
         }
 
         .total {
             text-align: right;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 16px;
+            /* Giảm font-size */
             margin-top: 10px;
+        }
+
+        .success-message {
+            line-height: 30px
+        }
+
+        /* Media Queries cho màn hình lớn hơn */
+        @media (min-width: 768px) {
+            .container-custom {
+                padding: 30px;
+                /* Khôi phục padding cho màn hình lớn */
+            }
+
+            .section-1 {
+                padding: 20px 0;
+            }
+
+            .success-message {
+                font-size: 24px;
+                /* Khôi phục font-size */
+            }
+
+            .section-2 {
+                flex-wrap: nowrap;
+                /* Không xuống dòng trên màn hình lớn */
+                margin: 20px 0;
+            }
+
+            .box {
+                width: 48%;
+                /* Trở lại 48% cho màn hình lớn */
+                padding: 15px;
+            }
+
+            .box h2 {
+                font-size: 18px;
+                /* Khôi phục font-size */
+            }
+
+            .section-3 {
+                margin-top: 20px;
+            }
+
+            .order-items {
+                padding: 15px;
+            }
+
+            .order-item {
+                padding: 10px 0;
+                flex-wrap: nowrap;
+                /* Không xuống dòng trên màn hình lớn */
+            }
+
+            .total {
+                font-size: 18px;
+                /* Khôi phục font-size */
+            }
         }
     </style>
 @endpush

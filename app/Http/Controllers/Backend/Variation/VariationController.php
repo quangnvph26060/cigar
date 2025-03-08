@@ -208,7 +208,18 @@ class VariationController extends Controller
 
         $product = Product::find($id);
         if (request()->ajax()) {
-            $columns    = ['id', 'name', 'slug', 'status', 'image'];
+            $columns    = [
+                'id',
+                'name',
+                'slug',
+                'status',
+                'image',
+                "rating",
+                "quality",
+                "strength",
+                "radius",
+                "length"
+            ];
 
             $query      = $this->queryBuilder->buildQuery(
                 $columns,
@@ -223,11 +234,12 @@ class VariationController extends Controller
 
             return $this->queryBuilder->processDataTable($query, function ($dataTable) use ($id) {
                 return $dataTable
+                    ->editColumn('image', fn($row) => "<img width='80' src=" . showImage($row->image) . " />")
                     ->editColumn('name', fn($row) => "<a href='" . route('admin.variations.product.edit', ['id' => $id, 'id1' => $row->id]) . "'><strong>{$row->name}</strong></a> ")
                     ->editColumn('status', fn($row) => $row->status == 1
-                        ? '<span class="badge bg-success">Xuất bản</span>'
-                        : '<span class="badge bg-warning">Chưa xuất bản</span>');
-            }, ['name', 'status']);
+                        ? '<span class="badge bg-primary">Xuất bản</span>'
+                        : '<span class="badge bg-secondary">Chưa xuất bản</span>');
+            }, ['name', 'status', 'image']);
         }
         return view('backend.variation.index', compact('id', 'product'));
     }
