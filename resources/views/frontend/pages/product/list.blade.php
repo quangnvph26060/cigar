@@ -11,15 +11,10 @@
                 $data[$category->name ?? $brand->name] = $category ? route('products', $category->slug) : null;
             }
 
-            if($paramOne && $paramTwo) {
+            if ($paramOne && $paramTwo) {
                 $data[$attribute_name] = null;
             }
 
-            // if()
-
-            // if ($paramOne) {
-            // }
-            // dd($data);
         @endphp
 
         @include('frontend.pages.include.breadcrumb', [
@@ -64,179 +59,103 @@
             </div>
         @endisset
 
-
-
-
         <div class="search-filter mb-2 mb-lg-3">
             <div class="ws-g ws-cx">
                 <div class="ws-u-1">
-                    <form class="ws-g ws-form" action="/zigarren" method="get" data-cssloader="true">
-                        <a class="ws-u-1 showfilter" href="#filter-dropnav">
-                            <span class="show">
-                                <i class="fa fa-sliders"></i>   Filter
-                                <i class="fa fa-caret-down"></i>
-                            </span>
-                            <span class="hide">
-                                <i class="fa fa-sliders"></i>   Filter ausblenden
-                                <i class="fa fa-caret-up"></i>
-                            </span>
+                    <form class="ws-g ws-form" action="" method="get">
+                        <a class="ws-u-1 showfilter" href="#filter-dropnav"> <span class="show"> <i
+                                    class="fa fa-sliders"></i> &nbsp; Filter &nbsp; <i class="fa fa-caret-down"></i> </span>
+                            <span class="hide"> <i class="fa fa-sliders"></i> &nbsp; Filter ausblenden &nbsp; <i
+                                    class="fa fa-caret-up"></i> </span> </a>
+
+                        <span class="filter-nav left hidden d-none" style="height: 64px;"><i
+                                class="fa fa-angle-left"></i></span>
+
+                        <span class="filter-nav right d-none" style="height: 64px;"><i class="fa fa-angle-right"></i></span>
+
+                        <a class="filter-nav h-100" href="javascript:void(0);" onclick="scrollFilters('right')"
+                            style="right: 0">
+                            <span><i class="fa fa-angle-right"></i></span>
                         </a>
-                        <span class="filter-nav left hidden d-none"><i class="fa fa-angle-left"></i></span>
-                        <span class="filter-nav right d-none"><i class="fa fa-angle-right"></i></span>
-                        <a class="filter-nav h-100" href="#search-filter-detail" style="right: 0"><span><i
-                                    class="fa fa-angle-right"></i></span></a>
-                        <ul class="ws-u-1 filter-dropnav" id="#filter-dropnav">
-                            <!-- -->
-                            <li class="filter-item search-filter-detail-toggle">
-                                <a href="#search-filter-detail"><span><i class="fa fa-fw fa-filter"></i></span></a>
-                            </li>
-                            <!-- -->
-                            <li class="filter-item">
-                                <a href="#filter-wgr"><span>Warengruppe<i
-                                            class="fa fa-angle-down caret-indicator"></i></span></a>
-                                <div class="filter-dropdown ws-g wgr" id="filter-wgr">
-                                    <div class="ws-u-1">
-                                        <ul class="ws-g inner">
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/zigarren/brasilien"
-                                                    data-cssloader="true">
-                                                    Brasilien
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/zigarren/costa-rica"
-                                                    data-cssloader="true">
-                                                    Costa Rica
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/zigarren/cuba" data-cssloader="true">
-                                                    Kuba
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/zigarren/deutschland"
-                                                    data-cssloader="true">
-                                                    Deutschland
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/zigarren/dominikanische-republik"
-                                                    data-cssloader="true">
-                                                    Dominikanische Republik
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/Zigarren/E-Zigaretten"
-                                                    data-cssloader="true">
-                                                    E-Zigaretten
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/zigarren/ecuador"
-                                                    data-cssloader="true">
-                                                    Ecuador
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/zigarren/honduras"
-                                                    data-cssloader="true">
-                                                    Honduras
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/zigarren/indonesien"
-                                                    data-cssloader="true">
-                                                    Indonesien
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/Zigarren/Italien"
-                                                    data-cssloader="true">
-                                                    Italien
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/Zigarren/Jamaika"
-                                                    data-cssloader="true">
-                                                    Jamaika
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/zigarren/kanaren"
-                                                    data-cssloader="true">
-                                                    Kanarische Inseln
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/Zigarren/Kolumbien"
-                                                    data-cssloader="true">
-                                                    Kolumbien
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/zigarren/mexiko"
-                                                    data-cssloader="true">
-                                                    Mexiko
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/Zigarren/Mosambik"
-                                                    data-cssloader="true">
-                                                    Mosambik
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/zigarren/nicaragua"
-                                                    data-cssloader="true">
-                                                    Nicaragua
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/zigarren/panama"
-                                                    data-cssloader="true">
-                                                    Panama
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/Zigarren/Peru"
-                                                    data-cssloader="true">
-                                                    Peru
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/zigarren/philippinen"
-                                                    data-cssloader="true">
-                                                    Philippinen
-                                                </a>
-                                            </li>
-                                            <li class="ws-u-1 nobr">
-                                                <a class="filter-item-wrapper" href="/zigarren/sampler"
-                                                    data-cssloader="true">
-                                                    Sampler
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </li>
+                        <a class="filter-nav h-100" href="javascript:void(0);" onclick="scrollFilters('left')"
+                            style="left: 0">
+                            <span><i class="fa fa-angle-left"></i></span>
+                        </a>
+
+                        <ul class="ws-u-1 filter-dropnav filter-container" id="#filter-dropnav">
                             <!-- -->
 
-                            <!-- -->
+
+                            @if (count($brands ?? []) > 0)
+                                <li class="filter-item">
+                                    <a href="#filter-brand">
+                                        <span>Warenzeichen
+                                            <i class="fa fa-angle-down caret-indicator"></i>
+                                        </span>
+                                    </a>
+                                    <div class="filter-dropdown ws-g hersteller enable-scroll" id="filter-brand">
+                                        <div class="ws-u-1">
+                                            <ul class="ws-g inner">
+                                                @foreach ($brands as $iBrand)
+                                                    <li class="ws-u-1 nobr">
+                                                        <label class="filter-item-wrapper" for="{{ $iBrand['name'] }}">
+                                                            <input type="checkbox" name="brands[]"
+                                                                id="{{ $iBrand['name'] }}" value="{{ $iBrand['name'] }}"
+                                                                onchange="submitFormWithDelay(true)"
+                                                                @if (in_array($iBrand['name'], request()->has('brands') ? explode(',', request()->input('brands')[0]) : [])) checked @endif>
+                                                            <span class="label-text">{{ $iBrand['name'] }}</span>
+                                                            <span class="count">({{ $iBrand['product_count'] }})</span>
+                                                        </label>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+
+
+                                        </div>
+                                    </div>
+                                </li>
+                            @endif
+
+                            @foreach ($attributesArray as $key => $attr)
+                                <li class="filter-item">
+                                    <a href="#filter-{{ $key }}">
+                                        <span>{{ $key }}
+                                            <i class="fa fa-angle-down caret-indicator"></i>
+                                        </span>
+                                    </a>
+                                    <div class="filter-dropdown ws-g hersteller enable-scroll"
+                                        id="filter-{{ $key }}">
+                                        <div class="ws-u-1">
+                                            <ul class="ws-g inner">
+                                                @foreach ($attr as $at_name)
+                                                    <li class="ws-u-1 nobr">
+                                                        <label class="filter-item-wrapper" for="{{ $at_name }}">
+                                                            <input type="checkbox" name="attrs[]" id="{{ $at_name }}"
+                                                                value="{{ $at_name }}"
+                                                                onchange="submitFormWithDelay(true)"
+                                                                @if (in_array($at_name, request()->has('attrs') ? explode(',', request()->input('attrs')[0]) : [])) checked @endif>
+                                                            <span class="label-text">{{ $at_name }}</span>
+                                                        </label>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+
+
+                                        </div>
+                                    </div>
+                                </li>
+                            @endforeach
                         </ul>
                     </form>
                 </div>
             </div>
         </div>
-        {{-- <form action="" method="get">
-            <select name="" id="">
-                <option value="">1</option>
-                <option value="">2</option>
-            </select>
-        </form> --}}
+<style>
+    
+</style>
         <div class="ws-g ws-cx mb-2 search-row-info">
             <form action="" method="get" class="ws-form">
-                {{-- <input type="hidden" name="page" value="{{ request('page') }}"> --}}
+
                 <div class="ws-u-1 ws-u-lg-12-24 mb-2 mb-lg-0">
                     {{ $products->total() }} Artikel gefunden
                 </div>
@@ -316,7 +235,7 @@
             @endforeach
         </div>
 
-        {{ $products->appends(request()->query())->links('vendor.pagination.default') }}
+        {{ $products->links('vendor.pagination.default') }}
 
         @isset($brand)
             <div id="text-cohiba---zigarren--zigarillos-und-zigarrenzubehoer"
@@ -331,6 +250,8 @@
 
 
     </div>
+
+
 @endsection
 
 @push('scripts')
@@ -349,4 +270,7 @@
             form.submit();
         }
     </script> --}}
+@endpush
+
+@push('styles')
 @endpush

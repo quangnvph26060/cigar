@@ -118,5 +118,23 @@ class DatabaseSeeder extends Seeder
         //         'updated_at'       => $now->subDays(rand(1, 10)),
         //     ]);
         // }
+
+        $attributes = DB::table('attributes')->pluck('id'); // giả sử bạn có bảng attributes lưu tất cả attribute_id
+
+        foreach ($attributes as $attribute_id) {
+            // Lấy tất cả các giá trị thuộc tính cho từng attribute_id từ bảng attribute_values
+            $attribute_values = DB::table('attribute_values')
+                ->where('attribute_id', $attribute_id)
+                ->pluck('id');
+
+            // Chọn một số giá trị ngẫu nhiên từ attribute_values cho mỗi attribute_id
+            for ($i = 0; $i < 1000; $i++) {
+                DB::table('variation_attribute_values')->insert([
+                    'variations_id' => fake()->numberBetween(100, 10000),  // variations_id từ 17-10000
+                    'attribute_id' => $attribute_id,                        // attribute_id từ bảng attributes
+                    'attribute_value_id' => fake()->randomElement($attribute_values->toArray()),  // chọn ngẫu nhiên attribute_value_id từ các giá trị đã lấy
+                ]);
+            }
+        }
     }
 }
