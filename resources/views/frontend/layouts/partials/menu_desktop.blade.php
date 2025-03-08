@@ -1,6 +1,5 @@
 <div class="ws-container container">
     <div class="row g-0">
-
         @foreach ($categories as $category)
             <div class="col">
                 <a class="dnav-item" href="/zigarren"
