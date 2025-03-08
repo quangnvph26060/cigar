@@ -52,14 +52,14 @@ class ProductController extends Controller
      */
     public function create()
     {
-
+        $product = null;
 
         // $qrCode = $this->genQrCode();
         // return "<img src='data:image/png;base64," . base64_encode($qrCode)  . "' />";
 
         $brands = Brand::get();
         $categorys = Category::get();
-        return view('backend.product.save', compact('brands', 'categorys'));
+        return view('backend.product.save', compact('brands', 'categorys', 'product'));
     }
 
     protected function genQrCode()

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Models\Brand;
 use App\Models\Category;
@@ -14,125 +15,225 @@ class ProductController extends Controller
 {
     public function productList($paramOne = null, $paramTwo = null, $paramThree = null)
     {
+        if ($paramThree) {
+            return $this->handleProductVariant($paramTwo, $paramThree);
+        }
+
+        if ($paramOne) {
+            return $this->handleProductListing($paramOne, $paramTwo);
+        }
+    }
+
+    private function handleProductVariant($paramTwo, $paramThree)
+    {
+        preg_match('/-(\d+)$/', $paramThree, $matches);
+        $product = Product::with(['variations' => function ($q) {
+            $q->where('status', 1);
+        }, 'variations.priceVariants'])
+            ->withCount('variations')
+            ->findOrFail($matches[1]);
+
+        $unpublishedVariations = $product->variations()->where('status', 2)->get();
+        $brand = Brand::where('slug', $paramTwo)->firstOrFail();
+        $relatedProducts = $this->getRelatedProducts($brand, $product);
+
+        return view('frontend.pages.product.product-variants', compact('product', 'relatedProducts', 'unpublishedVariations'));
+    }
+
+    private function getRelatedProducts($brand, $product)
+    {
+        return Product::where('brand_id', $brand->id)
+            ->where('id', '!=', $product->id)
+            ->whereNotNull('name')
+            ->with(['brand', 'variations' => function ($q) {
+                $q->where('status', 1);
+            }])
+            ->withCount('variations')
+            ->inRandomOrder()
+            ->limit(5)
+            ->get();
+    }
+
+    private function handleProductListing($paramOne, $paramTwo)
+    {
+        $category = Category::with(['products', 'children.products', 'parent.products'])
+            ->where('slug', $paramOne)
+            ->first();
+
+        $brand = $category ? null : Brand::with('products.variations')->where('slug', $paramOne)->firstOrFail();
+        $attribute_name = $paramTwo ? AttributeValue::where('slug', $paramTwo)->firstOrFail()->value : null;
+        $products = $category ? $this->getCategoryProducts($category) : $brand->products()->with(['category'])->withCount('variations');
+
+        $brands = Product::whereIn('id', $products->pluck('id'))
+            ->selectRaw('brand_id, COUNT(*) as product_count')
+            ->groupBy('brand_id')
+            ->with('brand:id,name') // Chỉ lấy những cột cần thiết từ brand
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'id' => $item->brand_id,
+                    'name' => $item->brand->name ?? 'Unknown',
+                    'product_count' => $item->product_count,
+                ];
+            })
+            ->where('product_count', '>', 0) // Bỏ thương hiệu có product_count = 0
+            ->values(); // Reset lại index của mảng
+
+        $products = $this->applySorting($products);
+
+
+        $attributesArray = $this->formatAttribute($products);
+
+        // dd($attributesArray);
+
+        $products = $products->paginate(30);
+
+        // dd($products);
+        // $products = $products->toRawSql();
+
+        // dd($products);
+
+        return view('frontend.pages.product.list', compact('products', 'category', 'brand', 'paramOne', 'paramTwo', 'attribute_name', 'brands', 'attributesArray'));
+    }
+
+    private function formatAttribute($products)
+    {
+        $attributesArray = [];
+
+        $products = $products->get(); // Lấy danh sách sản phẩm
+
+        foreach ($products as $product) {
+            foreach ($product->variations as $variation) { // Lặp qua từng biến thể
+                foreach ($variation->attributes as $attribute) {
+                    $attributeName = $attribute->name; // Tên thuộc tính (ví dụ: "Màu sắc")
+
+                    // Lấy giá trị từ pivot (attribute_value_id)
+                    $attributeValueId = $attribute->pivot->attribute_value_id;
+
+                    $attributeValue = $attribute->attributeValues()
+                        ->where('id', $attributeValueId)
+                        ->first()
+                        ->value ?? 'unknown';
+
+                    // Bỏ qua nếu giá trị là "unknown"
+                    if ($attributeValue === 'unknown') {
+                        continue;
+                    }
+
+                    // Nếu thuộc tính chưa tồn tại trong mảng, khởi tạo nó
+                    if (!isset($attributesArray[$attributeName])) {
+                        $attributesArray[$attributeName] = [];
+                    }
+
+                    // Thêm giá trị vào mảng nếu chưa có
+                    if (!in_array($attributeValue, $attributesArray[$attributeName])) {
+                        $attributesArray[$attributeName][] = $attributeValue;
+                    }
+                }
+            }
+        }
+
+        return $attributesArray;
+    }
+
+
+
+
+    private function getCategoryProducts($category)
+    {
+        // Lấy tất cả các ID danh mục liên quan (bao gồm danh mục chính, danh mục con và danh mục cha)
+        $categoryIds = [$category->id];
+
+        // Thêm các danh mục con vào mảng categoryIds
+        $category->children->each(function ($child) use (&$categoryIds) {
+            $categoryIds[] = $child->id;
+            // Thêm các danh mục con của các danh mục con (nếu có)
+            $child->children->each(function ($subChild) use (&$categoryIds) {
+                $categoryIds[] = $subChild->id;
+            });
+        });
+
+        // Thêm danh mục cha nếu có
+        if ($category->parent) {
+            $categoryIds[] = $category->parent->id;
+        }
+
+        // Lấy các sản phẩm có danh mục thuộc trong $categoryIds
+        $products = Product::with(['brand', 'variations.attributes.attributeValues'])->withCount('variations')
+            ->whereIn('category_id', $categoryIds); // Lọc sản phẩm theo các category_ids;
+
+        $products = $this->applySortAttributes($products);
+
+        return $products;
+    }
+
+    private function applyFilterBrand($products)
+    {
+        // Lấy mảng tên thương hiệu từ request
+        $brands = request()->has('brands') && request('brands')[0] != "" ? explode(',', request('brands')[0]) : [];
+
+        // Nếu mảng thương hiệu không trống, lọc sản phẩm theo thương hiệu
+        if (count($brands) > 0) {
+            $products = $products->whereIn('brand_id', function ($query) use ($brands) {
+                $query->select('id')
+                    ->from('brands')
+                    ->whereIn('name', $brands);
+            });
+        }
+
+        return $products;
+    }
+
+    private function applySortAttributes($products)
+    {
+        $attributes = request()->has('attrs') && request('attrs')[0] != "" ? explode(',', request('attrs')[0]) : [];
+
+        if (!empty($attributes)) {
+            $products->whereHas('variations.attributes.attributeValues', function ($query) use ($attributes) {
+                $query->whereIn('value', $attributes);
+            });
+        }
+
+        return $products;
+    }
+
+
+
+    private function applySorting($products)
+    {
         $sortOption = request('sortOrder', 'Relevanz');
 
-        if ($paramThree) {
-            preg_match('/-(\d+)$/', $paramThree, $matches);
+        $products =  $this->applyFilterBrand($products);
 
-            $product = Product::query()
-                ->with([
-                    'variations' => function ($q) {
-                        $q->where('status', 1);
-                    },
-                    'variations.priceVariants' // Nạp thêm quan hệ priceVariants từ variations
-                ])
-                ->withCount('variations')
-                ->findOrFail($matches[1]);
+        $products->selectRaw('
+        CASE
+            WHEN discount_value <= 0 THEN price
+            WHEN (discount_start IS NULL AND discount_end IS NULL) THEN discount_value
+            WHEN (discount_start IS NOT NULL AND discount_end IS NOT NULL
+                AND DATE(discount_start) <= CURDATE()
+                AND DATE(discount_end) >= CURDATE())
+                THEN discount_value
+            WHEN discount_start IS NOT NULL AND discount_end IS NULL
+                AND DATE(discount_start) <= CURDATE()
+                THEN discount_value
+            WHEN discount_start IS NULL AND discount_end IS NOT NULL
+                AND DATE(discount_end) >= CURDATE()
+                THEN discount_value
+            ELSE price
+        END AS final_price');
 
-            $unpublishedVariations = $product->variations()
-                ->where('status', 2)
-                ->get();
-
-            // Lấy ID của thương hiệu từ slug
-            $brand = Brand::where('slug', $paramTwo)->firstOrFail();
-
-            // Truy vấn sản phẩm liên quan
-            $relatedProducts = Product::query()
-                ->where('brand_id', $brand->id)
-                ->where('id', '!=', $product->id)
-                ->whereNotNull('name')
-                ->with(['brand', 'variations' => function ($q) {
-                    $q->where('status', 1);
-                }])
-                ->withCount('variations')
-                ->inRandomOrder()
-                ->limit(5)
-                ->get();
-
-            return view('frontend.pages.product.product-variants', compact('product', 'relatedProducts', 'unpublishedVariations'));
+        switch ($sortOption) {
+            case 'preis_desc':
+                $products->orderBy('final_price', 'desc');
+                break;
+            case 'preis_asc':
+                $products->orderBy('final_price', 'asc');
+                break;
+            case 'neueste':
+                $products->orderByDesc('created_at');
+                break;
         }
 
-        // Kiểm tra xem có $paramOne (danh mục hiện tại) hay không
-        if ($paramOne) {
-            $brand = null;
-            // Tìm danh mục dựa trên slug
-            $category = Category::with([
-                'products',
-                'children.products',
-                'parent.products'
-            ])->where('slug', $paramOne)->first();
-
-            // Nếu không tìm thấy danh mục, tìm theo Brand
-            if (!$category) {
-                $brand = Brand::with('products.variations')->where('slug', $paramOne)->firstOrFail();
-            }
-
-            $attribute_name = null;
-            // Nếu tìm thấy danh mục (category)
-            if ($category) {
-
-                $attribute_name = $paramTwo ?  AttributeValue::query()->where('slug', $paramTwo)->firstOrFail()->value : null;
-
-                $products = $category->products()->with(['brand'])->withCount('variations');
-
-                // Lấy sản phẩm của danh mục con
-                $category->children->each(function ($child) use (&$products) {
-                    $products = $products->merge($child->products);
-                    if ($child->children->isNotEmpty()) {
-                        $child->children->each(function ($subChild) use (&$products) {
-                            $products = $products->merge($subChild->products);
-                        });
-                    }
-                });
-
-                // Lấy sản phẩm của danh mục cha
-                if ($category->parent) {
-                    $products = $products->merge($category->parent->products);
-                }
-            } else {
-                // Nếu tìm thấy Brand, lấy tất cả sản phẩm của thương hiệu đó
-                $products = $brand->products()->with(['category'])->withCount('variations');
-            }
-
-            // Áp dụng logic sắp xếp giá
-            $products->selectRaw('
-                CASE
-                    WHEN discount_value <= 0 THEN price
-                    WHEN (discount_start IS NULL AND discount_end IS NULL) THEN discount_value
-                    WHEN (discount_start IS NOT NULL AND discount_end IS NOT NULL AND
-                        (CAST(discount_start AS DATETIME) <= NOW() AND CAST(discount_end AS DATETIME) >= NOW()))
-                        THEN discount_value
-                    WHEN discount_start IS NOT NULL AND discount_end IS NULL AND CAST(discount_start AS DATETIME) <= NOW()
-                        THEN discount_value
-                    WHEN discount_start IS NULL AND discount_end IS NOT NULL AND CAST(discount_end AS DATETIME) >= NOW()
-                        THEN discount_value
-                    ELSE price
-                END as final_price');
-
-            // Áp dụng sắp xếp theo lựa chọn của người dùng
-            switch ($sortOption) {
-                case 'preis_desc':
-                    $products->orderBy('final_price', 'desc');
-                    break;
-                case 'preis_asc':
-                    $products->orderBy('final_price', 'asc');
-                    break;
-                case 'neueste':
-                    $products->orderByDesc('created_at');
-                    break;
-                default:
-                    // Mặc định không sắp xếp
-                    break;
-            }
-
-            // Phân trang
-            $products = $products->paginate(30);
-
-            return view('frontend.pages.product.list', compact('products', 'category', 'brand', 'paramOne', 'paramTwo', 'attribute_name'));
-        }
-
-
-        // Nếu không có paramOne, trả về view mà không có sản phẩm
-        // return view('frontend.pages.product.list');
+        return $products;
     }
 }

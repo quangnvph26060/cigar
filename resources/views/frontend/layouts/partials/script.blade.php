@@ -58,22 +58,66 @@
         notification.classList.remove("show");
     }
 
-    function submitFormWithDelay() {
+    function submitFormWithDelay(resetPage = false) {
         const params = new URLSearchParams(window.location.search); // Lấy tất cả tham số hiện tại
         const formInputs = document.querySelectorAll('.ws-form input, .ws-form select');
 
-        // Cập nhật params từ form
+        // Duyệt qua tất cả các input và select
         formInputs.forEach(input => {
-            if ((input.type === 'checkbox' || input.type === 'radio') && !input.checked) return;
-            params.set(input.name, input.value);
+            if (input.type === 'checkbox' || input.type === 'radio') {
+                // Nếu là checkbox hoặc radio, lấy các giá trị được chọn
+                let selectedValues = [];
+                document.querySelectorAll(`input[name="${input.name}"]:checked`).forEach(checkbox => {
+                    selectedValues.push(checkbox.value);
+                });
+
+                // Nếu có giá trị được chọn, thêm vào URL dưới dạng mảng
+                if (selectedValues.length > 0) {
+                    params.set(input.name, selectedValues.join(',')); // Dùng dấu phẩy để phân tách
+                } else {
+                    params.delete(input.name); // Nếu không có giá trị nào, xóa tham số trong URL
+                }
+            } else if (input.type === 'text' || input.type === 'select-one') {
+                // Nếu là text input hoặc select, lấy giá trị
+                if (input.value) {
+                    params.set(input.name, input.value); // Thêm vào URL
+                } else {
+                    params.delete(input.name); // Nếu không có giá trị, xóa tham số trong URL
+                }
+            }
         });
 
-        // console.log(params.toString());
-
+        // Nếu resetPage = true thì xóa tham số 'page' nếu có
+        if (resetPage) {
+            params.delete('page');
+        }
 
         // Điều hướng đến URL mới
         window.location.href = window.location.pathname + '?' + params.toString();
     }
+
+    function scrollFilters(direction) {
+        let container = document.querySelector(".filter-container");
+
+        if (!container) return;
+
+        let scrollAmount = 200; // Số pixel trượt mỗi lần
+
+        // Đảm bảo padding trái không bị thay đổi
+        container.style.paddingLeft = "0px";
+
+        console.log("Trước khi cuộn:", container.scrollLeft);
+
+        if (direction === "right") {
+            container.scrollLeft += scrollAmount;
+        } else {
+            container.scrollLeft -= scrollAmount;
+        }
+
+        console.log("Sau khi cuộn:", container.scrollLeft);
+    }
+
+
 
     function getFormattedSubTotal(subTotal) {
         // Định dạng số với dấu phân cách thập phân là ',' và dấu phân cách hàng nghìn là '.'
