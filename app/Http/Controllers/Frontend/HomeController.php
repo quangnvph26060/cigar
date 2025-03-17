@@ -125,8 +125,14 @@ class HomeController extends Controller
         // Lưu cache danh sách sản phẩm bán chạy
         $bestsellerProducts = Cache::remember('bestseller_products', now()->addDay(), function () {
             return Product::leftJoin('order_details', 'products.id', '=', 'order_details.product_id')
-                ->select('products.*', DB::raw('COALESCE(SUM(order_details.p_qty), 0) as total_sold'))
-                ->groupBy('products.id')
+                ->select(
+                    'products.id',
+                    'products.name',
+                    'products.slug',
+                    'products.image',
+                    DB::raw('COALESCE(SUM(order_details.p_qty), 0) as total_sold')
+                )
+                ->groupBy('products.id', 'products.name', 'products.slug', 'products.image') // Thêm các cột vào GROUP BY
                 ->orderByDesc('total_sold')
                 ->limit(7)
                 ->get();
