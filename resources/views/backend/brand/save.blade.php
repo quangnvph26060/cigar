@@ -9,12 +9,12 @@
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
-            <a class="nav-link active fw-bold" id="info-tab" data-bs-toggle="tab" href="#info" role="tab" aria-controls="info"
-                aria-selected="true">Thông Tin Thương Hiệu</a>
+            <a class="nav-link active fw-bold" id="info-tab" data-bs-toggle="tab" href="#info" role="tab"
+                aria-controls="info" aria-selected="true">Thông Tin Thương Hiệu</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link fw-bold" id="seo-tab" data-bs-toggle="tab" href="#seo" role="tab" aria-controls="seo"
-                aria-selected="false">Cấu Hình Seo</a>
+            <a class="nav-link fw-bold" id="seo-tab" data-bs-toggle="tab" href="#seo" role="tab"
+                aria-controls="seo" aria-selected="false">Cấu Hình Seo</a>
         </li>
     </ul>
 
@@ -102,6 +102,42 @@
                             <option value="1" @selected(($brand->status ?? 1) == 1)>Xuất bản</option>
                             <option value="2" @selected(($brand->status ?? '') == 2)>Chưa xuất bản</option>
                         </select>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Hiển thị trang chủ</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check form-check-inline p-0">
+                            <input @checked(($brand->is_show_home ?? 0) == 1) class="form-check-input" type="radio"
+                                name="is_show_home" id="yes" value="yes">
+                            <label class="form-check-label" for="yes">Có</label>
+                        </div>
+                        <div class="form-check form-check-inline p-0">
+                            <input @checked(($brand->is_show_home ?? 0) == 0) class="form-check-input" type="radio"
+                                name="is_show_home" id="no" value="no">
+                            <label class="form-check-label" for="no">Không</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Thương hiệu hàng đầu</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check form-check-inline p-0">
+                            <input @checked(($brand->is_top ?? 0) == 1) class="form-check-input" type="radio"
+                                name="is_top" id="yes" value="yes">
+                            <label class="form-check-label" for="yes">Có</label>
+                        </div>
+                        <div class="form-check form-check-inline p-0">
+                            <input @checked(($brand->is_top ?? 0) == 0) class="form-check-input" type="radio"
+                                name="is_top" id="no" value="no">
+                            <label class="form-check-label" for="no">Không</label>
+                        </div>
                     </div>
                 </div>
 

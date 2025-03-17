@@ -76,7 +76,8 @@
 
                             @foreach ($relatedProducts as $rp)
                                 <li class="ws-u-1 rdsgn-List-item">
-                                    <a href="#" class="ws-g rdsgn-List-link">
+                                    <a href="{{ route('products', [$rp->category->slug, $rp->brand->slug, $rp->slug . '-' . $rp->id]) }}"
+                                        class="ws-g rdsgn-List-link">
                                         <div class="ws-u-1-5 rdsgn-List-col1">
                                             <img src="{{ showImage($rp->image) }}" class="rdsgn-List-image" />
                                         </div>
@@ -160,12 +161,12 @@
                             <a class="ws-u-1 ws-u-lg-4-24 DetailVariant-col DetailVariant-image"
                                 href="{{ route('products', [$product->category->slug, $product->brand->slug, $product->slug . '-' . $pv->slug . '-' . $product->id . '_' . $pv->id]) }}"
                                 title="Arturo Fuente {{ $pv->name }}">
-                                <img src="{{ showImage($pv->image) }}" style="width: 57%; height: auto"
+                                <img src="{{ showImage($pv->image) }}"
                                     alt="{{ implode(' ', [$product->category->name, $product->brand->name, $product->name, $pv->name]) }} " />
                             </a>
 
                             <a class="ws-u-1 ws-u-lg-11-24 ws-u-xl-13-24 DetailVariant-col DetailVariant-data"
-                                href="/zigarren/dominikanische-republik/arturo-fuente-hemingway-best-seller-perfecto-01101020_19532"
+                                href="{{ route('products', [$product->category->slug, $product->brand->slug, $product->slug . '-' . $pv->slug . '-' . $product->id . '_' . $pv->id]) }}"
                                 title="Arturo Fuente {{ $pv->name }}">
                                 <div class="ws-g">
                                     <div class="ws-u-1 DetailVariant-dataName">
@@ -276,8 +277,7 @@
 
                                                 <div class="ws-u-1-3 ws-u-lg-1-4 DetailVariant-formQuantity">
                                                     <input type="number" style="width: 40px"
-                                                        name="options[{{ $pirceV->id }}][qty]" value="0"
-                                                       >
+                                                        name="options[{{ $pirceV->id }}][qty]" value="0">
                                                 </div>
 
                                                 <div class="ws-u-1-3 ws-u-lg-1-2 DetailVariant-formUnit">

@@ -5,9 +5,11 @@ namespace App\Providers;
 use App\Models\AttributeValue;
 use App\Models\Category;
 use App\Models\Config;
+use App\Models\Post;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Cache;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,8 +27,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
-
-
         View::composer('*', function ($view) {
             $config = Config::query()->firstOrCreate();
 
@@ -34,60 +34,63 @@ class AppServiceProvider extends ServiceProvider
         });
 
         View::composer(['frontend.layouts.partials.menu_desktop', 'frontend.layouts.partials.menu_mobile'], function ($view) {
+            $cacheKey = 'menu_categories';
+            $cacheTime = 60 * 60;
 
-            $categories = Category::with([
-                'children' => function ($query) {
-                    $query->with(['products.brand']);
-                },
-                'products.brand'
-            ])->whereNull('parent_id')->get();
+            $categories = Cache::remember($cacheKey, $cacheTime, function () {
+                $categories = Category::with([
+                    'children.products.brand',
+                    'products.brand',
+                    'attributes'
+                ])->whereNull('parent_id')->orderBy('position', 'asc')->get();
 
+                // Lấy tất cả AttributeValue một lần duy nhất
+                $attributeValues = AttributeValue::all()->keyBy('id');
 
-            $categories->each(function ($category) {
-                // Lấy tất cả các thương hiệu của các sản phẩm trong danh mục này
-                $brands = $category->products->pluck('brand')->filter()->unique('id'); // Lọc và loại bỏ các giá trị null
-                $category->brands = $brands;
+                $categories->each(function ($category) use ($attributeValues) {
+                    $category->brands = $category->products
+                        ->pluck('brand')
+                        ->filter(fn($brand) => $brand && $brand->is_top) // Lọc thương hiệu có is_top = 1
+                        ->unique('id');
 
-                // Lặp qua các danh mục con
-                $category->children->each(function ($child) {
-                    $brands = $child->products->pluck('brand')->filter()->unique('id');
-                    $child->brands = $brands;
-                });
-            });
-
-            $attributeValueMap = AttributeValue::pluck('value', 'id');
-
-            $categories->each(function ($category) use ($attributeValueMap) {
-                $category->attributes->each(function ($attribute) use ($attributeValueMap) {
-                    $valueIds = json_decode($attribute->pivot->attribute_value_ids, true);
-
-                    $attribute->values = array_map(function ($id) use ($attributeValueMap) {
-                        $attributeValue = AttributeValue::find($id);
-                        return [
-                            'name' => $attributeValue->value ?? null, // Lấy giá trị name
-                            'slug' => $attributeValue->slug ?? null  // Lấy giá trị slug
-                        ];
-                    }, $valueIds);
-                });
-
-                $category->children->each(function ($child) use ($attributeValueMap) {
-                    $child->attributes->each(function ($attribute) use ($attributeValueMap) {
+                    // Xử lý danh sách thuộc tính của danh mục cha
+                    $category->attributes->each(function ($attribute) use ($attributeValues) {
                         $valueIds = json_decode($attribute->pivot->attribute_value_ids, true);
+                        $attribute->values = collect($valueIds)->map(fn($id) => [
+                            'name' => $attributeValues[$id]->value ?? null,
+                            'slug' => $attributeValues[$id]->slug ?? null
+                        ]);
+                    });
 
-                        $attribute->values = array_map(function ($id) use ($attributeValueMap) {
-                            $attributeValue = AttributeValue::find($id);
-                            return [
-                                'name' => $attributeValue->value ?? null,
-                                'slug' => $attributeValue->slug ?? null
-                            ];
-                        }, $valueIds);
+                    // Xử lý danh mục con
+                    $category->children->each(function ($child) use ($attributeValues) {
+                        $child->brands = $child->products
+                            ->pluck('brand')
+                            ->filter(fn($brand) => $brand && $brand->is_top)
+                            ->unique('id');
+
+                        $child->attributes->each(function ($attribute) use ($attributeValues) {
+                            $valueIds = json_decode($attribute->pivot->attribute_value_ids, true);
+                            $attribute->values = collect($valueIds)->map(fn($id) => [
+                                'name' => $attributeValues[$id]->value ?? null,
+                                'slug' => $attributeValues[$id]->slug ?? null
+                            ]);
+                        });
                     });
                 });
+
+                return $categories;
             });
 
-            // dd($categories);
-
             $view->with(['categories' => $categories]);
+        });
+
+        View::composer('frontend.layouts.partials.footer', function ($view) {
+            $newPosts = Post::query()
+                ->published()
+                ->orderByRaw('COALESCE(published_at, created_at) DESC')->limit(7)->get();
+
+            $view->with(['newPosts' => $newPosts]);
         });
     }
 }

@@ -26,13 +26,14 @@
 @endsection
 
 @push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
     <script src="{{ asset('backend/assets/js/plugin/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('backend/assets/js/columns/category.js') }}"></script>
     <script src="{{ asset('backend/assets/js/connectDataTable.js') }}"></script>
     <script>
         $(document).ready(function() {
             const api = "{{ route('admin.categories.index') }}"
-            dataTables(api, columns, 'Category')
+            dataTables(api, columns, 'Category', true)
         })
     </script>
 @endpush

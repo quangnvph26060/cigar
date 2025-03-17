@@ -65,6 +65,10 @@ class BrandController extends Controller
                 $credentials['slug'] = generateSlug($credentials['name']);
             }
 
+            $credentials['is_show_home'] = $credentials['is_show_home'] == 'yes';
+
+            $credentials['is_top'] = $credentials['is_top'] == 'yes';
+
             if ($request->hasFile('image')) {
                 $credentials['image'] = saveImages($request, 'image', 'brands');
             }
@@ -107,6 +111,10 @@ class BrandController extends Controller
             if (!$credentials['slug']) {
                 $credentials['slug'] = generateSlug($credentials['name']);
             }
+
+            $credentials['is_show_home'] = $credentials['is_show_home'] == 'yes';
+            
+            $credentials['is_top'] = $credentials['is_top'] == 'yes';
 
             if ($request->hasFile('image')) {
                 $credentials['image'] = saveImages($request, 'image', 'brands');

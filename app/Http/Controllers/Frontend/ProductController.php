@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Variation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ProductController extends Controller
 {
@@ -26,7 +27,34 @@ class ProductController extends Controller
 
     private function handleProductVariant($paramTwo, $paramThree)
     {
-        preg_match('/-(\d+)$/', $paramThree, $matches);
+
+        preg_match('/(\d+)$/', $paramThree, $matches);
+
+        if (preg_match('/\d+_\d+$/', $paramThree, $mat)) {
+            $attributes = [];
+            $variant = Variation::query()->with(['product.variations.priceVariants', 'albums', 'priceVariants', 'attributes.attributeValues'])->findOrFail($matches[1]);
+
+            $variant->attributes->map(function ($attribute) use (&$attributes) {
+                return $attributes[] = [
+                    'attribute_name' => $attribute->name,
+                    'attribute_value' => $attribute->attributeValues->find($attribute->pivot->attribute_value_id)->value
+                ];
+            });
+
+            $product = $variant->product;
+
+            $hasMatchingVariation =
+                $product->name === $variant->name &&
+                $product->slug === $variant->slug &&
+                $product->image === $variant->image;
+
+            $fakeProductPayed = Cache::remember('fake_product_payed', now()->addDay(), function () {
+                return Product::query()->inRandomOrder()->with('brand', 'category')->where('status', 1)->limit(7)->get();
+            });
+
+            return view('frontend.pages.product.product-detail', compact('hasMatchingVariation', 'variant', 'product', 'attributes', 'fakeProductPayed'));
+        }
+
         $product = Product::with(['variations' => function ($q) {
             $q->where('status', 1);
         }, 'variations.priceVariants'])
@@ -45,7 +73,7 @@ class ProductController extends Controller
         return Product::where('brand_id', $brand->id)
             ->where('id', '!=', $product->id)
             ->whereNotNull('name')
-            ->with(['brand', 'variations' => function ($q) {
+            ->with(['category', 'brand', 'variations' => function ($q) {
                 $q->where('status', 1);
             }])
             ->withCount('variations')
@@ -235,5 +263,12 @@ class ProductController extends Controller
         }
 
         return $products;
+    }
+
+    public function redirect($code)
+    {
+        $product = Product::query()->with(['brand', 'category'])->where('code', $code)->firstOrFail();
+
+        return redirect()->route('products', [$product->category->slug, $product->brand->slug, $product->slug . '-' . $product->id]);
     }
 }

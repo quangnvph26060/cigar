@@ -248,7 +248,7 @@
                 <div class="ws-g ws-c tabs-left" style="margin-top: 25px">
                     <ul class="ws-u-1 tab-nav tab-nav-amp tab-nav-amp-no-arrow">
                         <li class="active">
-                            <a href="#tab-pane-remainder" data-toggle="tab">Restbestände</a>
+                            <a href="#tab-pane-remainder" data-toggle="tab">Bestseller</a>
                         </li>
                         <li>
                             <a href="#tab-pane-discontinued" data-toggle="tab">Auslaufartikel</a>
@@ -258,23 +258,37 @@
                     <div class="tab-content">
                         <div id="tab-pane-remainder" class="ws-u-1 tab-pane remainder active fade in">
                             <div class="ws-g inner">
-                                <a class="ws-u-1 item" href="/zigarren/cuba/regulares/cohiba-01002">
-                                    <div class="ws-g tab-pane-item">
-                                        <div class="ws-u-4-24 image">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                data-src="/bilder/detail/small/2_13_163115.jpg" alt="Cohiba " />
+                                @foreach ($bestsellerProducts as $bP)
+                                    <a class="ws-u-1 item" href="/zigarren/cuba/regulares/cohiba-01002">
+                                        <div class="ws-g tab-pane-item">
+                                            <div class="ws-u-4-24 image">
+                                                <img src="{{ showImage($bP->image) }}"
+                                                    data-src="{{ showImage($bP->image) }}" alt="{{ $bP->name }} " />
+                                            </div>
+                                            <div class="ws-u-15-24 ws-u-md-11-24 content">
+                                                <span class="title nobr">{{ $bP->name }} </span>
+                                                <span class="subtitle nobr">Robustos</span>
+                                            </div>
+                                            <div
+                                                class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
+                                                @if (isDiscounted($bP))
+                                                    <del class="altpreis"><span data-eurval="{{ $bP->price }}"
+                                                            data-curiso="USD">{{ $bP->price }}
+                                                            €</span></del>
+                                                    <span>
+                                                        <span data-eurval="{{ $bP->discount_value }}">
+                                                            {{ $bP->discount_value }}
+                                                            €
+                                                        </span>
+                                                    </span>
+                                                @else
+                                                    <span data-eurval="{{ $bP->price }}">{{ $bP->price }}
+                                                        €</span>
+                                                @endif
+                                            </div>
                                         </div>
-                                        <div class="ws-u-15-24 ws-u-md-11-24 content">
-                                            <span class="title nobr">Cohiba </span>
-                                            <span class="subtitle nobr">Robustos</span>
-                                        </div>
-                                        <div
-                                            class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                            <span><span data-eurval="75.50">75.50 €</span></span>
-                                        </div>
-                                    </div>
-                                </a>
-
+                                    </a>
+                                @endforeach
                                 {{-- <a class="ws-u-1 more" href="/shop/restbestand">Weitere Restbestände
                                     anzeigen</a> --}}
                             </div>
@@ -283,22 +297,34 @@
                         <div id="tab-pane-discontinued" class="ws-u-1 tab-pane discontinued fade in">
                             <div class="ws-g inner">
 
-                                @foreach ($statusTwoProducts as $sTP)
+                                @foreach ($stoppedProducts as $stP)
                                     <a class="ws-u-1 item"
-                                        href="{{ route('products', [$sTP->category->slug, $sTP->brand->slug, $sTP->slug . '-' . $sTP->id]) }}">
+                                        href="{{ route('products', [$stP->category->slug, $stP->brand->slug, $stP->slug . '-' . $stP->id]) }}">
                                         <div class="ws-g tab-pane-item item-row">
                                             <div class="ws-u-4-24 image">
-                                                <img src="{{ showImage($sTP->image) }}"
-                                                    data-src="{{ showImage($sTP->image) }}" alt="{{ $sTP->name }}" />
+                                                <img src="{{ showImage($stP->image) }}"
+                                                    data-src="{{ showImage($stP->image) }}" alt="{{ $stP->name }}" />
                                             </div>
                                             <div class="ws-u-20-24 ws-u-md-11-24 content">
-                                                <span class="title nobr">{{ $sTP->name }}</span>
-                                                <span class="subtitle nobr">{{ $sTP->short_description }}</span>
+                                                <span class="title nobr">{{ $stP->name }}</span>
+                                                <span class="subtitle nobr">{{ $stP->short_description }}</span>
                                             </div>
                                             <div
                                                 class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                                <span><span
-                                                        data-eurval="{{ isDiscounted($sTP) ? $sTP->discount_value : $sTP->price }}">{{ isDiscounted($sTP) ? $sTP->discount_value : $sTP->price }} €</span></span>
+                                                @if (isDiscounted($stP))
+                                                    <del class="altpreis"><span data-eurval="{{ $stP->price }}"
+                                                            data-curiso="USD">{{ $stP->price }}
+                                                            €</span></del>
+                                                    <span>
+                                                        <span data-eurval="{{ $stP->discount_value }}">
+                                                            {{ $stP->discount_value }}
+                                                            €
+                                                        </span>
+                                                    </span>
+                                                @else
+                                                    <span data-eurval="{{ $stP->price }}">{{ $stP->price }}
+                                                        €</span>
+                                                @endif
                                             </div>
                                         </div>
                                     </a>
@@ -326,46 +352,37 @@
                         <div id="tab-pane-new" class="ws-u-1 tab-pane new active fade in">
                             <div class="ws-g inner">
 
-                                @foreach ($newVariants as $nv)
-                                    @php
-                                        // Lấy bản ghi priceVariant đầu tiên cho biến thể này
-                                        $firstPriceVariant = $nv->priceVariants->first();
-                                    @endphp
-
+                                @foreach ($newProducts as $np)
                                     <a class="ws-u-1 item" href="#">
                                         <div class="ws-g tab-pane-item">
                                             <div class="ws-u-4-24 image">
-                                                <img src="{{ showImage($nv->image) }}"
-                                                    data-src="{{ showImage($nv->image) }}" alt="{{ $nv->name }}" />
+                                                <img src="{{ showImage($np->image) }}"
+                                                    data-src="{{ showImage($np->image) }}" alt="{{ $np->name }}" />
                                             </div>
                                             <div class="ws-u-15-24 ws-u-md-11-24 content">
-                                                <span class="title nobr">{{ $nv->name }}</span>
-                                                <span class="subtitle nobr">{{ $nv->short_description }}</span>
+                                                <span class="title nobr">{{ $np->name }}</span>
+                                                <span class="subtitle nobr">{{ $np->short_description }}</span>
                                             </div>
                                             <div
                                                 class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
-                                                @if ($firstPriceVariant && isDiscounted($firstPriceVariant))
+                                                @if (isDiscounted($np))
                                                     <del class="altpreis"><span data-eurval="12.00"
-                                                            data-curiso="USD">{{ $firstPriceVariant->price }}
+                                                            data-curiso="USD">{{ $np->price }}
                                                             €</span></del>
                                                     <span>
-                                                        <span data-eurval="{{ $firstPriceVariant->discount_value }}">
-                                                            {{ $firstPriceVariant->discount_value }}
+                                                        <span data-eurval="{{ $np->discount_value }}">
+                                                            {{ $np->discount_value }}
                                                             €
                                                         </span>
                                                     </span>
                                                 @else
-                                                    <!-- Nếu không có giảm giá, hiển thị giá gốc -->
-                                                    <span
-                                                        data-eurval="{{ $firstPriceVariant->price }}">{{ $firstPriceVariant->price }}
+                                                    <span data-eurval="{{ $np->price }}">{{ $np->price }}
                                                         €</span>
                                                 @endif
                                             </div>
                                         </div>
                                     </a>
                                 @endforeach
-
-
 
                                 {{-- <a class="ws-u-1 more" href="/shop/neu/zigarren">Alle neuen Produkte
                                     anzeigen</a> --}}
@@ -374,32 +391,28 @@
 
                         <div id="tab-pane-reduced" class="ws-u-1 tab-pane reduced fade in">
                             <div class="ws-g inner">
-                                @foreach ($discountVariants as $dv)
-                                    @php
-                                        $discountFirstPrice = $dv->priceVariants->first();
-                                    @endphp
+                                @foreach ($discountProducts as $dp)
                                     <a class="ws-u-1 item"
-                                        href="/zigarren/nicaragua/blanco-cigars-nine-{{ $dv->id }}">
+                                        href="/zigarren/nicaragua/blanco-cigars-nine-{{ $dp->id }}">
                                         <div class="ws-g tab-pane-item item-row">
                                             <div class="ws-u-4-24 image">
-                                                <img src="{{ showImage($dv->image) }}"
-                                                    data-src="{{ showImage($dv->image) }}" alt="{{ $dv->name }}" />
+                                                <img src="{{ showImage($dp->image) }}"
+                                                    data-src="{{ showImage($dp->image) }}" alt="{{ $dp->name }}" />
                                             </div>
                                             <div class="ws-u-20-24 ws-u-md-11-24 content">
-                                                <span class="title nobr">{{ $dv->name }}</span>
-                                                <span class="subtitle nobr">{{ $dv->short_description }}</span>
+                                                <span class="title nobr">{{ $dp->name }}</span>
+                                                <span class="subtitle nobr">{{ $dp->short_description }}</span>
                                             </div>
                                             <div
                                                 class="mobileItemOffset ws-u-14-24 ws-u-sm-14-24 ws-u-md-14-24 ws-u-lg-9-24 ws-u-xl-9-24 price nobr">
 
                                                 <!-- Nếu có giảm giá, hiển thị giá sau giảm -->
-                                                <del class="altpreis"><span
-                                                        data-eurval="{{ $discountFirstPrice->price }}"
-                                                        data-curiso="USD">{{ $discountFirstPrice->price }}
+                                                <del class="altpreis"><span data-eurval="{{ $dp->price }}"
+                                                        data-curiso="USD">{{ $dp->price }}
                                                         €</span></del>
                                                 <span>
-                                                    <span data-eurval="{{ $discountFirstPrice->discount_value }}">
-                                                        {{ $discountFirstPrice->discount_value }}
+                                                    <span data-eurval="{{ $dp->discount_value }}">
+                                                        {{ $dp->discount_value }}
                                                         €
                                                     </span>
                                                 </span>

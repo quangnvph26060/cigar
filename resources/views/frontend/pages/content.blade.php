@@ -38,7 +38,7 @@
                 <div class="box-right">
                     <div class="new-content">
                         <div class="n-heading">
-                            <h3>Bài viết mới</h3>
+                            <h3>Neuer Artikel</h3>
                         </div>
                         @foreach ($posts->take(8) as $item)
                             <div class="box-new-content">

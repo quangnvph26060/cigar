@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Schema;
+
 class BaseQuery
 {
     protected $modelClass;
@@ -23,16 +25,22 @@ class BaseQuery
             $query->withCount($withCount);
         }
 
-        if ($order) {
-            $query->orderBy($order[0], $order[1]);
-        }
-
         foreach ($where as $condition) {
             if (count($condition) === 3) {
                 $query->where($condition[0], $condition[1], $condition[2]);
             } elseif (count($condition) === 2) {
                 $query->where($condition[0], $condition[1]);
             }
+        }
+
+        // Kiểm tra nếu bảng có cột "is_show_home" thì mới order by
+        $tableName = (new $this->modelClass)->getTable();
+        if (Schema::hasColumn($tableName, 'is_show_home')) {
+            $query->orderByRaw('is_show_home DESC');
+        }
+
+        if ($order) {
+            $query->orderBy($order[0], $order[1]);
         }
 
         $query->when(empty($request->order), fn($q) => $q->latest('id'))

@@ -95,9 +95,9 @@ if (!function_exists('successResponse')) {
 }
 
 if (!function_exists('handleResponse')) {
-    function handleResponse($message, $code = 200)
+    function handleResponse($message, $code = 200, $isToastr = false)
     {
-        sessionFlash('success', $message);
+        $isToastr ? sessionFlash('success', $message) : '';
         return response()->json(['success' => true, 'message' => $message], $code);
     }
 }
@@ -156,6 +156,19 @@ if (!function_exists('saveImages')) {
 
         return null;
     }
+}
+
+function generateProductCode()
+{
+    $letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // Chỉ chứa chữ cái viết hoa
+    $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Chữ cái + số
+
+    $code = $letters[rand(0, strlen($letters) - 1)]; // Ký tự đầu tiên là chữ cái in hoa
+    for ($i = 1; $i < 11; $i++) {
+        $code .= $characters[rand(0, strlen($characters) - 1)];
+    }
+
+    return $code;
 }
 
 if (!function_exists('uploadImages')) {

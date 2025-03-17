@@ -34,6 +34,8 @@ class BrandRequest extends FormRequest
             'seo_keywords'          => 'nullable',
             'position'              => 'nullable|numeric|min:1',
             'status'                => 'required|in:1,2',
+            'is_show_home'          => 'required|in:yes,no',
+            'is_top'          => 'required|in:yes,no'
         ];
     }
 

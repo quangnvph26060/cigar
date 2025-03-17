@@ -18,7 +18,7 @@
         </div>
     </div>
 </div>
-
+{{-- @dd($categories) --}}
 <div class="dropnav">
     @foreach ($categories as $category)
         <div class="container dropnav-{{ $category->slug }}">
@@ -32,7 +32,7 @@
                         <a href="{{ route('products', $cat->slug) }}"
                             class="h4 text-uppercase dropnav-h-1">{{ $cat->name }}</a>
                         <div class="row g-0 justify-content-start">
-                            @foreach ($category->attributes as $attribute)
+                            @foreach ($cat->attributes as $attribute)
                                 <div class="col-auto">
                                     <span class="h5 dropnav-h-2">{{ $attribute->name }}</span>
                                     <ul>
@@ -48,21 +48,27 @@
                                 </div>
                             @endforeach
 
-
                             <!-- Hiển thị các thương hiệu trong cùng row với thuộc tính -->
-                            <div class="col-auto">
-                                <span class="h5 dropnav-h-2">Thương hiệu</span>
-                                <ul>
-                                    @foreach ($cat->brands as $brand)
+                            @if ($cat->brands->isNotEmpty())
+                                <div class="col-auto">
+                                    <span class="h5 dropnav-h-2">Top-Marken</span>
+                                    <ul>
+                                        @foreach ($cat->brands as $brand)
+                                            <li>
+                                                <a href="{{ route('products', $brand->slug) }}"
+                                                    title="{{ $brand->name }}">
+                                                    <span>{{ $brand->name }}</span>
+                                                </a>
+                                            </li>
+                                        @endforeach
                                         <li>
-                                            <a href="{{ route('products', $brand->slug) }}"
-                                                title="{{ $brand->name }}">
-                                                <span>{{ $brand->name }}</span>
-                                            </a>
+                                            <a href="{{ route('marken', $cat->slug) }}">alle
+                                                Marken</a>
                                         </li>
-                                    @endforeach
-                                </ul>
-                            </div>
+                                    </ul>
+                                </div>
+                            @endif
+
                         </div>
                     </div>
 

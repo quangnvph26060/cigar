@@ -119,22 +119,129 @@ class DatabaseSeeder extends Seeder
         //     ]);
         // }
 
-        $attributes = DB::table('attributes')->pluck('id'); // giả sử bạn có bảng attributes lưu tất cả attribute_id
+        // $attributes = DB::table('attributes')->pluck('id'); // giả sử bạn có bảng attributes lưu tất cả attribute_id
 
-        foreach ($attributes as $attribute_id) {
-            // Lấy tất cả các giá trị thuộc tính cho từng attribute_id từ bảng attribute_values
-            $attribute_values = DB::table('attribute_values')
-                ->where('attribute_id', $attribute_id)
-                ->pluck('id');
+        // foreach ($attributes as $attribute_id) {
+        //     // Lấy tất cả các giá trị thuộc tính cho từng attribute_id từ bảng attribute_values
+        //     $attribute_values = DB::table('attribute_values')
+        //         ->where('attribute_id', $attribute_id)
+        //         ->pluck('id');
 
-            // Chọn một số giá trị ngẫu nhiên từ attribute_values cho mỗi attribute_id
-            for ($i = 0; $i < 1000; $i++) {
-                DB::table('variation_attribute_values')->insert([
-                    'variations_id' => fake()->numberBetween(100, 10000),  // variations_id từ 17-10000
-                    'attribute_id' => $attribute_id,                        // attribute_id từ bảng attributes
-                    'attribute_value_id' => fake()->randomElement($attribute_values->toArray()),  // chọn ngẫu nhiên attribute_value_id từ các giá trị đã lấy
-                ]);
-            }
-        }
+        //     // Chọn một số giá trị ngẫu nhiên từ attribute_values cho mỗi attribute_id
+        //     for ($i = 0; $i < 1000; $i++) {
+        //         DB::table('variation_attribute_values')->insert([
+        //             'variations_id' => fake()->numberBetween(100, 10000),  // variations_id từ 17-10000
+        //             'attribute_id' => $attribute_id,                        // attribute_id từ bảng attributes
+        //             'attribute_value_id' => fake()->randomElement($attribute_values->toArray()),  // chọn ngẫu nhiên attribute_value_id từ các giá trị đã lấy
+        //         ]);
+        //     }
+        // }
+
+        // $products = DB::table('products')->get(); // Lấy toàn bộ sản phẩm
+
+        // foreach ($products as $product) {
+        //     DB::table('variations')->insert([
+        //         'product_id'       => $product->id,
+        //         'name'             => $product->name, // Giữ nguyên tên sản phẩm
+        //         'slug'             => $product->slug, // Giữ nguyên slug
+        //         'image'            => $product->image, // Giữ nguyên ảnh
+        //         'description'      => $product->description, // Giữ nguyên mô tả
+        //         'short_description'=> $product->short_description, // Giữ nguyên mô tả ngắn
+        //         'rating'           => fake()->randomFloat(1, 1, 5), // Giá trị từ 1.0 - 5.0
+        //         'quality'          => fake()->numberBetween(1, 100),
+        //         'strength'         => fake()->numberBetween(1, 100),
+        //         'radius'           => fake()->randomFloat(2, 0.1, 10),
+        //         'length'           => fake()->randomFloat(2, 0.1, 100),
+        //         'quantity'         => fake()->numberBetween(1, 100),
+        //         'unit'             => fake()->randomElement(['pcs', 'set', 'box']),
+        //         'tags'             => null,
+        //         'seo_title'        => null,
+        //         'seo_description'  => null,
+        //         'seo_keywords'     => null,
+        //         'status'           => $product->status, // Giữ nguyên trạng thái sản phẩm
+        //         'created_at'       => now(),
+        //         'updated_at'       => now(),
+        //     ]);
+        // }
+
+        // echo "Inserted " . count($products) . " variations into the database.\n";
+
+        // $variations = DB::table('variations')->get();
+        // $attributes = DB::table('attributes')->get();
+
+        // $data = [];
+        // $batchSize = 500; // Số bản ghi mỗi lần insert
+
+        // foreach ($variations as $variation) {
+        //     // Lấy 5 đến 8 thuộc tính ngẫu nhiên cho biến thể này
+        //     $selectedAttributes = $attributes->random(rand(5, 8));
+
+        //     foreach ($selectedAttributes as $attribute) {
+        //         // Lấy danh sách các giá trị hợp lệ của thuộc tính này
+        //         $attributeValues = DB::table('attribute_values')
+        //             ->where('attribute_id', $attribute->id)
+        //             ->pluck('id')
+        //             ->toArray();
+
+        //         if (!empty($attributeValues)) {
+        //             // Chọn ngẫu nhiên 1 giá trị thuộc tính hợp lệ
+        //             $attributeValueId = $attributeValues[array_rand($attributeValues)];
+
+        //             $data[] = [
+        //                 'variations_id'      => $variation->id,
+        //                 'attribute_id'       => $attribute->id,
+        //                 'attribute_value_id' => $attributeValueId,
+        //             ];
+        //         }
+        //     }
+
+        //     // Chèn theo từng batch nhỏ để tránh lỗi quá nhiều placeholders
+        //     if (count($data) >= $batchSize) {
+        //         DB::table('variation_attribute_values')->insert($data);
+        //         $data = [];
+        //     }
+        // }
+
+        // // Chèn dữ liệu còn lại
+        // if (!empty($data)) {
+        //     DB::table('variation_attribute_values')->insert($data);
+        // }
+
+        // echo "Seeded variation_attribute_values successfully.\n";
+
+        // $variations = DB::table('variations')->get();
+        // $data = [];
+        // $batchSize = 500; // Giới hạn batch tối đa
+
+        // foreach ($variations as $variation) {
+        //     // Lấy thông tin giá từ bảng `products`
+        //     $product = DB::table('products')->where('id', $variation->product_id)->first();
+
+        //     if ($product) {
+        //         $data[] = [
+        //             'variation_id'   => $variation->id,
+        //             'price'          => $product->price,
+        //             'discount_value' => $product->discount_value,
+        //             'discount_start' => $product->discount_start,
+        //             'discount_end'   => $product->discount_end,
+        //             'unit'           => '1 điều',  // Đơn vị mặc định
+        //             'created_at'     => Carbon::now(),
+        //             'updated_at'     => Carbon::now(),
+        //         ];
+        //     }
+
+        //     // Nếu đạt batchSize, chèn vào database
+        //     if (count($data) >= $batchSize) {
+        //         DB::table('price_variants')->insert($data);
+        //         $data = []; // Reset lại mảng để tránh quá tải
+        //     }
+        // }
+
+        // // Chèn nốt dữ liệu còn lại nếu có
+        // if (!empty($data)) {
+        //     DB::table('price_variants')->insert($data);
+        // }
+
+        // echo "Seeded price_variants successfully.\n";
     }
 }
