@@ -2,14 +2,18 @@
 
 @section('content')
     <div class="ws-container">
-        <div class="ws-g ws-c breadcrumbs">
-            <div class="ws-u-1">
-                <span class="breadcrumb-title">Sie befinden sich hier: </span><span class="breadcrumb-item"><a href="/"
-                        class="breadcrumb-link"><span>Startseite</span></a></span><i
-                    class="fa fa-angle-right breadcrumb-icon"></i><span class="breadcrumb-item"><a href="/warenkorb/show"
-                        class="breadcrumb-link"><span>Warenkorb</span></a></span>
-            </div>
-        </div>
+
+        @php
+            $data = [];
+            $data['Warenkorb'] = null;
+        @endphp
+
+        @include('frontend.pages.include.breadcrumb', [
+            'data' => $data,
+        ])
+
+
+
         <div class="ws-g ws-c">
             <div class="ws-u-1">
                 <div class="article" id="warenkorbpage">

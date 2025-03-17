@@ -3,22 +3,18 @@
 @section('content')
     <div class="ws-container">
 
-        <div class="ws-g ws-c breadcrumbs">
-            <div class="ws-u-1">
-                <span class="breadcrumb-title">Sie befinden sich hier: </span>
-                <span class="breadcrumb-item">
-                    <a href="/" class="breadcrumb-link">
-                        <span>Trang chủ</span>
-                    </a>
-                </span>
-                <i class="fa fa-angle-right breadcrumb-icon"></i>
-                <span class="breadcrumb-item">
-                    <a href="/shop/index" class="breadcrumb-link">
-                        <span>Bài viết</span>
-                    </a>
-                </span>
-            </div>
-        </div>
+        @php
+            $data = [];
+            $data['Content'] = $post ? route('content') : null;
+
+            if (isset($post)) {
+                $data[$post->title] = null;
+            }
+        @endphp
+
+        @include('frontend.pages.include.breadcrumb', [
+            'data' => $data,
+        ])
 
         <div class="microsite">
             <div class="ws-container group-content">
@@ -170,11 +166,13 @@
                 .group-content {
                     display: block;
                 }
+
                 .new-content .n-image {
                     width: 50px;
                     height: 50px;
                 }
-                .new-content{
+
+                .new-content {
                     margin-top: 40px;
                 }
             }

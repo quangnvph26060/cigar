@@ -151,7 +151,7 @@
             </div>
         </div>
 <style>
-    
+
 </style>
         <div class="ws-g ws-cx mb-2 search-row-info">
             <form action="" method="get" class="ws-form">
@@ -185,7 +185,7 @@
             @foreach ($products as $item)
                 {{-- @dd($item) --}}
                 <div class="ws-u-1-2 ws-u-md-1-3 ws-u-xl-1-5 search-result-item"> <a class="search-result-item-inner"
-                        href="{{ route('products', [$item->category->slug, $item->brand->slug, $item->slug . '-' . $item->id]) }}"
+                        href="{{  route('products', [$item->category->slug, $item->brand->slug, $item->slug . '-' . $item->id]) }}"
                         title="{{ $item->name ?? $item->brand->name }}">
                         <div class="product-badge-wrapper">
                             @if (isDiscounted($item))

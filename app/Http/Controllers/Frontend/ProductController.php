@@ -27,7 +27,7 @@ class ProductController extends Controller
 
     private function handleProductVariant($paramTwo, $paramThree)
     {
-
+        
         preg_match('/(\d+)$/', $paramThree, $matches);
 
         if (preg_match('/\d+_\d+$/', $paramThree, $mat)) {

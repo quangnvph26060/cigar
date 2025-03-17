@@ -3,26 +3,16 @@
 @section('content')
     <div class="ws-container">
 
-        <div class="ws-g ws-c breadcrumbs">
-            <div class="ws-u-1">
-                <span class="breadcrumb-title">Sie befinden sich hier: </span><span class="breadcrumb-item"><a href="/"
-                        class="breadcrumb-link"><span>Startseite</span></a></span><i
-                    class="fa fa-angle-right breadcrumb-icon"></i><span class="breadcrumb-item"><a href="/shop/index"
-                        class="breadcrumb-link"><span>Shop</span></a></span><i
-                    class="fa fa-angle-right breadcrumb-icon"></i><span class="breadcrumb-item"><a href="/zigarren"
-                        class="breadcrumb-link"><span>Zigarren</span></a></span><i
-                    class="fa fa-angle-right breadcrumb-icon"></i><span class="breadcrumb-item"><a
-                        href="/zigarren/dominikanische-republik" class="breadcrumb-link"><span>Dominikanische
-                            Republik</span></a></span><i class="fa fa-angle-right breadcrumb-icon"></i><span
-                    class="breadcrumb-item"><a href="/arturo-fuente" class="breadcrumb-link"><span>Arturo
-                            Fuente</span></a></span><i class="fa fa-angle-right breadcrumb-icon"></i><span
-                    class="breadcrumb-item"><a href="/zigarren/dominikanische-republik/arturo-fuente-hemingway-01101020"
-                        class="breadcrumb-link"><span>Hemingway</span></a></span><i
-                    class="fa fa-angle-right breadcrumb-icon"></i><span class="breadcrumb-item"><a
-                        href="/zigarren/dominikanische-republik/arturo-fuente-hemingway-best-seller-maduro-perfecto-01101020_36963"
-                        class="breadcrumb-link"><span>Best Seller Maduro (Perfecto)</span></a></span>
-            </div>
-        </div>
+        @php
+            $data = [];
+            $data[$product->category->name] = route('products', $product->category->slug);
+            $data[$product->brand->name] = route('products', $product->brand->slug);
+            $data[($product->name == $variant->name ? $product->name : $product->name . ' ' . $variant->name)] = null;
+        @endphp
+
+        @include('frontend.pages.include.breadcrumb', [
+            'data' => $data,
+        ])
 
         <div class="ws-g">
             <div class="ws-u-1 ws-u-xl-6-24 SeriesProducts">

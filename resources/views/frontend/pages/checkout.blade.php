@@ -6,14 +6,18 @@
         @csrf
         <div class="ws-container">
             <div id="content" class="default normal">
-                <div class="ws-g ws-c breadcrumbs">
-                    <div class="ws-u-1">
-                        <span class="breadcrumb-title">Sie befinden sich hier: </span><span class="breadcrumb-item"><a
-                                href="/" class="breadcrumb-link"><span>Startseite</span></a></span><i
-                            class="fa fa-angle-right breadcrumb-icon"></i><span class="breadcrumb-item"><a
-                                href="/bestellung/index" class="breadcrumb-link"><span>Bestellung</span></a></span>
-                    </div>
-                </div>
+
+                @php
+                    $data = [];
+                    $data['Warenkorb'] = route('cartList');
+
+                    $data['zahlen'] = null;
+                @endphp
+
+                @include('frontend.pages.include.breadcrumb', [
+                    'data' => $data,
+                ])
+
 
                 @if ($errors->any())
                     <div class="ws-g ws-c notice">
@@ -67,7 +71,7 @@
                         @foreach ($carts as $cart)
                             <div class="order-product">
                                 <span>{{ $cart->name }} × {{ $cart->qty }}</span>
-                                <span>{{ getFormattedSubTotal($cart->price )}} $</span>
+                                <span>{{ getFormattedSubTotal($cart->price) }} $</span>
                             </div>
                         @endforeach
 
