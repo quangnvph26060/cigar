@@ -13,7 +13,11 @@ use App\Http\Controllers\Backend\Slider\SliderController;
 use App\Http\Controllers\Backend\Variation\VariationController;
 use App\Http\Controllers\Backend\Config\ConfigController;
 use App\Http\Controllers\Backend\FastUpdateController;
+use App\Imports\ProductsImport;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +35,14 @@ Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'admin.
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
+
+    route::get('import-data', function () {
+        return view('backend.import');
+    });
+
+    route::post('import-data', function (Request $request) {
+        Excel::import(new ProductsImport, $request->file('file'));
+    })->name('import-data');
 
     Route::put('handle-fast-update', [FastUpdateController::class, 'handleFastUpdate']);
 

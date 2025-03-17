@@ -29,7 +29,29 @@
                     <p><strong>Ngày đặt:</strong> {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</p>
                     <p><strong>Phương thức thanh toán:</strong>
                         {{ $order->payment_method == 'cod' ? 'Thanh toán khi nhận hàng' : 'Thanh toán chuyển khoản' }} </p>
-                    <p><strong>Trạng thái:</strong> Đang xử lý...</p>
+                    <p><strong>Trạng thái: </strong>
+                        @switch($order->order_status)
+                            @case('pending')
+                                Đang xử lý...
+                            @break
+
+                            @case('confirmed')
+                                Đã xác nhận
+                            @break
+
+                            @case('completed')
+                                Đã hoàn thành
+                            @break
+
+                            @case('cancelled')
+                                Đã hủy
+                            @break
+
+                            @default
+                                Không xác định
+                        @endswitch
+                    </p>
+
                 </div>
             </div>
 

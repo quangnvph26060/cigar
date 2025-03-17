@@ -4,7 +4,7 @@ const columns = [
         name: "name",
         title: "TÊN DANH MỤC",
         render(data, type, row) {
-            return `<a href="/admin/categories/${row.id}/edit"><strong>${data}</strong></a>`
+            return `<a href="/admin/categories/${row.id}/edit"><strong>${data}</strong></a>`;
         },
     },
     {
@@ -18,7 +18,7 @@ const columns = [
         title: "THUỘC TÍNH",
         orderable: false,
         searchable: false,
-        width: "30%"
+        width: "30%",
     },
     {
         data: "parent_id",
@@ -31,6 +31,7 @@ const columns = [
         data: "products_count",
         name: "products_count",
         title: "SẢN PHẨM",
-        width: "10%"
+        width: "10%",
+        searchable: false,
     },
 ];

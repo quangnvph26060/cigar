@@ -240,8 +240,7 @@
         @isset($brand)
             <div id="text-cohiba---zigarren--zigarillos-und-zigarrenzubehoer"
                 class="ws-g ws-c mt-4 contentpage contentpage--twocol">
-                <div class="ws-u-1 contentpage__title"><span class="h1">Cohiba – Zigarren, Zigarillos und
-                        Zigarrenzubehör</span></div>
+                <div class="ws-u-1 contentpage__title"><span class="h1">{{ $brand->title }}</span></div>
                 <div class="ws-u-1 contentpage__content">
                     {!! $brand->description !!}
                 </div>

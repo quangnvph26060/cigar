@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Frontend\AuthController;
+use App\Http\Controllers\Frontend\BrandController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\ContentController;
@@ -39,5 +40,9 @@ route::get('erfolg/{code}', [CheckoutController::class, 'orderSuccess'])->name('
 route::get('logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
 route::get('meinkonto', [AuthController::class, 'myInfo'])->name('myInfo')->middleware('auth');
+
+route::get('shop/marken/{slug?}', [BrandController::class, 'index'])->name('marken');
+
+route::get('redirect/{code}', [ProductController::class, 'redirect'])->name('redirect');
 
 route::get('{paramOne?}/{paramTwo?}/{paramThree?}', [ProductController::class, 'productList'])->name('products');

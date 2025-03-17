@@ -35,7 +35,10 @@ class CategoryController extends Controller
                 $columns,
                 ['attributes', 'parent'],
                 ['products'],
-                request()
+                request(),
+                null,
+                [],
+                ['position', 'asc']
             );
 
             return $this->queryBuilder->processDataTable($query, function ($dataTable) {

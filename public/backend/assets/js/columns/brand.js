@@ -22,7 +22,8 @@ const columns = [
         data: "products_count",
         name: "products_count",
         title: "SẢN PHẨM",
-        width: "10%"
+        width: "10%",
+        searchable: false,
     },
     {
         data: "position",

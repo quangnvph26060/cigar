@@ -2,7 +2,7 @@
     <div class="ws-g ws-c">
         <div class="ws-u-1 ws-u-lg-1-2">
             <div class="ws-g">
-                <div class="ws-u-1 ws-u-sm-1-2">
+                <div class=" ws-u-1 ws-u-sm-1-2">
                     <span class="h">Kontakt</span>
                     <p class="address" style="width: 50%"><span>{{ $config->address }}</span></p>
                     <p class="hotline"><a
@@ -24,16 +24,19 @@
                 </div>
             </div>
         </div>
-
         <div class="ws-u-1 ws-u-lg-1-2">
             <div class="ws-g">
                 <div class="ws-u-1 ws-u-sm-1-2">
                     <div class="ws-g">
                         <div class="ws-u-1">
-                            <span class="h">Versandmitarbeiter</span>
-                            <span class="a">DHL</span>
-                            <span class="a">UPS</span>
-                            <a class="a" href="/service/versandkosten">Versandkosten</a>
+                            <span class="h">Neueste Artikel</span>
+
+                            @foreach ($newPosts as $nPost)
+                                <a style="display: block"
+                                    href="{{ route('content', $nPost->slug) }}">{{ \Str::words($nPost->title, 10, '...') }}</a>
+                            @endforeach
+
+                            <a class="a" href="{{ route('content') }}">alle Artikel</a>
                         </div>
                     </div>
                 </div>
