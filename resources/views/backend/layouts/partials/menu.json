@@ -71,10 +71,6 @@
                 "url": "admin.configs.payment"
             },
             {
-                "title": "Cấu hình bộ lọc",
-                "url": "admin.configs.filter"
-            },
-            {
                 "title": "Cấu hình slider",
                 "url": "admin.sliders.index"
             }

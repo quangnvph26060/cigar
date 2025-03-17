@@ -2,13 +2,17 @@
 
 @section('content')
     <div class="ws-container">
+
         <div id="content" class="default normal">
-            <div class="ws-g ws-c breadcrumbs">
-                <div class="ws-u-1"><span class="breadcrumb-title">Sie befinden sich hier: </span><span
-                        class="breadcrumb-item"><a href="/" class="breadcrumb-link"><span>Startseite</span></a></span><i
-                        class="fa fa-angle-right breadcrumb-icon"></i><span class="breadcrumb-item"><a
-                            href="/bestellung/index" class="breadcrumb-link"><span>Bestellung</span></a></span></div>
-            </div>
+
+            @php
+                $data = [];
+                $data['einloggen'] = null;
+            @endphp
+
+            @include('frontend.pages.include.breadcrumb', [
+                'data' => $data,
+            ])
 
 
             <div class="checkout-login">
