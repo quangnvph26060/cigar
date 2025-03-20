@@ -65,13 +65,15 @@
 
                                     <div class="form-group mb-3 col-lg-3">
                                         <label for="discount_start" class="form-label">Ngày bắt đầu</label>
-                                        <input type="date" value="{{ optional($product)->discount_start ? $product->discount_start->format('Y-m-d') : '' }}"
+                                        <input type="date"
+                                            value="{{ optional($product)->discount_start ? $product->discount_start->format('Y-m-d') : '' }}"
                                             name="discount_start" id="discount_start" class="form-control">
                                     </div>
                                     <div class="form-group mb-3 col-lg-3">
                                         <label for="discount_end" class="form-label">Ngày kết thúc</label>
-                                        <input type="date" value="{{ optional($product)->discount_end ? $product->discount_end->format('Y-m-d') : '' }}" name="discount_end"
-                                            id="discount_end" class="form-control">
+                                        <input type="date"
+                                            value="{{ optional($product)->discount_end ? $product->discount_end->format('Y-m-d') : '' }}"
+                                            name="discount_end" id="discount_end" class="form-control">
                                     </div>
 
                                     <div class="form-group mb-3 col-lg-12">
@@ -124,8 +126,10 @@
                     <div class="card">
                         <div class="card-body m-auto">
                             <label for="qr-code"></label>
-                            <img width="100" height="100" src="data:image/png;base64, {!! base64_encode($product->qr_code) !!}"
-                                alt="">
+                            <a id="downloadQrCode" href="{{ showImage($product->qr_code) }}"
+                                download="qr_code_{{ $product->id }}.png">
+                                <img width="150" height="150" src="{{ showImage($product->qr_code) }}" alt="QR Code">
+                            </a>
                         </div>
                     </div>
                 @endisset
