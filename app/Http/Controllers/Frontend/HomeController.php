@@ -17,10 +17,11 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\Log;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Support\Facades\Storage;
+
 
 class HomeController extends Controller
 {
@@ -73,6 +74,19 @@ class HomeController extends Controller
         // return "Xử lý ảnh hoàn tất! Ảnh đã lưu trong public/storage/products/resized/";
 
         // Cache::flush();
+
+        // DB::table('products')
+        //     ->where('id', '>', 5790)
+        //     ->select('id', 'code')
+        //     ->orderBy('id')
+        //     ->chunk(100, function ($products) {
+        //         foreach ($products as $product) {
+        //             dispatch(new \App\Jobs\GenerateQrCodeJob($product));
+        //         }
+        //     });
+
+        // return "Đã gửi tất cả sản phẩm vào queue!";
+
 
         $sliders = Slider::query()->orderBy('position', 'asc')->get();
 
