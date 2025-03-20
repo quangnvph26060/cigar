@@ -223,7 +223,7 @@
                                                         class="price-value"><span
                                                             data-eurval="{{ isDiscounted($item) ? $item->discount_value : $item->price }}"
                                                             data-curiso="USD">{{ isDiscounted($item) ? $item->discount_value : $item->price }}
-                                                            $</span></span></div>
+                                                            €</span></span></div>
                                             </div>
                                         </div>
                                     </div>

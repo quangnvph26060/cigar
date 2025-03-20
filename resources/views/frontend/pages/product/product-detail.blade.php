@@ -341,7 +341,7 @@
                                                                                             <span
                                                                                                 data-eurval="{{ isDiscounted($fPP) ? $fPP->discount_value : $fPP->price }}"
                                                                                                 data-curiso="USD">{{ isDiscounted($fPP) ? $fPP->discount_value : $fPP->price }}
-                                                                                                $
+                                                                                                €
                                                                                             </span>
                                                                                         </span>
                                                                                     </div>
