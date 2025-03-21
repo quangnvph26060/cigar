@@ -12,7 +12,7 @@
             }
 
             if ($paramOne && $paramTwo) {
-                $data[$attribute_name] = null;
+                $data[$attribute->value] = null;
             }
 
         @endphp
@@ -24,7 +24,7 @@
         @isset($category)
             <div class="ws-g ws-cx mb-2 mb-lg-4 mt-2 mt-lg-0 contentpage contentpage--teaser">
                 <div class="ws-u-1">
-                    <h1 class="h2 mb-2">Brasilien</h1>
+                    <h1 class="h2 mb-2">{{ $category->name }}</h1>
                 </div>
             </div>
         @else
@@ -98,12 +98,12 @@
                                             <ul class="ws-g inner">
                                                 @foreach ($brands as $iBrand)
                                                     <li class="ws-u-1 nobr">
-                                                        <label class="filter-item-wrapper" for="{{ $iBrand['name'] }}">
-                                                            <input type="checkbox" name="brands[]"
-                                                                id="{{ $iBrand['name'] }}" value="{{ $iBrand['name'] }}"
+                                                        <label class="filter-item-wrapper" for="{{ $iBrand['id'] }}">
+                                                            <input type="checkbox" name="brands[]" id="{{ $iBrand['id'] }}"
+                                                                value="{{ $iBrand['brand_name'] }}"
                                                                 onchange="submitFormWithDelay(true)"
-                                                                @if (in_array($iBrand['name'], request()->has('brands') ? explode(',', request()->input('brands')[0]) : [])) checked @endif>
-                                                            <span class="label-text">{{ $iBrand['name'] }}</span>
+                                                                @if (in_array($iBrand['brand_name'], request()->has('brands') ? explode(',', request()->input('brands')[0]) : [])) checked @endif>
+                                                            <span class="label-text">{{ $iBrand['brand_name'] }}</span>
                                                             <span class="count">({{ $iBrand['product_count'] }})</span>
                                                         </label>
                                                     </li>
@@ -127,14 +127,15 @@
                                         id="filter-{{ $key }}">
                                         <div class="ws-u-1">
                                             <ul class="ws-g inner">
-                                                @foreach ($attr as $at_name)
+                                                @foreach ($attr as $aKey => $count)
                                                     <li class="ws-u-1 nobr">
-                                                        <label class="filter-item-wrapper" for="{{ $at_name }}">
-                                                            <input type="checkbox" name="attrs[]" id="{{ $at_name }}"
-                                                                value="{{ $at_name }}"
+                                                        <label class="filter-item-wrapper" for="{{ $aKey }}">
+                                                            <input type="checkbox" name="attrs[]" id="{{ $aKey }}"
+                                                                value="{{ $aKey }}"
                                                                 onchange="submitFormWithDelay(true)"
-                                                                @if (in_array($at_name, request()->has('attrs') ? explode(',', request()->input('attrs')[0]) : [])) checked @endif>
-                                                            <span class="label-text">{{ $at_name }}</span>
+                                                                @if (in_array($aKey, request()->has('attrs') ? explode(',', request()->input('attrs')[0]) : [])) checked @endif>
+                                                            <span class="label-text">{{ $aKey }}</span>
+                                                            <span class="count">({{ $count }})</span>
                                                         </label>
                                                     </li>
                                                 @endforeach
@@ -150,9 +151,9 @@
                 </div>
             </div>
         </div>
-<style>
+        <style>
 
-</style>
+        </style>
         <div class="ws-g ws-cx mb-2 search-row-info">
             <form action="" method="get" class="ws-form">
 
@@ -185,7 +186,7 @@
             @foreach ($products as $item)
                 {{-- @dd($item) --}}
                 <div class="ws-u-1-2 ws-u-md-1-3 ws-u-xl-1-5 search-result-item"> <a class="search-result-item-inner"
-                        href="{{  route('products', [$item->category->slug, $item->brand->slug, $item->slug . '-' . $item->id]) }}"
+                        href="{{ route('products', [$item->category->slug, $item->brand->slug, $item->slug . '-' . $item->id]) }}"
                         title="{{ $item->name ?? $item->brand->name }}">
                         <div class="product-badge-wrapper">
                             @if (isDiscounted($item))
