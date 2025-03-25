@@ -219,13 +219,34 @@
                                                 @endif
 
                                             </div>
+
                                             <div class="ws-u-1 ws-u-lg-3-5 price">
-                                                <div class="price-wrapper"><span class="price-remark"></span> <span
-                                                        class="price-value"><span
-                                                            data-eurval="{{ isDiscounted($item) ? $item->discount_value : $item->price }}"
-                                                            data-curiso="USD">{{ isDiscounted($item) ? $item->discount_value : $item->price }}
-                                                            €</span></span></div>
+                                                <div class="price-wrapper">
+                                                    <span class="price-remark"></span>
+                                                    <div class="price-value">
+                                                        @if (isDiscounted($item))
+                                                            <del class="altpreis">
+                                                                <span data-eurval="{{ $item->price }}"
+                                                                    data-curiso="EUR">
+                                                                    {{ $item->price }} €
+                                                                </span>
+                                                            </del>
+                                                            <span>
+                                                                <span data-eurval="{{ $item->discount_value }}"
+                                                                    data-curiso="EUR">
+                                                                    {{ $item->discount_value }}
+                                                                    €
+                                                                </span>
+                                                            </span>
+                                                        @else
+                                                            <span data-eurval="{{ $item->price }}" data-curiso="EUR">
+                                                                {{ $item->price}} €
+                                                            </span>
+                                                        @endif
+                                                    </div>
+                                                </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
