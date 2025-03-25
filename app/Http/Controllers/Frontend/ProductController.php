@@ -86,7 +86,7 @@ class ProductController extends Controller
 
     private function handleProductListing($paramOne, $paramTwo)
     {
-        Cache::flush();
+        // Cache::flush();
         // Tạo key cache duy nhất dựa vào các tham số
         $cacheKey = "product_listing_{$paramOne}_{$paramTwo}_" . request('brands') . "_" . request('attrs') . "_" . request('sortOrder') . "_" .  request('page');
 
