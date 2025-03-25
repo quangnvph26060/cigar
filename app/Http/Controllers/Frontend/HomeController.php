@@ -150,7 +150,16 @@ class HomeController extends Controller
                     'products.discount_end',
                     DB::raw('COALESCE(SUM(order_details.p_qty), 0) as total_sold')
                 )
-                ->groupBy('products.id', 'products.name', 'products.slug', 'products.image') // Thêm các cột vào GROUP BY
+                ->groupBy(
+                    'products.id',
+                    'products.name',
+                    'products.slug',
+                    'products.image',
+                    'products.price',
+                    'products.discount_value',
+                    'products.discount_start',
+                    'products.discount_end'
+                ) // Thêm các cột vào GROUP BY
                 ->orderByDesc('total_sold')
                 ->limit(7)
                 ->get();
