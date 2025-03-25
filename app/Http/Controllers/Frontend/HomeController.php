@@ -96,7 +96,7 @@ class HomeController extends Controller
 
         $newProducts = Cache::remember('new_products', now()->addDay(), function () {
             return Product::query()
-                ->where('created_at', '>=', now()->subDays(7))
+                // ->where('created_at', '>=', now()->subDays(7))
                 ->whereNotNull('name')
                 ->inRandomOrder()
                 ->limit(7)
@@ -144,6 +144,10 @@ class HomeController extends Controller
                     'products.name',
                     'products.slug',
                     'products.image',
+                    'products.price',
+                    'products.discount_value',
+                    'products.discount_start',
+                    'products.discount_end',
                     DB::raw('COALESCE(SUM(order_details.p_qty), 0) as total_sold')
                 )
                 ->groupBy('products.id', 'products.name', 'products.slug', 'products.image') // Thêm các cột vào GROUP BY
@@ -151,7 +155,6 @@ class HomeController extends Controller
                 ->limit(7)
                 ->get();
         });
-
 
 
         return view('frontend.pages.home', compact(

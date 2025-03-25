@@ -71,9 +71,7 @@ class AttributeValueController extends Controller
 
             $credentials['attribute_id'] = $id;
 
-            if (!$credentials['slug']) {
-                $credentials['slug'] = generateSlug($credentials['value']);
-            }
+            $credentials['slug'] = (!$credentials['slug'] ? generateSlug($credentials['value']) : generateSlug($credentials['slug']))  . '-' . $id;
 
             if ($request->hasFile('image')) {
                 $credentials['image'] = saveImages($request, 'image', 'attributes');
@@ -114,9 +112,7 @@ class AttributeValueController extends Controller
 
             $credentials['attribute_id'] = $id;
 
-            if (!$credentials['slug']) {
-                $credentials['slug'] = generateSlug($credentials['value']);
-            }
+            $credentials['slug'] = (!$credentials['slug'] ? generateSlug($credentials['value']) : generateSlug($credentials['slug']))  . '-' . $id;
 
             if ($request->hasFile('image')) {
                 $credentials['image'] = saveImages($request, 'image', 'attributes');

@@ -70,27 +70,20 @@ class VariationController extends Controller
         return transaction(function () use ($request) {
 
             $credentials = $request->validated();
-            $credentials['prices'] = json_encode($credentials['prices']);
-            $credentials['quantity'] = json_encode($credentials['quantity']);
-            $credentials['unit'] = json_encode($credentials['unit']);
 
             if (!$credentials['slug']) {
                 $credentials['slug'] = generateSlug($credentials['name']);
             }
 
             if ($request->hasFile('image')) {
-                $credentials['image'] = saveImages($request, 'image', 'variations');
+                $credentials['image'] = uploadAndResizeImage($request, 'image', 'variations', 278, 175, false, true);
             }
 
             $variation = Variation::create($credentials);
 
-            foreach ($request->attribute_value_id ?? [] as $key => $value) {
-                DB::table('variation_attribute_values')->insert([
-                    'variations_id' => $variation->id,
-                    'attribute_id' =>  $key,
-                    'attribute_value_id' => $value,
-                ]);
-            }
+            $variation->attributes()->sync($request->attribute_value_id);
+
+            $variation->priceVariants()->createMany($request->options);
 
             // dd($request->images);
             if ($request->hasFile('images')) {
@@ -138,7 +131,6 @@ class VariationController extends Controller
      */
     public function update(VariationRequest $request, Variation $variation)
     {
-        // dd($request->toArray());
         return transaction(function () use ($request, $variation) {
 
             $credentials = $request->validated();
@@ -148,7 +140,7 @@ class VariationController extends Controller
             }
 
             if ($request->hasFile('image')) {
-                $credentials['image'] = saveImages($request, 'image', 'variations');
+                $credentials['image'] = uploadAndResizeImage($request, 'image', 'variations', 278, 175, false, true);
             }
 
             $variation->update($credentials);
@@ -172,7 +164,7 @@ class VariationController extends Controller
             }
 
             if ($request->hasFile('images')) {
-                $imagePaths = saveImages($request, 'images', 'variations_images', 150, 150, true);
+                $imagePaths = saveImages($request, 'images', 'variations_images', 355, 640, true);
                 collect($imagePaths)->map(fn($imagePath) => VariationImage::create([
                     'variation_id' => $variation->id,
                     'image_path' => $imagePath,

@@ -177,7 +177,6 @@
                                                     </div>
                                                 </span>
                                                 <span class="hidden">5 Bewertungen</span>
-                                                <span class="DetailVariant-dataTitle">25 Bewertungen</span>
                                             </div>
 
                                             <div class="ws-u-1 ws-u-lg-12-24 ws-u-xl-6-24 DetailVariant-dataContent">
@@ -189,8 +188,6 @@
                                                         @endfor
                                                     </div>
                                                 </span>
-                                                <span class="hidden">6 Bewertungen</span>
-                                                <span class="DetailVariant-dataTitle">Qualität</span>
                                             </div>
 
                                             <div class="ws-u-1 ws-u-lg-12-24 ws-u-xl-6-24 DetailVariant-dataContent">
@@ -198,25 +195,22 @@
                                                     <div class="rating">
                                                         @for ($i = 0; $i < 8; $i++)
                                                             <span
-                                                                class="fa fa-star {{ $i + 1 > $pv->strength ? 'inactive' : '' }}"></span>
+                                                                class="fa fa-leaf {{ $i + 1 > $pv->strength ? 'inactive' : '' }}"></span>
                                                         @endfor
                                                     </div>
                                                 </span>
-                                                <span class="hidden">5 Bewertungen</span>
-                                                <span class="DetailVariant-dataTitle">
-                                                    Stärke
-                                                </span>
+
                                             </div>
 
                                             <div
                                                 class="ws-u-1 ws-u-lg-6-24 ws-u-xl-3-24 DetailVariant-dataContent DetailVariant-dataDiameter">
-                                                <span class="DetailVariant-dataValue">{{ $pv->radius }}</span>
+                                                <span class="DetailVariant-dataValue">{{ $pv->radius ?? 0 }}</span>
                                                 <span class="DetailVariant-dataTitle">Ø</span>
                                             </div>
 
                                             <div
                                                 class="ws-u-1 ws-u-lg-6-24 ws-u-xl-3-24 DetailVariant-dataContent DetailVariant-dataLength">
-                                                <span class="DetailVariant-dataValue">{{ $pv->length }}</span>
+                                                <span class="DetailVariant-dataValue">{{ $pv->length ?? 0 }}</span>
                                                 <span class="DetailVariant-dataTitle">Länge</span>
                                             </div>
                                         </div>
@@ -310,7 +304,6 @@
                 <div id="tab-pane-soldout" class="ws-u-1 fade tab-pane sortable in">
                     <ul class="DetailVariant-list">
                         @foreach ($unpublishedVariations as $uv)
-                            {{-- @dd($pv) --}}
                             <li class="ws-g DetailVariant" data-addtocart="loader">
                                 <div class="ws-u-1 DetailVariant-variantName">
                                     {{ $uv->name }}
@@ -343,8 +336,7 @@
                                                             @endfor
                                                         </div>
                                                     </span>
-                                                    <span class="hidden">5 Bewertungen</span>
-                                                    <span class="DetailVariant-dataTitle">25 Bewertungen</span>
+
                                                 </div>
 
                                                 <div class="ws-u-1 ws-u-lg-12-24 ws-u-xl-6-24 DetailVariant-dataContent">
@@ -369,21 +361,17 @@
                                                             @endfor
                                                         </div>
                                                     </span>
-                                                    <span class="hidden">5 Bewertungen</span>
-                                                    <span class="DetailVariant-dataTitle">
-                                                        Stärke
-                                                    </span>
-                                                </div>
 
+                                                </div>
                                                 <div
                                                     class="ws-u-1 ws-u-lg-6-24 ws-u-xl-3-24 DetailVariant-dataContent DetailVariant-dataDiameter">
-                                                    <span class="DetailVariant-dataValue">{{ $uv->radius }}</span>
+                                                    <span class="DetailVariant-dataValue">{{ $uv->radius ?? 0 }}</span>
                                                     <span class="DetailVariant-dataTitle">Ø</span>
                                                 </div>
 
                                                 <div
                                                     class="ws-u-1 ws-u-lg-6-24 ws-u-xl-3-24 DetailVariant-dataContent DetailVariant-dataLength">
-                                                    <span class="DetailVariant-dataValue">{{ $uv->length }}</span>
+                                                    <span class="DetailVariant-dataValue">{{ $uv->length ?? 0 }}</span>
                                                     <span class="DetailVariant-dataTitle">Länge</span>
                                                 </div>
                                             </div>

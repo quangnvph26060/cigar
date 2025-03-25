@@ -57,4 +57,9 @@ class Variation extends Model
     {
         return $this->hasMany(VariationImage::class);
     }
+
+    public function attributeValues()
+    {
+        return $this->belongsToMany(AttributeValue::class, 'attribute_value_variants')->withPivot('value_attribute_value');
+    }
 }

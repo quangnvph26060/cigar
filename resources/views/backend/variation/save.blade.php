@@ -44,7 +44,7 @@
                                                 class="text-danger">*</span></label>
                                         <input value="{{ $variation->name ?? '' }}" oninput="convertSlug('#name', '#slug')"
                                             id="name" name="name" class="form-control" type="text"
-                                            placeholder="Tên thương hiệu">
+                                            placeholder="Nhập tên biến thể">
                                     </div>
 
                                     <div class="form-group mb-3 col-lg-6">
@@ -98,7 +98,7 @@
 
                                     <div class="col-lg-12 form-group">
                                         <div id="additional-detail">
-                                            @foreach ($variation->priceVariants as $index => $pv)
+                                            @foreach ($variation->priceVariants ?? [] as $index => $pv)
                                                 <div class="row mb-3">
                                                     <div class="col-lg-2">
                                                         <label for="price" class="form-label">Giá</label>
@@ -148,37 +148,44 @@
 
                                     <div class="form-group mb-3 col-lg-12">
                                         <label for="short_description" class="form-label">Mô tả ngắn</label>
-                                        <textarea name="short_description" class="form-control" id="short_description" rows="3" placeholder="Mô tả ngắn">{{ $variation->short_description ?? '' }}</textarea>
+                                        <textarea name="short_description" class="form-control" id="short_description" rows="3"
+                                            placeholder="Mô tả ngắn">{{ $variation->short_description ?? '' }}</textarea>
                                     </div>
 
                                     <div class="form-group mb-3 col-lg-12">
                                         <label for="description" class="form-label">Mô tả chi tiết</label>
-                                        <textarea name="description" class="form-control" id="description" placeholder="Mô tả seo">{!! $variation->description ?? '' !!}</textarea>
+                                        <textarea name="description" class="form-control ckeditor" id="description" placeholder="Mô tả seo">{!! $variation->description ?? '' !!}</textarea>
                                     </div>
 
                                     <div class="row form-group-item">
-                                        <div class="form-group mb-3 col-lg-3">
+                                        <div class="form-group mb-3 col-lg-2">
                                             <label class="form-label">Đánh giá</label>
                                             <input name="rating" class="form-control" type="number"
-                                                placeholder="Dánh giá">
+                                                placeholder="Đánh giá" value="{{ $variation->rating ?? 0 }}">
                                         </div>
 
-                                        <div class="form-group mb-3 col-lg-3">
+                                        <div class="form-group mb-3 col-lg-2">
                                             <label class="form-label">Chất lượng</label>
                                             <input name="quality" class="form-control" type="number"
-                                                placeholder="Chất lượng">
+                                                placeholder="Chất lượng" value="{{ $variation->quality ?? 0 }}">
+                                        </div>
+
+                                        <div class="form-group mb-3 col-lg-2">
+                                            <label class="form-label">Sức mạnh</label>
+                                            <input name="strength" class="form-control" type="number"
+                                                placeholder="Sức mạnh" value="{{ $variation->strength ?? 0 }}">
                                         </div>
 
                                         <div class="form-group mb-3 col-lg-3">
                                             <label class="form-label">Bán kính</label>
                                             <input name="radius" id='radius' class="form-control" type="text"
-                                                placeholder="Bán kính">
+                                                placeholder="Bán kính" value="{{ $variation->radius ?? 0 }}">
                                         </div>
 
                                         <div class="form-group mb-3 col-lg-3 ">
                                             <label class="form-label">Chiều dài</label>
                                             <input name="length" id='length' class="form-control" type="text"
-                                                placeholder="Chiều dài">
+                                                placeholder="Chiều dài" value="{{ $variation->length ?? 0 }}">
                                         </div>
                                     </div>
 
@@ -457,7 +464,14 @@
                 </div>
             `;
 
-            var hasPriceVariants = @json($variation->priceVariants->count() > 0);
+            var hasPriceVariants =
+                @isset($variation->priceVariants)
+                    @json($variation->priceVariants->count() > 0);
+                @else
+                    0
+                @endisset
+
+
 
             if (!hasPriceVariants) {
                 $('#additional-detail').append(_html(counter, true));

@@ -258,6 +258,7 @@
                     <div class="tab-content">
                         <div id="tab-pane-remainder" class="ws-u-1 tab-pane remainder active fade in">
                             <div class="ws-g inner">
+
                                 @foreach ($bestsellerProducts as $bP)
                                     <a class="ws-u-1 item" href="/zigarren/cuba/regulares/cohiba-01002">
                                         <div class="ws-g tab-pane-item">

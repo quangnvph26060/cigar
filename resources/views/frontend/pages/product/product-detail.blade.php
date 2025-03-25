@@ -7,7 +7,7 @@
             $data = [];
             $data[$product->category->name] = route('products', $product->category->slug);
             $data[$product->brand->name] = route('products', $product->brand->slug);
-            $data[($product->name == $variant->name ? $product->name : $product->name . ' ' . $variant->name)] = null;
+            $data[$product->name == $variant->name ? $product->name : $product->name . ' ' . $variant->name] = null;
         @endphp
 
         @include('frontend.pages.include.breadcrumb', [
@@ -33,7 +33,7 @@
                             </li>
                         @else
                             @foreach ($product->variations as $item)
-                                <li class="SeriesProducts-item">
+                                <li class="SeriesProducts-item {{ $item->id == $variant->id ? 'active' : '' }}">
                                     <a href="{{ route('products', [$product->category->slug, $product->brand->slug, $product->slug . '-' . $item->slug . '-' . $product->id . '_' . $item->id]) }}"
                                         title="{{ $item->name }}" class="nobr">{{ $item->name }}</a>
                                 </li>
@@ -55,7 +55,7 @@
                 <div class="ws-g ws-c VariantTitle">
                     <div class="ws-u-1">
                         <h1 class="h-alt">
-                            {{ $product->category->name . ' ' . $product->brand->name . ' ' . ($product->name == $variant->name ? $product->name : $product->name . ' ' . $variant->name) }}
+                            {{ $variant->name }}
                         </h1>
                     </div>
                 </div>
@@ -171,7 +171,7 @@
                                             </div>
                                             <div class="ws-u-5-24 DetailOrderbox-col DetailOrderbox-quantity">
                                                 <input type="number" style="width: 40px"
-                                                    name="options[{{ $vp->id }}][qty]" value="0">
+                                                    name="options[{{ $vp->id }}][qty]" value="0" min="0">
 
                                             </div>
                                             <div class="ws-u-8-24 DetailOrderbox-col DetailOrderbox-unit">
@@ -214,11 +214,13 @@
                     <div class="ws-u-1">
                         <div class="ws-g ws-c VariantTab-nav">
                             <ul class="ws-u-1 tab-nav tab-nav-amp">
-                                <li class="active">
-                                    <a href="#tab-pane-description" data-toggle="tab">Beschreibung</a>
-                                </li>
+                                @if ($variant->description)
+                                    <li class="active">
+                                        <a href="#tab-pane-description" data-toggle="tab">Beschreibung</a>
+                                    </li>
+                                @endif
 
-                                <li class="">
+                                <li class="{{ !$variant->description ? 'active' : '' }}">
                                     <a href="#tab-pane-data" data-toggle="tab">Infos und Fakten</a>
                                 </li>
                             </ul>
@@ -235,7 +237,8 @@
                                 </div>
                             </ul>
 
-                            <div id="tab-pane-data" class="ws-u-1 tab-pane fade in">
+                            <div id="tab-pane-data"
+                                class="ws-u-1 tab-pane fade in {{ !$variant->description ? 'active' : '' }}">
                                 <div class="ws-g VariantInfo">
                                     <div class="ws-u-1 ws-u-sm-1-2 ws-u-md-1-3 ws-u-lg-1-3 ws-u-xl-1-5 VariantInfo-item">
                                         <div class="ws-g ws-c">

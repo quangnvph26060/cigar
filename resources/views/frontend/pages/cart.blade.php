@@ -93,7 +93,8 @@
                                                                         <span class="mobile">Einzelpreis:</span>
                                                                         <span class="preis"><span data-eurval="2.90"
                                                                                 data-curiso="USD">{{ $cart->price }}
-                                                                                $</span></span>
+                                                                                €
+ </span></span>
                                                                         <br class="mobile">
 
                                                                     </div>
@@ -104,7 +105,7 @@
                                                                         <span class="onecol">
                                                                             <span data-eurval="2.90"
                                                                                 data-curiso="USD">{{ $cart->price * $cart->qty }}
-                                                                                $</span>
+                                                                                €</span>
                                                                         </span>
 
                                                                     </div>
@@ -160,7 +161,8 @@
                                                                 <div> <span
                                                                         data-eurval="{{ Cart::instance('shopping')->subTotal() }}"
                                                                         data-curiso="USD">{{ Cart::instance('shopping')->subTotal() }}
-                                                                        $</span> </div>
+                                                                        €
+ </span> </div>
                                                             </div>
                                                         </div>
                                                     </div>
