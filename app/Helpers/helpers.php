@@ -2,6 +2,7 @@
 
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -169,6 +170,55 @@ function generateProductCode()
     }
 
     return $code;
+}
+
+function uploadAndResizeImage(Request $request, string $inputName, string $directory = 'images', $width = 150, $height = 150, $isArray = false, $resize = false)
+{
+    $paths = [];
+
+    if ($request->hasFile($inputName)) {
+        $images = $request->file($inputName);
+        if (!is_array($images)) {
+            $images = [$images];
+        }
+
+        $manager = new ImageManager(['driver' => 'gd']);
+        $storagePath = storage_path('app/public/' . trim($directory, '/'));
+
+        // Tạo thư mục nếu chưa tồn tại
+        if (!file_exists($storagePath)) {
+            mkdir($storagePath, 0777, true);
+        }
+
+        foreach ($images as $key => $image) {
+            $img = $manager->make($image->getRealPath());
+
+            if ($resize) {
+                // Tạo canvas với kích thước cố định và nền trắng
+                $canvas = $manager->canvas($width, $height, '#ffffff');
+                $img->resize($width, $height, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+
+                // Chèn ảnh vào giữa canvas
+                $canvas->insert($img, 'center');
+                $img = $canvas;
+            }
+
+            $filename = time() . uniqid() . '.webp';
+
+            // Lưu ảnh vào storage
+            Storage::disk('public')->put($directory . '/' . $filename, $img->encode('webp'));
+
+            // Lưu đường dẫn
+            $paths[$key] = asset($directory . '/' . $filename);
+        }
+
+        return $isArray ? $paths : $paths[0] ?? null;
+    }
+
+    return null;
 }
 
 if (!function_exists('uploadImages')) {

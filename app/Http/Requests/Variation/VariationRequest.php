@@ -29,6 +29,7 @@ class VariationRequest extends FormRequest
             'quality'               => 'nullable',
             'radius'                => 'nullable',
             'length'                => 'nullable',
+            'strength'              => 'nullable',
             'quantity'              => 'nullable',
             'unit'                  => 'nullable',
             'tags'                  => 'nullable',

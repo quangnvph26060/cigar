@@ -24,8 +24,8 @@ class AttributeValueRequest extends FormRequest
         $id = request()->id;
 
         return [
-            'value' => 'required|unique:attribute_values,value,' . $id,
-            'slug' => 'nullable|unique:attribute_values,slug,' . $id,
+            'value' => 'required',
+            'slug' => 'nullable',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'description' => 'nullable',
             'seo_title'             => 'nullable|max:100',

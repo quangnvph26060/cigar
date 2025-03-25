@@ -86,8 +86,9 @@ class ProductController extends Controller
 
     private function handleProductListing($paramOne, $paramTwo)
     {
+        Cache::flush();
         // Tạo key cache duy nhất dựa vào các tham số
-        $cacheKey = "product_listing_{$paramOne}_{$paramTwo}_" . request('brands') . "_" . request('attrs') . "_" . request('sortOrder');
+        $cacheKey = "product_listing_{$paramOne}_{$paramTwo}_" . request('brands') . "_" . request('attrs') . "_" . request('sortOrder') . "_" .  request('page');
 
         // Lưu cache danh sách sản phẩm
         $data = Cache::remember($cacheKey, now()->addMinutes(30), function () use ($paramOne, $paramTwo) {
@@ -101,7 +102,7 @@ class ProductController extends Controller
 
             $ids = $category ? $this->getCategoryProducts($category) : [$brand->id];
 
-            $products = Product::query()->with(['variations', 'brand', 'category'])
+            $products = Product::query()->with(['variations', 'brand', 'category'])->withCount('variations')
                 ->whereIn($category ? 'category_id' : 'brand_id', $ids);
 
             if ($attribute) {
@@ -219,20 +220,25 @@ class ProductController extends Controller
         $sortOption = request('sortOrder', 'Relevanz');
 
         $products->selectRaw("
-        *,
-        CASE
-            WHEN discount_value <= 0 THEN price
-            WHEN (discount_start IS NULL AND discount_end IS NULL) THEN discount_value
-            WHEN (discount_start IS NOT NULL AND discount_end IS NOT NULL
-                AND DATE(discount_start) <= CURDATE()
-                AND DATE(discount_end) >= CURDATE()) THEN discount_value
-            WHEN (discount_start IS NOT NULL AND discount_end IS NULL
-                AND DATE(discount_start) <= CURDATE()) THEN discount_value
-            WHEN (discount_start IS NULL AND discount_end IS NOT NULL
-                AND DATE(discount_end) >= CURDATE()) THEN discount_value
-            ELSE price
-        END AS final_price
-    ");
+            products.id,
+            products.name,
+            products.price,
+            products.discount_value,
+            products.discount_start,
+            products.discount_end,
+            CASE
+                WHEN discount_value <= 0 THEN price
+                WHEN (discount_start IS NULL AND discount_end IS NULL) THEN discount_value
+                WHEN (discount_start IS NOT NULL AND discount_end IS NOT NULL
+                    AND DATE(discount_start) <= CURDATE()
+                    AND DATE(discount_end) >= CURDATE()) THEN discount_value
+                WHEN (discount_start IS NOT NULL AND discount_end IS NULL
+                    AND DATE(discount_start) <= CURDATE()) THEN discount_value
+                WHEN (discount_start IS NULL AND discount_end IS NOT NULL
+                    AND DATE(discount_end) >= CURDATE()) THEN discount_value
+                ELSE price
+            END AS final_price
+        ");
 
         return match ($sortOption) {
             'preis_desc' => $products->orderByRaw('final_price DESC'),
@@ -241,6 +247,7 @@ class ProductController extends Controller
             default => $products
         };
     }
+
 
 
 

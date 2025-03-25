@@ -201,7 +201,7 @@
                             <div class="ws-u-1 bottom">
                                 <div class="ws-g bottom-content">
                                     <div class="ws-u-1 mb-2 mb-lg-0 bottom-row bottom-row--1">
-                                        <div class="brand">{{ $item->brand->name }}</div>
+                                        <div class="brand">{{ $item->brand->name }} {{ $item->variations_count }}</div>
                                         <div class="name">{{ $item->name }}</div>
                                         <div class="remark"></div>
                                     </div>

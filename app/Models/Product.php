@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Product extends Model
 {
@@ -53,5 +54,13 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    protected static function boot()
+    {
+        parent::boot();
 
+        static::saved(function ($model) {
+            // Xóa cache sau khi model được lưu
+            Cache::flush();
+        });
+    }
 }
